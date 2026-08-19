@@ -1,4 +1,4 @@
-﻿using Back.Models
+﻿using Back.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +20,11 @@ namespace Back.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
-            _context.Clientes.Add(Cliente);
+            _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
             //    return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return Created("", cliente)
+            return Created("", cliente);
         }
 
         [HttpGet("{id}")]
@@ -37,18 +37,18 @@ namespace Back.Controllers
                 return NotFound();
             }
 
-            return Cliente;
+            return Ok(Cliente);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
-            if (id != Cliente.Id)
+            if (id != cliente.id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Cliente).State = EntityState.Modified;
+            _context.Entry(cliente).State = EntityState.Modified;
 
             try
             {
@@ -69,10 +69,15 @@ namespace Back.Controllers
             return NoContent();
         }
 
+        private bool ClienteExists(int id)
+        {
+            return _context.Clientes.Any(e => e.id == id);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            var Cliente2 = await _context.Cliente.FindAsync(id);
+            var Cliente2 = await _context.Clientes.FindAsync(id);
             if (Cliente2 == null)
             {
                 return NotFound();

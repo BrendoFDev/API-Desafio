@@ -35,18 +35,18 @@ namespace Back.Controllers
                 return NotFound();
             }
 
-            return Carro;
+            return Ok(Carro);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCarro(long id, Carro carro)
         {
-            if (id != Carro.Id)
+            if (id != carro.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(Carro).State = EntityState.Modified;
+            _context.Entry(carro).State = EntityState.Modified;
 
             try
             {
@@ -67,10 +67,15 @@ namespace Back.Controllers
             return NoContent();
         }
 
+        private bool CarroExists(long id)
+        {
+            return _context.Carros.Any(e => e.Id == id);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarro(long id)
         {
-            var Carro2 = await _context.Carro.FindAsync(id);
+            var Carro2 = await _context.Carros.FindAsync(id);
             if (Carro2 == null)
             {
                 return NotFound();
