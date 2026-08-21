@@ -54,16 +54,23 @@ namespace Back.Controllers
                     carro.Cor = requisicao.Cor;
                 if (!string.IsNullOrEmpty(requisicao.Modelo))
                     carro.Modelo = requisicao.Modelo;
+                if (!string.IsNullOrEmpty(requisicao.Marca))
+                    carro.Marca = requisicao.Marca;
+                if (requisicao.Ano.HasValue)
+                    carro.Ano = requisicao.Ano.Value;
+                if (requisicao.Preco.HasValue)
+                    carro.Preco = requisicao.Preco.Value;
+
 
                 await _context.SaveChangesAsync();
 
-                return Ok(carro);
+                return Ok("Carro criado com sucesso\n" + carro);
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!CarroExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Carro não encontrado");
                 }
                 else
                 {

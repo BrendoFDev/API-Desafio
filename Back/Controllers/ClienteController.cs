@@ -1,4 +1,5 @@
-﻿using Back.Models;
+﻿using Back.DTO_s;
+using Back.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Back.Controllers
             await _context.SaveChangesAsync();
 
             //    return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return Created("", cliente);
+            return Created("Cliente encontrado", cliente);
         }
 
         [HttpGet("{id}")]
@@ -34,31 +35,37 @@ namespace Back.Controllers
 
             if (Cliente == null)
             {
-                return NotFound();
+                return NotFound("Não existe nenhum cliente");
             }
 
-            return Ok(Cliente);
+            return Ok("Cliente encontrado"+Cliente);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(int id, Cliente cliente)
+        public async Task<IActionResult> PutCliente(int id, [FromBody] ClienteDTO requisicao)
         {
-            if (id != cliente.id)
-            {
-                return BadRequest();
-            }
+           //if (id != requisicao.id)
+            //{
+            //    return BadRequest();
+            //}
 
-            _context.Entry(cliente).State = EntityState.Modified;
+            _context.Entry(requisicao).State = EntityState.Modified;
 
             try
             {
+                var cliente = await _context.Clientes.FindAsync(id);
+
+                if (!string.IsNullOrEmpty(requisicao.nome))
+                    cliente.nome = requisicao.nome;
+                if (!string.IsNullOrEmpty(requisicao.cpf))
+                    cliente.cpf = requisicao.cpf;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!ClienteExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Cliente não encontrado");
                 }
                 else
                 {
@@ -80,7 +87,7 @@ namespace Back.Controllers
             var Cliente2 = await _context.Clientes.FindAsync(id);
             if (Cliente2 == null)
             {
-                return NotFound();
+                return NotFound("Cliente não encontrado");
             }
 
             _context.Clientes.Remove(Cliente2);
