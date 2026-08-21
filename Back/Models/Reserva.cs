@@ -1,20 +1,21 @@
-﻿namespace Back.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Back.Models
 {
     public class Reserva
     {
         public int Id { get; set; }
-        public Carro carro{get; set;}
-        public Cliente cliente{get; set;}
 
-        public DateOnly dataDeReserva { get; set; }
+        public long CarroId { get; set; }
+        [JsonIgnore]
+        public Carro carro { get; set; } = default!;
 
-        public Reserva(int id, Carro carro, Cliente cliente)
-        {
-            Id = id;
-            this.carro = carro;
-            this.cliente = cliente;
-            dataDeReserva = DateOnly.FromDateTime(DateTime.Now);
-        }
+        public int ClienteId { get; set; }
+        [JsonIgnore]
+        public Cliente cliente { get; set; } = default!;
+
+        public DateOnly dataDeReserva { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
 
 
     }

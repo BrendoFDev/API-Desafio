@@ -1,4 +1,5 @@
-﻿using Back.Models;
+﻿using Back.DTO_s;
+using Back.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace Back.Controllers
 
         private readonly Contexto _context;
 
-
+        
         [HttpPost]
         public async Task<ActionResult<CarroController>> PostCarro(Carro carro)
         {
@@ -39,18 +40,24 @@ namespace Back.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarro(long id, Carro carro)
+        public async Task<IActionResult> PutCarro(long id, [FromBody] CarroDTO requisicao)
         {
-            if (id != carro.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(carro).State = EntityState.Modified;
-
             try
             {
+
+                var carro = await _context.Carros.FindAsync(id);
+
+                if (carro == null)
+                    return BadRequest("carro não existe");
+
+                if (!string.IsNullOrEmpty(requisicao.Cor))
+                    carro.Cor = requisicao.Cor;
+                if (!string.IsNullOrEmpty(requisicao.Modelo))
+                    carro.Modelo = requisicao.Modelo;
+
                 await _context.SaveChangesAsync();
+
+                return Ok(carro);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -64,7 +71,7 @@ namespace Back.Controllers
                 }
             }
 
-            return NoContent();
+           
         }
 
         private bool CarroExists(long id)

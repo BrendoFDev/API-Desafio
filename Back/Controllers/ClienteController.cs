@@ -28,7 +28,7 @@ namespace Back.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteController>> GetCliente(long id)
+        public async Task<ActionResult<ClienteController>> GetCliente(int id)
         {
             var Cliente = await _context.Clientes.FindAsync(id);
 

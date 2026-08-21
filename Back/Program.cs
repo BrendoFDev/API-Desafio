@@ -1,11 +1,16 @@
 ﻿using Back.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<Contexto>();//Colocar os bglh do bancos
+var connectionString = builder.Configuration.GetRequiredSection("ConnectionStrings:DefaultConnection").Value!.ToString();
+builder.Services.AddDbContext<Contexto>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 var app = builder.Build();
 
