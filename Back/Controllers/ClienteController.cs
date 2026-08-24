@@ -24,7 +24,6 @@ namespace Back.Controllers
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
-            //    return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
             return Created("Cliente criado com sucesso", cliente);
             
         }
@@ -45,13 +44,7 @@ namespace Back.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, [FromBody] ClienteDTO requisicao)
         {
-           //if (id != requisicao.id)
-            //{
-            //    return BadRequest();
-            //}
-
-            
-
+          
             try
             {
                 var cliente = await _context.Clientes.FindAsync(id);
