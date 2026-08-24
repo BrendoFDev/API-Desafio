@@ -24,9 +24,9 @@ namespace Back.Models
             modelBuilder.Entity<Cliente>(x =>
             {
                 x.HasKey(c => c.id);
-                x.Property(c => c.cpf).HasMaxLength(11);
+                x.Property(c => c.Cpf).HasMaxLength(11);
                 x.Property(c => c.dataDeCriacao);
-                x.Property(c => c.nome).HasMaxLength(100);
+                x.Property(c => c.Nome).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Reserva>(x =>

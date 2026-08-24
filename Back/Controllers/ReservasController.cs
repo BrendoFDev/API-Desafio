@@ -28,7 +28,7 @@ namespace Back.Controllers
             _context.Reservas.Add(reserva);
             await _context.SaveChangesAsync();
 
-            return Created("", reserva);
+            return Created("Reserva criada com sucesso" , reserva);
         }
         
         [HttpGet("{id}")]
@@ -38,7 +38,7 @@ namespace Back.Controllers
 
             if (Reserva == null)
             {
-                return NotFound();
+                return NotFound("Reserva não encontrado.");
             }
 
             return Ok(Reserva);
@@ -67,7 +67,7 @@ namespace Back.Controllers
             {
                 if (!ReservaExists(id))
                 {
-                    return NotFound();
+                    return NotFound("Reserva não encontrada.");
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace Back.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok("Reserva atualizada com sucesso.");
         }
 
         [HttpDelete("{id}")]
@@ -90,7 +90,7 @@ namespace Back.Controllers
             _context.Reservas.Remove(Reserva2);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Reserva deletada com sucesso");
         }
     }
 }

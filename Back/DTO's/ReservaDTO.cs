@@ -4,5 +4,7 @@
     {
         public long CarroId { get; set; }
         public int ClienteId { get; set; }
+
+        //public DateOnly? dataDeReserva { get; set; } = DateOnly.FromDateTime(DateTime.Now);
     }
 }

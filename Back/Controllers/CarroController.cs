@@ -23,7 +23,7 @@ namespace Back.Controllers
             _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
-            return Created("", carro);
+            return Created("Carro criado com sucesso. ", carro);
         }
 
         [HttpGet("{id}")]
@@ -48,7 +48,7 @@ namespace Back.Controllers
                 var carro = await _context.Carros.FindAsync(id);
 
                 if (carro == null)
-                    return BadRequest("carro não existe");
+                    return BadRequest("carro não existe.");
 
                 if (!string.IsNullOrEmpty(requisicao.Cor))
                     carro.Cor = requisicao.Cor;
@@ -64,13 +64,13 @@ namespace Back.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return Ok("Carro criado com sucesso\n" + carro);
+                return Ok("Carro atualizado com sucesso");
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!CarroExists(id))
                 {
-                    return NotFound("Carro não encontrado");
+                    return NotFound("Carro não encontrado.");
                 }
                 else
                 {
@@ -92,13 +92,13 @@ namespace Back.Controllers
             var Carro2 = await _context.Carros.FindAsync(id);
             if (Carro2 == null)
             {
-                return NotFound();
+                return NotFound("Carro não encontrado.");
             }
 
             _context.Carros.Remove(Carro2);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Carro deletado com sucesso.");
         }
 
     }

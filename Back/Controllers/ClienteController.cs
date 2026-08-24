@@ -25,7 +25,8 @@ namespace Back.Controllers
             await _context.SaveChangesAsync();
 
             //    return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
-            return Created("Cliente encontrado", cliente);
+            return Created("Cliente criado com sucesso", cliente);
+            
         }
 
         [HttpGet("{id}")]
@@ -36,9 +37,9 @@ namespace Back.Controllers
             if (Cliente == null)
             {
                 return NotFound("Não existe nenhum cliente");
-            }
+            }           
 
-            return Ok("Cliente encontrado"+Cliente);
+            return Ok(Cliente);
         }
 
         [HttpPut("{id}")]
@@ -49,17 +50,19 @@ namespace Back.Controllers
             //    return BadRequest();
             //}
 
-            _context.Entry(requisicao).State = EntityState.Modified;
+            
 
             try
             {
                 var cliente = await _context.Clientes.FindAsync(id);
 
-                if (!string.IsNullOrEmpty(requisicao.nome))
-                    cliente.nome = requisicao.nome;
-                if (!string.IsNullOrEmpty(requisicao.cpf))
-                    cliente.cpf = requisicao.cpf;
+                if (!string.IsNullOrEmpty(requisicao.Nome))
+                   cliente.Nome = requisicao.Nome;
+                if (!string.IsNullOrEmpty(requisicao.Cpf))
+                    cliente.Cpf = requisicao.Cpf;
                 await _context.SaveChangesAsync();
+
+                return Ok("Cliente atualizado com sucesso");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,7 +76,7 @@ namespace Back.Controllers
                 }
             }
 
-            return NoContent();
+            
         }
 
         private bool ClienteExists(int id)
@@ -93,7 +96,7 @@ namespace Back.Controllers
             _context.Clientes.Remove(Cliente2);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Cliente removido com sucesso.");
         }
 
     }
