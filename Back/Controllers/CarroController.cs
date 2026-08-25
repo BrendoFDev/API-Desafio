@@ -2,6 +2,7 @@
 using Back.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Back.Controllers
 {
@@ -26,80 +27,52 @@ namespace Back.Controllers
             return Created("Carro criado com sucesso. ", carro);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FiltrarProdutos(
-        [FromQuery] string? marca,
-        [FromQuery] string? modelo,
-        [FromQuery] int? ano,
-        [FromQuery] string? cor,
-        [FromQuery] int pagina = 1,          // Padrão: primeira página
-        [FromQuery] int tamanhoPagina = 10)  // Padrão: 10 itens por página
-        {
-            // Garante valores mínimos válidos para a paginação
-            if (pagina < 1) pagina = 1;
-            if (tamanhoPagina < 1) tamanhoPagina = 10;
+       [HttpGet]
+    public async Task<IActionResult> GetCarros(
+           [FromQuery] int pagina = 1,
+           [FromQuery] int tamanhoPagina = 10,
+           [FromQuery] string? marca = null,
+           [FromQuery] string? modelo = null,
+           [FromQuery] int? ano = null,
+           [FromQuery] string? cor = null)
+      {
+            var query = _context.Carros.AsQueryable();
 
-            // 1. Consulta base
-            IQueryable<Carro> consulta = _contexto.Produtos;
+            
+            if (!string.IsNullOrEmpty(marca))
+            {
+                query = query.Where(c => EF.Functions.Like(c.Marca, $"%{marca}%"));
+            }
 
-            // 2. Filtros Dinâmicos (Opcionais)
-            if (!string.IsNullOrWhiteSpace(marca))
-                consulta = consulta.Where(p => p.Marca.Contains(marca));
+            
+            if (!string.IsNullOrEmpty(modelo))
+            {
+                query = query.Where(c => EF.Functions.Like(c.Modelo, $"%{modelo}%"));
+            }
 
-            if (!string.IsNullOrWhiteSpace(modelo))
-                consulta = consulta.Where(p => p.Modelo.Contains(modelo));
-
+            
             if (ano.HasValue)
-                consulta = consulta.Where(p => p.Ano == ano.Value);
+            {
+                query = query.Where(c => c.Ano == ano.Value);
+            }
 
-            if (!string.IsNullOrWhiteSpace(cor))
-                consulta = consulta.Where(p => p.Cor.Contains(cor));
+            
+            if (!string.IsNullOrEmpty(cor))
+            {
+                query = query.Where(c => EF.Functions.Like(c.Cor, $"%{cor}%"));
+            }
 
-            // 3. Paginação (Calcula quantos registros pular e quantos pegar)
-            var totalRegistros = await consulta.CountAsync(); // Total antes de paginar
-
-            var itensPaginados = await consulta
+            
+            var carros = await query
                 .Skip((pagina - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
                 .ToListAsync();
 
-            // 4. Retorna os dados e metadados da paginação
-            var resposta = new
-            {
-                TotalItens = totalRegistros,
-                PaginaAtual = pagina,
-                TamanhoPagina = tamanhoPagina,
-                TotalPaginas = (int)Math.Ceiling((double)totalRegistros / tamanhoPagina),
-                Dados = itensPaginados
-            };
-
-            return Ok(resposta);
+            return Ok(carros);
         }
-    }
+    
 
-    //public async Task<IActionResult> GetCarros(int numeroPagina = 1, int quantidadePorPagina = 10)
-    //  {
-    // Pula os registros das páginas anteriores e pega apenas a quantidade da página atual
-    // var a = await _context.Carros
-    //    .Skip((numeroPagina - 1) * quantidadePorPagina)
-    // .Take(quantidadePorPagina)
-    //  .ToListAsync();
 
-    // return Ok(a);
-
-    // }
-    //   public async Task<ActionResult<CarroController>> GetCarro(long id)
-    //   {
-
-    //      var Carro = await _context.Carros.FindAsync(id);
-
-    //       if (Carro == null)
-    //     {
-    //         return NotFound();
-    //     }
-
-    //     return Ok(Carro);
-    // }
 
     [HttpPut("{id}")]
         public async Task<IActionResult> PutCarro(long id, [FromBody] CarroDTO requisicao)
