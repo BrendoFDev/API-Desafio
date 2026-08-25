@@ -14,18 +14,8 @@ namespace Back.Models
         [StringLength(100, ErrorMessage = "O CPF deve ter no máximo 100 caracteres.")]
         public string Cpf { get; set; }
 
-
-        public DateOnly dataDeCriacao { get; set; }
+        public DateOnly dataDeCriacao { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         
-        public ICollection<Reserva> Reservas {  get; set; } =
-        [];
-
-      //  public Cliente(int id, string nome, string cpf)
-       // {
-       //     this.id = id;
-       //     this.nome = nome;
-     //       this.cpf = cpf;
-      //      dataDeCriacao = DateOnly.FromDateTime(DateTime.Now);
-       // }
+        public ICollection<Reserva> Reservas {  get; set; } = [];
     }
 }

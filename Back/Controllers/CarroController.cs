@@ -2,6 +2,7 @@
 using Back.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Back.Controllers
 {
@@ -16,7 +17,7 @@ namespace Back.Controllers
 
         private readonly Contexto _context;
 
-        
+
         [HttpPost]
         public async Task<ActionResult<CarroController>> PostCarro(Carro carro)
         {
@@ -26,20 +27,54 @@ namespace Back.Controllers
             return Created("Carro criado com sucesso. ", carro);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CarroController>> GetCarro(long id)
-        {
-            var Carro = await _context.Carros.FindAsync(id);
+       [HttpGet]
+    public async Task<IActionResult> GetCarros(
+           [FromQuery] int pagina = 1,
+           [FromQuery] int tamanhoPagina = 10,
+           [FromQuery] string? marca = null,
+           [FromQuery] string? modelo = null,
+           [FromQuery] int? ano = null,
+           [FromQuery] string? cor = null)
+      {
+            var query = _context.Carros.AsQueryable();
 
-            if (Carro == null)
+            
+            if (!string.IsNullOrEmpty(marca))
             {
-                return NotFound();
+                query = query.Where(c => EF.Functions.Like(c.Marca, $"%{marca}%"));
             }
 
-            return Ok(Carro);
-        }
+            
+            if (!string.IsNullOrEmpty(modelo))
+            {
+                query = query.Where(c => EF.Functions.Like(c.Modelo, $"%{modelo}%"));
+            }
 
-        [HttpPut("{id}")]
+            
+            if (ano.HasValue)
+            {
+                query = query.Where(c => c.Ano == ano.Value);
+            }
+
+            
+            if (!string.IsNullOrEmpty(cor))
+            {
+                query = query.Where(c => EF.Functions.Like(c.Cor, $"%{cor}%"));
+            }
+
+            
+            var carros = await query
+                .Skip((pagina - 1) * tamanhoPagina)
+                .Take(tamanhoPagina)
+                .ToListAsync();
+
+            return Ok(carros);
+        }
+    
+
+
+
+    [HttpPut("{id}")]
         public async Task<IActionResult> PutCarro(long id, [FromBody] CarroDTO requisicao)
         {
             try
@@ -78,7 +113,7 @@ namespace Back.Controllers
                 }
             }
 
-           
+
         }
 
         private bool CarroExists(long id)
@@ -89,17 +124,22 @@ namespace Back.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarro(long id)
         {
-            var Carro2 = await _context.Carros.FindAsync(id);
-            if (Carro2 == null)
+            var carro = await _context.Carros.FindAsync(id);
+            if (carro == null) return NotFound("Carro não encontrado.");
+
+            // Verifica se existe alguma reserva para este carro
+            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == id);
+
+            if (possuiReserva)
             {
-                return NotFound("Carro não encontrado.");
+                return BadRequest("Não é possível remover o carro porque ele possui reservas vinculadas.");
             }
 
-            _context.Carros.Remove(Carro2);
+            _context.Carros.Remove(carro);
             await _context.SaveChangesAsync();
 
-            return Ok("Carro deletado com sucesso.");
-        }
+            return NoContent();
 
+        }
     }
 }

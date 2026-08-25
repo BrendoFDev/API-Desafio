@@ -20,21 +20,44 @@ namespace Back.Controllers
         public async Task<ActionResult<ReservasController>> PostReserva(ReservaDTO requisicao)
         {
 
+
             var reserva = new Reserva
             {
                 ClienteId = requisicao.ClienteId,
                 CarroId = requisicao.CarroId
             };
+
+            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.ClienteId == requisicao.ClienteId && r.CarroId == requisicao.CarroId);
+        
+
+            bool ClienteExiste = await _context.Clientes.AnyAsync(r => r.id == requisicao.ClienteId);
+            bool CarroExiste = await _context.Carros.AnyAsync(r => r.Id == requisicao.CarroId);
+
+            if (!ClienteExiste)
+            {
+                return BadRequest("Cliente não existe, digite um ID válido");
+            }
+
+            if (!CarroExiste)
+            {
+                return BadRequest("Carro não existe, digite um ID válido");
+            }
+
+            if (possuiReserva)
+            {
+                return BadRequest("Essa reserva já existe");
+            }
+
             _context.Reservas.Add(reserva);
             await _context.SaveChangesAsync();
 
-            return Created("Reserva criada com sucesso" , reserva);
+            return Created("Reserva criada com sucesso", reserva);
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ReservasController>> GetReserva(int id)
         {
-            var Reserva= await _context.Reservas.FindAsync(id);
+            var Reserva = await _context.Reservas.FindAsync(id);
 
             if (Reserva == null)
             {

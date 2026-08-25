@@ -21,13 +21,40 @@ namespace Back.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
+
+
+            bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
+
+            if (cpfExiste)
+            {
+               return BadRequest("Este CPF já está cadastrado no sistema.");
+            }
+
+
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
-            //    return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
             return Created("Cliente criado com sucesso", cliente);
-            
+
         }
+        public bool ValidarQuantidadeCaracteres(string cpf)
+{
+    if (string.IsNullOrWhiteSpace(cpf))
+    {
+        return false;
+    }
+
+    // Remove pontos e traços, caso o CPF esteja formatado
+    string cpfLimpo = cpf.Replace(".", "").Replace("-", "").Trim();
+
+    // Verifica se o tamanho é exatamente 11
+    if (cpfLimpo.Length == 11)
+    {
+        return true; // Quantidade correta
+    }
+
+    return false; // Quantidade incorreta
+}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ClienteController>> GetCliente(int id)
@@ -37,7 +64,7 @@ namespace Back.Controllers
             if (Cliente == null)
             {
                 return NotFound("Não existe nenhum cliente");
-            }           
+            }
 
             return Ok(Cliente);
         }
@@ -45,19 +72,13 @@ namespace Back.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, [FromBody] ClienteDTO requisicao)
         {
-           //if (id != requisicao.id)
-            //{
-            //    return BadRequest();
-            //}
-
-            
 
             try
             {
                 var cliente = await _context.Clientes.FindAsync(id);
 
                 if (!string.IsNullOrEmpty(requisicao.Nome))
-                   cliente.Nome = requisicao.Nome;
+                    cliente.Nome = requisicao.Nome;
                 if (!string.IsNullOrEmpty(requisicao.Cpf))
                     cliente.Cpf = requisicao.Cpf;
                 await _context.SaveChangesAsync();
@@ -76,7 +97,7 @@ namespace Back.Controllers
                 }
             }
 
-            
+
         }
 
         private bool ClienteExists(int id)
@@ -84,19 +105,25 @@ namespace Back.Controllers
             return _context.Clientes.Any(e => e.id == id);
         }
 
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            var Cliente2 = await _context.Clientes.FindAsync(id);
-            if (Cliente2 == null)
+            var Cliente = await _context.Clientes.FindAsync(id);
+            if (Cliente == null) return NotFound("Cliente não encontrado.");
+
+            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.ClienteId == id);
+
+            if (possuiReserva)
             {
-                return NotFound("Cliente não encontrado");
+                return BadRequest("Não é possível remover o carro porque ele possui reservas vinculadas.");
             }
 
-            _context.Clientes.Remove(Cliente2);
+            _context.Clientes.Remove(Cliente);
             await _context.SaveChangesAsync();
 
-            return Ok("Cliente removido com sucesso.");
+            return NoContent();
+
         }
 
     }

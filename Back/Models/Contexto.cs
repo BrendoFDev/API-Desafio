@@ -19,6 +19,7 @@ namespace Back.Models
                 x.Property(c => c.Preco).HasMaxLength(100);
                 x.Property(c => c.Ano);
                 x.Property(c => c.Cor).HasMaxLength(50);
+                
             });
 
             modelBuilder.Entity<Cliente>(x =>
@@ -42,6 +43,7 @@ namespace Back.Models
                 x.HasOne(reserva => reserva.carro)
                  .WithMany(carro => carro.Reservas)
                  .HasForeignKey(reserva => reserva.CarroId);
+                 
             });
         }
 
