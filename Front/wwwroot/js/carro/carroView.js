@@ -1,27 +1,37 @@
-﻿const inputMarca = document.getElementById("inputMa").value;
-const inputModelo = document.getElementById("inputMo").value;
-const inputAnoF = document.getElementById("inputAF").value;
-const inputCor = document.getElementById("inputC").value;
-const inputPreco = document.getElementById("inputP").value;
+﻿const inputMarca = document.getElementById("inputMa");
+const inputModelo = document.getElementById("inputMo");
+const inputAnoF = document.getElementById("inputAF");
+const inputCor = document.getElementById("inputC");
+const inputPreco = document.getElementById("inputP");
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
 const modalview = document.getElementById("staticBackdrop");
 
 try {
     adcarro.addEventListener('click', async () => {
+
+        const marca = inputMarca.value;
+        const modelo = inputModelo.value;
+        const ano = inputAnoF.value;
+        const cor = inputCor.value;
+        const preco = inputPreco.value;
+
         if (!validacaoForm())
             return;
+
+        const payload = {
+            "marca": marca,
+            "modelo": modelo,
+            "ano": ano,
+            "cor": cor,
+            "preco": preco
+        }
+
 
         const sendRequest = await fetch("https://localhost:7063/api/carro", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: {
-                "marca": "Toyota",
-                "modelo": "Corolla",
-                "ano": 2025,
-                "cor": "Prata",
-                "preco": 150000.00
-            },
+            body: JSON.stringify(payload),
         });
 
 
@@ -30,7 +40,7 @@ try {
     });
 
 }
-catch(err) {
+catch (err) {
     console.log(err);
 }
 function validacaoForm() {

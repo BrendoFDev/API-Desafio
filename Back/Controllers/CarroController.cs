@@ -19,12 +19,13 @@ namespace Back.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<CarroController>> PostCarro(Carro carro)
+        public async Task<ActionResult<CarroController>> PostCarro(Carro carro2)
         {
-            _context.Carros.Add(carro);
+            
+            _context.Carros.Add(carro2);
             await _context.SaveChangesAsync();
 
-            return Created("Carro criado com sucesso. ", carro);
+            return Created("Carro criado com sucesso. ", carro2);
         }
 
        [HttpGet]
