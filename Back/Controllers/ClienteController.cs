@@ -25,11 +25,19 @@ namespace Back.Controllers
 
             bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
 
+            
+
             if (cpfExiste)
             {
                return BadRequest("Este CPF já está cadastrado no sistema.");
             }
+            string cpfLimpo = cliente.Cpf.Replace(".", "").Replace("-", "").Trim();
 
+           
+            if (!cpfLimpo.All(char.IsDigit) || cpfLimpo.Length != 11)
+            {
+                return BadRequest("CPF inválido... ");
+            }
 
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
@@ -37,24 +45,7 @@ namespace Back.Controllers
             return Created("Cliente criado com sucesso", cliente);
 
         }
-        public bool ValidarQuantidadeCaracteres(string cpf)
-{
-    if (string.IsNullOrWhiteSpace(cpf))
-    {
-        return false;
-    }
-
-    // Remove pontos e traços, caso o CPF esteja formatado
-    string cpfLimpo = cpf.Replace(".", "").Replace("-", "").Trim();
-
-    // Verifica se o tamanho é exatamente 11
-    if (cpfLimpo.Length == 11)
-    {
-        return true; // Quantidade correta
-    }
-
-    return false; // Quantidade incorreta
-}
+       
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ClienteController>> GetCliente(int id)
