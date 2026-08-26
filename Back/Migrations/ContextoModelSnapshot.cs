@@ -65,18 +65,18 @@ namespace Back.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("cpf")
+                    b.Property<string>("Cpf")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("character varying(11)");
 
-                    b.Property<DateOnly>("dataDeCriacao")
-                        .HasColumnType("date");
-
-                    b.Property<string>("nome")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<DateOnly>("dataDeCriacao")
+                        .HasColumnType("date");
 
                     b.HasKey("id");
 

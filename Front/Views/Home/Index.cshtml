@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    
+    <div class="text-end">
+        <button type="button" class="btn btn-outline-primary active" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="background-color: ">
+            Adicionar Carro
+        </button>
+    </div>
+
+</div>
+
+@section Modals {
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Carro</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <form class="needs-validation" novalidate>
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <label for="inputMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
+                                <input id="inputMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
+                                <div class="invalid-feedback">
+                                    <span>Preencha o campo!</span>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="inputMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
+                                <input id="inputMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
+                                <div class="invalid-feedback">
+                                    <span>Preencha o campo!</span>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="inputAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
+                                <input id="inputAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
+                                <div class="invalid-feedback">
+                                    <span>Preencha o campo!</span>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="inputC" class="fw-medium col-auto fs-5 form-label">Cor:</label>
+                                <input id="inputC" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a cor do veículo" required />
+                                <div class="invalid-feedback">
+                                    <span>Preencha o campo!</span>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <label for="inputP" class="fw-medium col-auto fs-5 form-label">Preço:</label>
+                                <input id="inputP" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o valor do veículo" required />
+                                <div class="invalid-feedback">
+                                    <span>Preencha o campo!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="adcarro" type="button" class="btn btn-primary">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section Scripts {
+    <script src="~/js/carro/carroView.js" asp-append-version="true"></script>
+}

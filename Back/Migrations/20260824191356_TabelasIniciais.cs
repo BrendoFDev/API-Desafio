@@ -7,11 +7,43 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Back.Migrations
 {
     /// <inheritdoc />
-    public partial class GerarTabelaReservas : Migration
+    public partial class TabelasIniciais : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Carros",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Modelo = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Marca = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Ano = table.Column<int>(type: "integer", nullable: false),
+                    Cor = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Preco = table.Column<float>(type: "real", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carros", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Cpf = table.Column<string>(type: "character varying(11)", maxLength: 11, nullable: false),
+                    dataDeCriacao = table.Column<DateOnly>(type: "date", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Reservas",
                 columns: table => new
@@ -55,6 +87,12 @@ namespace Back.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Reservas");
+
+            migrationBuilder.DropTable(
+                name: "Carros");
+
+            migrationBuilder.DropTable(
+                name: "Clientes");
         }
     }
 }

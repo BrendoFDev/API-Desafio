@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Back.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20260820184058_CriarTabelaClientes")]
-    partial class CriarTabelaClientes
+    [Migration("20260824191356_TabelasIniciais")]
+    partial class TabelasIniciais
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,8 @@ namespace Back.Migrations
 
                     b.Property<string>("Marca")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
@@ -67,22 +68,77 @@ namespace Back.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("cpf")
+                    b.Property<string>("Cpf")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("character varying(11)");
 
-                    b.Property<DateOnly>("dataDeCriacao")
-                        .HasColumnType("date");
-
-                    b.Property<string>("nome")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<DateOnly>("dataDeCriacao")
+                        .HasColumnType("date");
+
                     b.HasKey("id");
 
                     b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("Back.Models.Reserva", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("CarroId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("dataDeReserva")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarroId");
+
+                    b.HasIndex("ClienteId");
+
+                    b.ToTable("Reservas");
+                });
+
+            modelBuilder.Entity("Back.Models.Reserva", b =>
+                {
+                    b.HasOne("Back.Models.Carro", "carro")
+                        .WithMany("Reservas")
+                        .HasForeignKey("CarroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Back.Models.Cliente", "cliente")
+                        .WithMany("Reservas")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("carro");
+
+                    b.Navigation("cliente");
+                });
+
+            modelBuilder.Entity("Back.Models.Carro", b =>
+                {
+                    b.Navigation("Reservas");
+                });
+
+            modelBuilder.Entity("Back.Models.Cliente", b =>
+                {
+                    b.Navigation("Reservas");
                 });
 #pragma warning restore 612, 618
         }

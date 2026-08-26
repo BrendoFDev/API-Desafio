@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "ProjetoCarros",
+    "Projects": [
+      {
+        "Path": "Back\\Back.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Front\\Front.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]
