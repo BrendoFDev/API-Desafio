@@ -71,11 +71,52 @@ namespace Back.Controllers
 
             return Ok(carros);
         }
-    
+
+
+        [HttpGet("paginado")]
+        public async Task<ActionResult<Paginacao<CarroDTO>>> GetCarros([FromQuery] int paginaAtual = 1, [FromQuery] int tamanhoPagina = 10)
+        {
+            
+            if (paginaAtual < 1) paginaAtual = 1;
+            if (tamanhoPagina < 1) tamanhoPagina = 10;
+
+            
+            var query = _context.Carros.AsQueryable();
+
+            
+            var totalRegistro = await query.CountAsync();
+
+            
+            var items = await query
+                .Select(c => new CarroDTO
+                {
+                    Modelo = c.Modelo,
+                    Ano = c.Ano,
+                    Preco = c.Preco,
+                    Marca = c.Marca,
+                    Cor = c.Cor
+                })
+                .Skip((paginaAtual - 1) * tamanhoPagina)
+                .Take(tamanhoPagina)
+                .ToListAsync();
+
+            
+            var resultado = new Paginacao<CarroDTO>
+            {
+                Items = items,
+                TotalRegistro = totalRegistro,
+                PaginaAtual = paginaAtual,
+                TamanhoPagina = tamanhoPagina
+            };
+
+            return Ok(resultado);
+        }
 
 
 
-    [HttpPut("{id}")]
+
+
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutCarro(long id, [FromBody] CarroDTO requisicao)
         {
             try
