@@ -14,8 +14,6 @@
 
         public bool ProximaPagina => PaginaAtual < TotalPagina;
 
-
-
     }
 
     public class Paginacao<T,TMetadata>: Paginacao<T>
