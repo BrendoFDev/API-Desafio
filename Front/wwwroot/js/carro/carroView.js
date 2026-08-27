@@ -3,15 +3,59 @@ const inputModelo = document.getElementById("inputMo");
 const inputAnoF = document.getElementById("inputAF");
 const inputCor = document.getElementById("inputC");
 const inputPreco = document.getElementById("inputP");
+// EDITAR CARRO
+const inputEditMarca = document.getElementById("inputEditMa");
+const inputEditModelo = document.getElementById("inputEditMo");
+const inputEditAnoF = document.getElementById("inputEditAF");
+const inputEditCor = document.getElementById("inputEditC");
+const inputEditPreco = document.getElementById("inputEditP");
+const editcarro = document.getElementById("editCarro");
+
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
 const modalview = document.getElementById("staticBackdrop");
 const divCarros = document.getElementById("divRenderCars");
-const paginas = document.getElementsByClassName("page-item")
+const paginas = document.querySelectorAll(".page-item")
+const voltar = document.getElementById("liVoltar");
+
+
+let page = 1;
 
 try {
 
-    renderCarros();
+    paginas.forEach((li) => {
+        li.addEventListener('click', function () {
+
+            const valueLi = this.textContent.trim();
+
+            
+            
+            switch (valueLi) {
+                case "1":
+                    page = 1;
+                    renderCarros(page);
+                    break;
+                case "2":
+                    page = 2;
+                    renderCarros(page);
+                    break;
+                case "3":
+                    page = 3;
+                    renderCarros(page);
+                    break;
+                case "Proximo":
+                    page = page + 1;
+                    renderCarros(page);
+                    break;
+                case "Voltar":
+                    page = page - 1;
+                    renderCarros(page);
+                    break;
+            }
+        })
+    });
+
+    renderCarros(page);
 
     adcarro.addEventListener('click', async () => {
 
@@ -40,7 +84,32 @@ try {
         });
     });
 
+    editcarro.addEventListener('click', async () => {
 
+        const marca = inputEditMarca.value;
+        const modelo = inputEditModelo.value;
+        const ano = inputEditAnoF.value;
+        const cor = inputEditCor.value;
+        const preco = inputEditPreco.value;
+
+        if (!validacaoForm())
+            return;
+
+        const payload = {
+            "marca": marca,
+            "modelo": modelo,
+            "ano": ano,
+            "cor": cor,
+            "preco": preco
+        }
+
+
+        const sendRequest = await fetch('https://localhost:7063/api/carro/${}', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    });
 }
 catch (err) {
     console.log(err);
@@ -61,7 +130,7 @@ function validacaoForm() {
 
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?page=1&pageSize=10`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&tamanhoPagina=10`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
@@ -72,15 +141,15 @@ async function renderCarros() {
     dados.forEach((item) => {
 
         cardCarros += `
-            <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;">
-                <div class="card-body  rounded-3">
+            <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;" id='${item.id}'>
+                <div class="card-body rounded-3">
                     <h3 class="card-title">${item.modelo}</h3>
                     <h6 class="card-subtitle mb-2 text-body-secondary">${item.marca}</h6>
                     <p class="card-text text-start fw-bold mb-1">Ano: ${item.ano}</p>
                     <p class="card-text text-start fw-bold mb-1">Cor: ${item.cor}</p>
                     <h3 class="card-title mb-3">R$ ${item.preco}</h3>
                     <div class="justify-content-between d-flex">
-                        <button class="btn editar btn-warning fs-6 fw-bold rounded-pill">Editar</button>
+                        <button class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                         <button class="btn reservar btn-success fs-6 fw-bold rounded-pill">Reservar</button>
                     </div>
                 </div>

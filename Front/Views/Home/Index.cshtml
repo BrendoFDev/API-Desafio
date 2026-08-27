@@ -5,7 +5,7 @@
 <div class="text-center">
 
     <div class="text-end">
-        <button type="button" class="btn btn-outline-primary active" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             Adicionar Carro
         </button>
     </div>
@@ -15,18 +15,14 @@
 
     <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-5">
         <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
+            <li id="liVoltar" class="page-item">
+                <a class="page-link" href="#" aria-label="Voltar">Voltar</a>
             </li>
             <li class="page-item"><a class="page-link" href="#">1</a></li>
             <li class="page-item"><a class="page-link" href="#">2</a></li>
             <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
+                <a class="page-link" href="#" aria-label="Proximo">Proximo</a>
             </li>
         </ul>
     </nav>
@@ -43,7 +39,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                        @* CADASTRAR CARRO *@
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center">
                             <div class="col-auto">
@@ -97,44 +93,44 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Carro</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                        @* EDITAR CARRO *@
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center">
                             <div class="col-auto">
-                                <label for="inputMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
-                                <input id="inputMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
+                                <label for="inputEditMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
+                                <input id="inputEditMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <label for="inputMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
-                                <input id="inputMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
+                                <label for="inputEditMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
+                                <input id="inputEditMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <label for="inputAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
-                                <input id="inputAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
+                                <label for="inputEditAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
+                                <input id="inputEditAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <label for="inputC" class="fw-medium col-auto fs-5 form-label">Cor:</label>
-                                <input id="inputC" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a cor do veículo" required />
+                                <label for="inputEditC" class="fw-medium col-auto fs-5 form-label">Cor:</label>
+                                <input id="inputEditC" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a cor do veículo" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <label for="inputP" class="fw-medium col-auto fs-5 form-label">Preço:</label>
-                                <input id="inputP" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o valor do veículo" required />
+                                <label for="inputEditP" class="fw-medium col-auto fs-5 form-label">Preço:</label>
+                                <input id="inputEditP" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o valor do veículo" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
@@ -144,7 +140,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button id="adcarro" type="button" class="btn btn-primary">Adicionar</button>
+                    <button id="editCarro" type="button" class="btn btn-primary">Comfirmar</button>
                 </div>
             </div>
         </div>
