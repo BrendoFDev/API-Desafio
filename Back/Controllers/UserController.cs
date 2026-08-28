@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 
@@ -42,7 +45,7 @@ namespace Back.Controllers
             {
                 return BadRequest("O formato do e-mail digitado é inválido.");
             }
-                
+
             if (string.IsNullOrWhiteSpace(user.Senha) || user.Senha.Length < 6)
             {
                 return BadRequest("A senha deve ter no mínimo 6 caracteres.");
@@ -63,7 +66,12 @@ namespace Back.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Created("Usuário criado com sucesso", user);
+            return Ok( user);
+
+            
+            
+        
+           
 
         }
 
