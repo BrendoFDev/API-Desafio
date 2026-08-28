@@ -45,10 +45,33 @@ namespace Back.Models
                  .HasForeignKey(reserva => reserva.CarroId);
                  
             });
+
+            modelBuilder.Entity<User>(x =>
+            {
+                x.HasKey(x => x.Id);
+                x.Property(x => x.Email)
+                .HasMaxLength(100)
+                .IsRequired();
+                
+                x.HasIndex(x => x.Email)
+                .IsUnique();
+                
+                x.Property(x =>x.Username) .HasMaxLength(100);
+
+                x.HasIndex(x => x.Username).IsUnique();
+
+                x.Property(x => x.Senha).HasMaxLength(100);
+
+
+            }
+
+                );
         }
 
         public DbSet<Carro> Carros { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

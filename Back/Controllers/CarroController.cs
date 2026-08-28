@@ -3,6 +3,9 @@ using Back.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.ConstrainedExecution;
+using System.Text.RegularExpressions;
 
 namespace Back.Controllers
 {
@@ -29,53 +32,78 @@ namespace Back.Controllers
         }
 
        [HttpGet]
-    public async Task<IActionResult> GetCarros(
-           [FromQuery] int pagina = 1,
+        public async Task<ActionResult<Paginacao<CarroDTO>>> GetCarros(
+           [FromQuery] int paginaAtual = 1, 
            [FromQuery] int tamanhoPagina = 10,
            [FromQuery] string? marca = null,
            [FromQuery] string? modelo = null,
            [FromQuery] int? ano = null,
            [FromQuery] string? cor = null)
-      {
+        {
+            
+            if (paginaAtual < 1) paginaAtual = 1;
+            if (tamanhoPagina < 1) tamanhoPagina = 10;
             var query = _context.Carros.AsQueryable();
 
-            
+
             if (!string.IsNullOrEmpty(marca))
             {
                 query = query.Where(c => EF.Functions.Like(c.Marca, $"%{marca}%"));
             }
 
-            
+             
             if (!string.IsNullOrEmpty(modelo))
             {
                 query = query.Where(c => EF.Functions.Like(c.Modelo, $"%{modelo}%"));
             }
 
-            
+
             if (ano.HasValue)
             {
                 query = query.Where(c => c.Ano == ano.Value);
             }
 
-            
+
             if (!string.IsNullOrEmpty(cor))
             {
                 query = query.Where(c => EF.Functions.Like(c.Cor, $"%{cor}%"));
             }
 
+
+
+
+            var totalRegistro = await query.CountAsync();
+
             
-            var carros = await query
-                .Skip((pagina - 1) * tamanhoPagina)
+            var items = await query
+                .Select(c => new CarroDTO
+                {
+                    Modelo = c.Modelo,
+                    Ano = c.Ano,
+                    Preco = c.Preco,
+                    Marca = c.Marca,
+                    Cor = c.Cor
+                })
+                .Skip((paginaAtual - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
                 .ToListAsync();
 
-            return Ok(carros);
+            var resultado = new Paginacao<CarroDTO>
+            {
+                Items = items,
+                TotalRegistro = totalRegistro,
+                PaginaAtual = paginaAtual,
+                TamanhoPagina = tamanhoPagina
+            };
+
+            return Ok(resultado);
         }
-    
 
 
 
-    [HttpPut("{id}")]
+
+
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutCarro(long id, [FromBody] CarroDTO requisicao)
         {
             try

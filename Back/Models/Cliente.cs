@@ -11,7 +11,7 @@ namespace Back.Models
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O CPF é obrigatório.")]
-        [StringLength(100, ErrorMessage = "O CPF deve ter no máximo 100 caracteres.")]
+        [StringLength(11, ErrorMessage = "O CPF deve ter no máximo 11 caracteres.")]
         public string Cpf { get; set; }
 
         public DateOnly dataDeCriacao { get; set; } = DateOnly.FromDateTime(DateTime.Now);
