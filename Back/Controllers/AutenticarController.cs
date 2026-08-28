@@ -65,7 +65,7 @@ namespace Back.Controllers
                 HttpOnly = true, 
                 Secure = true,   
                 SameSite = SameSiteMode.Strict, 
-                Expires = DateTimeOffset.UtcNow.AddHours(2) 
+                Expires = DateTimeOffset.UtcNow.AddDays(7) 
             });
 
 
