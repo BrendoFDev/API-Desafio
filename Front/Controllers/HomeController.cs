@@ -17,7 +17,7 @@ namespace Front.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult CadastroCliente()
         {
             return View();
         }

@@ -3,7 +3,7 @@ const inputModelo = document.getElementById("inputMo");
 const inputAnoF = document.getElementById("inputAF");
 const inputCor = document.getElementById("inputC");
 const inputPreco = document.getElementById("inputP");
-// EDITAR CARRO
+// EDITAR CARRO MODAL
 const inputEditMarca = document.getElementById("inputEditMa");
 const inputEditModelo = document.getElementById("inputEditMo");
 const inputEditAnoF = document.getElementById("inputEditAF");
@@ -13,6 +13,7 @@ const editcarro = document.getElementById("editCarro");
 
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
+const editCarroModal = document.getElementById("btnEditar");
 const modalview = document.getElementById("staticBackdrop");
 const divCarros = document.getElementById("divRenderCars");
 const paginas = document.querySelectorAll(".page-item")
@@ -20,6 +21,7 @@ const voltar = document.getElementById("liVoltar");
 
 
 let page = 1;
+let carroSelecionado;
 
 try {
 
@@ -84,6 +86,13 @@ try {
         });
     });
 
+    divCarros.addEventListener('click', (event) => {
+        const btnEditar = event.target.closest('.editar');
+        if (btnEditar) {
+            carroSelecionado = btnEditar.getAttribute("data-id");
+        }
+    });
+
     editcarro.addEventListener('click', async () => {
 
         const marca = inputEditMarca.value;
@@ -92,23 +101,28 @@ try {
         const cor = inputEditCor.value;
         const preco = inputEditPreco.value;
 
-        if (!validacaoForm())
-            return;
+        // if (!validacaoForm())
+        //     return;
 
         const payload = {
-            "marca": marca,
-            "modelo": modelo,
-            "ano": ano,
-            "cor": cor,
-            "preco": preco
+            marca: marca,
+            modelo: modelo,
+            ano: ano,
+            cor: cor,
+            preco: preco
         }
 
 
-        const sendRequest = await fetch('https://localhost:7063/api/carro/${}', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
+        const atualizar = await fetch(`https://localhost:7063/api/carro/${carroSelecionado}`, {
+           method: 'PUT',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify(payload),
         });
+
+        console.log("teste")
+        renderCarros(page);
+
+        
     });
 }
 catch (err) {
@@ -149,7 +163,7 @@ async function renderCarros() {
                     <p class="card-text text-start fw-bold mb-1">Cor: ${item.cor}</p>
                     <h3 class="card-title mb-3">R$ ${item.preco}</h3>
                     <div class="justify-content-between d-flex">
-                        <button class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                        <button id="btnEditar" class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-id=${item.id} data-bs-target="#modalEditar">Editar</button>
                         <button class="btn reservar btn-success fs-6 fw-bold rounded-pill">Reservar</button>
                     </div>
                 </div>
