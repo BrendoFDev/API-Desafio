@@ -50,7 +50,7 @@ namespace Back.Controllers
                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                     new Claim(ClaimTypes.Name, usuario.Username),
                     new Claim(ClaimTypes.Email, usuario.Email)]),
-                // Expires = DateTime.UtcNow.AddSeconds(10),
+                // Expires = DateTime.UtcNow.AddDay(7),
                 Expires = DateTime.UtcNow.AddDays(7),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
@@ -70,6 +70,7 @@ namespace Back.Controllers
 
 
             return Ok(new { token = tokenString });
+            
 
 
         }
