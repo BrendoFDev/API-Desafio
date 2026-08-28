@@ -101,8 +101,8 @@ try {
         const cor = inputEditCor.value;
         const preco = inputEditPreco.value;
 
-        // if (!validacaoForm())
-        //     return;
+        if (!validacaoForm())
+            return;
 
         const payload = {
             marca: marca,
