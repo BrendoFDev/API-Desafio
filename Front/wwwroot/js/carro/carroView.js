@@ -3,7 +3,7 @@ const inputModelo = document.getElementById("inputMo");
 const inputAnoF = document.getElementById("inputAF");
 const inputCor = document.getElementById("inputC");
 const inputPreco = document.getElementById("inputP");
-// EDITAR CARRO MODAL
+//EDITAR CARRO MODAL
 const inputEditMarca = document.getElementById("inputEditMa");
 const inputEditModelo = document.getElementById("inputEditMo");
 const inputEditAnoF = document.getElementById("inputEditAF");
@@ -20,44 +20,23 @@ const paginas = document.querySelectorAll(".page-item")
 const voltar = document.getElementById("liVoltar");
 
 
+const inputpage = document.getElementById("inputpage");
+
+let dados = "";
 let page = 1;
 let carroSelecionado;
 
 try {
+    renderCarros(page);
 
-    paginas.forEach((li) => {
-        li.addEventListener('click', function () {
+    inputpage.addEventListener('change', () => {
+        page = inputpage.value
+        if (dados.proximaPagina < page) {
+            renderCarros(page)
+        }
 
-            const valueLi = this.textContent.trim();
-
-            
-            
-            switch (valueLi) {
-                case "1":
-                    page = 1;
-                    renderCarros(page);
-                    break;
-                case "2":
-                    page = 2;
-                    renderCarros(page);
-                    break;
-                case "3":
-                    page = 3;
-                    renderCarros(page);
-                    break;
-                case "Proximo":
-                    page = page + 1;
-                    renderCarros(page);
-                    break;
-                case "Voltar":
-                    page = page - 1;
-                    renderCarros(page);
-                    break;
-            }
-        })
     });
 
-    renderCarros(page);
 
     adcarro.addEventListener('click', async () => {
 
@@ -79,7 +58,7 @@ try {
         }
 
 
-        const sendRequest = await fetch("https://localhost:7063/api/carro", {
+        const sendRequest = await fetch("https:localhost:7063/api/carro", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
@@ -113,14 +92,13 @@ try {
         }
 
 
-        const atualizar = await fetch(`https://localhost:7063/api/carro/${carroSelecionado}`, {
+        const atualizar = await fetch(`https:localhost:7063/api/carro/${carroSelecionado}`, {
            method: 'PUT',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify(payload),
         });
 
-        console.log("teste")
-        renderCarros(page);
+        
 
         
     });
@@ -144,15 +122,15 @@ function validacaoForm() {
 
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&tamanhoPagina=10`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&tamanhoPagina=10`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
 
-    const dados = await requisicaoRender.json();
+    dados = await requisicaoRender.json();
 
     let cardCarros = "";
-    dados.forEach((item) => {
+    dados.items.forEach((item) => {
 
         cardCarros += `
             <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;" id='${item.id}'>
@@ -171,5 +149,15 @@ async function renderCarros() {
         `;
     });
 
-    divCarros.innerHTML = cardCarros
+    divCarros.innerHTML = cardCarros;
+}
+
+async function getCarros() {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&tamanhoPagina=10`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    dados = await requisicaoRender.json();
+    return dados;
 }
