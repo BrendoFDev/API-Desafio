@@ -1,9 +1,10 @@
-﻿const inputMarca = document.getElementById("inputMa");
+const inputMarca = document.getElementById("inputMa");
 const inputModelo = document.getElementById("inputMo");
 const inputAnoF = document.getElementById("inputAF");
 const inputCor = document.getElementById("inputC");
 const inputPreco = document.getElementById("inputP");
-//EDITAR CARRO MODAL
+
+// EDITAR CARRO MODAL
 const inputEditMarca = document.getElementById("inputEditMa");
 const inputEditModelo = document.getElementById("inputEditMo");
 const inputEditAnoF = document.getElementById("inputEditAF");
@@ -13,151 +14,276 @@ const editcarro = document.getElementById("editCarro");
 
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
-const editCarroModal = document.getElementById("btnEditar");
-const modalview = document.getElementById("staticBackdrop");
 const divCarros = document.getElementById("divRenderCars");
-const paginas = document.querySelectorAll(".page-item")
-const voltar = document.getElementById("liVoltar");
-
-
 const inputpage = document.getElementById("inputpage");
+const btnPrevious = document.getElementById("btnPrevious");
+const btnNext = document.getElementById("btnNext");
+const paginaInfo = document.getElementById("paginaInfo");
 
-let dados = "";
-let page = 1;
+const API_BASE = "https://localhost:7063/api/carro";
+const TAMANHO_PAGINA = 10;
+
+let dados;
+let paginaAtual = 1;
+let totalPaginas = 1;
 let carroSelecionado;
 
+
 try {
-    renderCarros(page);
-
-    inputpage.addEventListener('change', () => {
-        page = inputpage.value
-        if (dados.proximaPagina < page) {
-            renderCarros(page)
-        }
-
-    });
-
-
-    adcarro.addEventListener('click', async () => {
-
-        const marca = inputMarca.value;
-        const modelo = inputModelo.value;
-        const ano = inputAnoF.value;
-        const cor = inputCor.value;
-        const preco = inputPreco.value;
-
-        if (!validacaoForm())
-            return;
-
-        const payload = {
-            "marca": marca,
-            "modelo": modelo,
-            "ano": ano,
-            "cor": cor,
-            "preco": preco
-        }
+    renderCarros(paginaAtual);
+    
+    adcarro.addEventListener('click', adicionarCarro);
+    editcarro.addEventListener('click', atualizarCarro);
+    divCarros.addEventListener('click', selecionarCarro);
+    inputpage.addEventListener('change', mudarPagina);
+    btnPrevious.addEventListener('click', pagAnterior);
+    btnNext.addEventListener('click', proxPagina);
+} catch (err) {
+    console.error("Erro ao inicializar:", err);
+}
 
 
-        const sendRequest = await fetch("https:localhost:7063/api/carro", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
-    });
+async function renderCarros(pagina = 1) {
+    try {
+        const requisicao = await fetch(
+            `${API_BASE}?paginaAtual=${pagina}&tamanhoPagina=${TAMANHO_PAGINA}`,
+            {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            }
+        );
 
-    divCarros.addEventListener('click', (event) => {
-        const btnEditar = event.target.closest('.editar');
-        if (btnEditar) {
-            carroSelecionado = btnEditar.getAttribute("data-id");
-        }
-    });
-
-    editcarro.addEventListener('click', async () => {
-
-        const marca = inputEditMarca.value;
-        const modelo = inputEditModelo.value;
-        const ano = inputEditAnoF.value;
-        const cor = inputEditCor.value;
-        const preco = inputEditPreco.value;
-
-        if (!validacaoForm())
-            return;
-
-        const payload = {
-            marca: marca,
-            modelo: modelo,
-            ano: ano,
-            cor: cor,
-            preco: preco
-        }
-
-
-        const atualizar = await fetch(`https:localhost:7063/api/carro/${carroSelecionado}`, {
-           method: 'PUT',
-           headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify(payload),
-        });
-
+        if (!requisicao.ok) throw new Error('Erro ao buscar carros');
         
+        dados = await requisicao.json();
+        paginaAtual = dados.paginaAtual;
+        totalPaginas = dados.totalPaginas || Math.ceil(dados.totalRegistro / TAMANHO_PAGINA);
 
-        
-    });
-}
-catch (err) {
-    console.log(err);
-}
+        exibirCarros(dados.items);
+        atualizarControlesPaginacao();
 
-
-function validacaoForm() {
-    if (!formValidation.checkValidity()) {
-        formValidation.classList.add('was-validated')
-        const input = formValidation.querySelector(":invalid");
-        input.focus();
-        return false;
-    };
-
-    formValidation.classList.add('was-validated')
-    return true;
+    } catch (err) {
+        console.error("Erro ao renderizar carros:", err);
+        mostrarMensagem("Erro ao carregar carros", "danger");
+    }
 }
 
+function exibirCarros(carros) {
+    let html = "";
+    
+    if (carros.length === 0) {
+        divCarros.innerHTML = '<div class="col-12 text-center mt-5"><p class="fs-5">Nenhum carro encontrado</p></div>';
+        return;
+    }
 
-async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&tamanhoPagina=10`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    });
+    carros.forEach((item) => {
+        html += `
+            <div class="card h-100 shadow-sm rounded-3 col-12 col-sm-6 col-lg-4" style="background: linear-gradient(135deg, #fff9e6 0%, #ffe6cc 100%);" id="card-${item.id}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-1">${item.modelo}</h5>
+                    <h6 class="card-subtitle mb-3 text-muted">${item.marca}</h6>
+                    
+                    <div class="flex-grow-1">
+                        <div class="mb-2">
+                            <small class="text-muted">Ano:</small>
+                            <p class="mb-0 fw-bold">${item.ano}</p>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted">Cor:</small>
+                            <p class="mb-0 fw-bold">${item.cor}</p>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">Preço:</small>
+                            <h5 class="text-success mb-0">R$ ${formatarPreco(item.preco)}</h5>
+                        </div>
+                    </div>
 
-    dados = await requisicaoRender.json();
-
-    let cardCarros = "";
-    dados.items.forEach((item) => {
-
-        cardCarros += `
-            <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;" id='${item.id}'>
-                <div class="card-body rounded-3">
-                    <h3 class="card-title">${item.modelo}</h3>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">${item.marca}</h6>
-                    <p class="card-text text-start fw-bold mb-1">Ano: ${item.ano}</p>
-                    <p class="card-text text-start fw-bold mb-1">Cor: ${item.cor}</p>
-                    <h3 class="card-title mb-3">R$ ${item.preco}</h3>
-                    <div class="justify-content-between d-flex">
-                        <button id="btnEditar" class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-id=${item.id} data-bs-target="#modalEditar">Editar</button>
-                        <button class="btn reservar btn-success fs-6 fw-bold rounded-pill">Reservar</button>
+                    <div class="gap-2 d-flex">
+                        <button 
+                            class="btn btn-sm btn-warning flex-grow-1 fw-bold editar" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modalEditar"
+                            data-id="${item.id}"
+                        >
+                            ✎ Editar
+                        </button>
+                        <button class="btn btn-sm btn-success flex-grow-1 fw-bold">✓ Reservar</button>
                     </div>
                 </div>
             </div>
         `;
     });
 
-    divCarros.innerHTML = cardCarros;
+    divCarros.innerHTML = html;
 }
 
-async function getCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&tamanhoPagina=10`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+function atualizarControlesPaginacao() {
+    inputpage.value = paginaAtual;
+    inputpage.max = totalPaginas;
+    paginaInfo.textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+    
+    btnPrevious.disabled = paginaAtual <= 1;
+    btnNext.disabled = paginaAtual >= totalPaginas;
+}
+
+async function adicionarCarro() {
+    if (!validacaoForm()) return;
+
+    const payload = {
+        marca: inputMarca.value,
+        modelo: inputModelo.value,
+        ano: inputAnoF.value,
+        cor: inputCor.value,
+        preco: inputPreco.value
+    };
+
+    try {
+        const resposta = await fetch(API_BASE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        if (resposta.ok) {
+            mostrarMensagem("Carro adicionado com sucesso!", "success");
+            limparFormulario();
+            bootstrap.Modal.getInstance(document.getElementById('staticBackdrop')).hide();
+            renderCarros(1);
+            console.log ("tipo")
+        } else {
+            mostrarMensagem("Erro ao adicionar carro", "danger");
+            console.log("ndve")
+        }
+    } catch (err) {
+        console.error("Erro:", err);
+        mostrarMensagem("Erro ao adicionar carro", "danger");
+        console.log("er")
+    }
+}
+
+async function atualizarCarro() {
+    if (!validacaoForm()) return;
+    if (!carroSelecionado) {
+        mostrarMensagem("Selecione um carro para editar", "warning");
+        return;
+    }
+
+    const payload = {
+        marca: inputEditMarca.value,
+        modelo: inputEditModelo.value,
+        ano: parseInt(inputEditAnoF.value),
+        cor: inputEditCor.value,
+        preco: parseFloat(inputEditPreco.value)
+    };
+
+    try {
+        const resposta = await fetch(`${API_BASE}/${carroSelecionado}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        if (resposta.ok) {
+            mostrarMensagem("Carro atualizado com sucesso!", "success");
+            bootstrap.Modal.getInstance(document.getElementById('modalEditar')).hide();
+            renderCarros(paginaAtual);
+            carroSelecionado = null;
+        } else {
+            mostrarMensagem("Erro ao atualizar carro", "danger");
+        }
+    } catch (err) {
+        console.error("Erro:", err);
+        mostrarMensagem("Erro ao atualizar carro", "danger");
+    }
+}
+
+function selecionarCarro(event) {
+    const btnEditar = event.target.closest('.editar');
+    if (btnEditar) {
+        carroSelecionado = btnEditar.getAttribute("data-id");
+        carregarDadosEdicao(carroSelecionado);
+    }
+}
+
+function carregarDadosEdicao(id) {
+    const carro = dados.items.find(c => c.id == id);
+    if (carro) {
+        inputEditMarca.value = carro.marca;
+        inputEditModelo.value = carro.modelo;
+        inputEditAnoF.value = carro.ano;
+        inputEditCor.value = carro.cor;
+        inputEditPreco.value = carro.preco;
+    }
+}
+
+function mudarPagina() {
+    const novaPagina = parseInt(inputpage.value);
+    if (novaPagina > 0 && novaPagina <= totalPaginas) {
+        renderCarros(novaPagina);
+    } else {
+        inputpage.value = paginaAtual;
+    }
+}
+
+function pagAnterior() {
+    if (paginaAtual > 1) {
+        renderCarros(paginaAtual - 1);
+    }
+}
+
+function proxPagina() {
+    if (paginaAtual < totalPaginas) {
+        renderCarros(paginaAtual + 1);
+    }
+}
+
+function validacaoForm() {
+    const forms = document.querySelectorAll(".needs-validation");
+    let valido = true;
+
+    forms.forEach(form => {
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            const input = form.querySelector(":invalid");
+            if (input) input.focus();
+            valido = false;
+        }
     });
 
-    dados = await requisicaoRender.json();
-    return dados;
+    return valido;
+}
+
+function limparFormulario() {
+    inputMarca.value = "";
+    inputModelo.value = "";
+    inputAnoF.value = "";
+    inputCor.value = "";
+    inputPreco.value = "";
+    
+    const form = document.querySelector("#staticBackdrop .needs-validation");
+    form.classList.remove('was-validated');
+}
+
+function formatarPreco(preco) {
+    return preco.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function mostrarMensagem(mensagem, tipo = "info") {
+    const alerta = document.createElement('div');
+    alerta.className = `alert alert-${tipo} alert-dismissible fade show`;
+    alerta.role = "alert";
+    alerta.innerHTML = `
+        ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    const container = document.querySelector('.text-center');
+    container.insertBefore(alerta, container.firstChild);
+    
+    setTimeout(() => {
+        alerta.remove();
+    }, 4000);
 }

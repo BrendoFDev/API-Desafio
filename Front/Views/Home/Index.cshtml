@@ -1,145 +1,145 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Gerenciador de Carros";
 }
 
-<div class="text-center">
+<div class="container-lg py-5">
 
-    <div class="text-end">
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Adicionar Carro
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-column flex-md-row gap-3">
+        <h1 class="mb-0">Concessionária JPLOG</h1>
+        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            + Adicionar Carro
         </button>
     </div>
 
-    <div id="divRenderCars" class="row justify-content-start d-flex gap-sm-5">
+    <div id="divRenderCars" class="row g-4 mb-5">
     </div>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><<input id="inputpage" type="number" /></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-    </nav>
+
+    <div class="bg-white p-4 rounded-3 shadow-sm">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <button id="btnPrevious" type="button" class="btn btn-outline-secondary">
+                ← Anterior
+            </button>
+            
+            <div class="d-flex align-items-center gap-3 justify-content-center">
+                <label for="inputpage" class="form-label mb-0 fw-medium">Ir para página:</label>
+                <input id="inputpage" type="number" class="form-control text-center" style="max-width: 80px;" min="1" value="1" />
+            </div>
+
+            <div id="paginaInfo" class="fw-medium text-muted text-center">
+                Página 1 de 1
+            </div>
+
+            <button id="btnNext" type="button" class="btn btn-outline-secondary">
+                Próxima →
+            </button>
+        </div>
+    </div>
 
 </div>
 
 @section Modals {
 
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Carro</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Novo Carro</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                        @* CADASTRAR CARRO *@
                     <form class="needs-validation" novalidate>
-                        <div class="row justify-content-center">
-                            <div class="col-auto">
-                                <label for="inputMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
-                                <input id="inputMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
-                                <input id="inputMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
-                                <input id="inputAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputC" class="fw-medium col-auto fs-5 form-label">Cor:</label>
-                                <input id="inputC" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a cor do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputP" class="fw-medium col-auto fs-5 form-label">Preço:</label>
-                                <input id="inputP" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o valor do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="inputMa" class="form-label">Marca</label>
+                            <input id="inputMa" type="text" class="form-control rounded-2" placeholder="Ex: Toyota" required />
+                            <div class="invalid-feedback">Campo obrigatório</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputMo" class="form-label">Modelo</label>
+                            <input id="inputMo" type="text" class="form-control rounded-2" placeholder="Ex: Corolla" required />
+                            <div class="invalid-feedback">Campo obrigatório</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputAF" class="form-label">Ano de Fabricação</label>
+                            <input id="inputAF" type="number" class="form-control rounded-2" placeholder="Ex: 2023" min="1900" max="2100" required />
+                            <div class="invalid-feedback">Informe um ano válido</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputC" class="form-label">Cor</label>
+                            <input id="inputC" type="text" class="form-control rounded-2" placeholder="Ex: Preto" required />
+                            <div class="invalid-feedback">Campo obrigatório</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputP" class="form-label">Preço (R$)</label>
+                            <input id="inputP" type="number" class="form-control rounded-2" placeholder="Ex: 50000" step="0.01" min="0" required />
+                            <div class="invalid-feedback">Informe um preço válido</div>
                         </div>
                     </form>
-
                 </div>
+
                 <div class="modal-footer">
-                    <button id="adcarro" type="button" class="btn btn-primary">Adicionar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="adcarro" type="button" class="btn btn-primary">Adicionar Carro</button>
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="modal fade" id="modalEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modalEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar</h1>
+                    <h1 class="modal-title fs-5" id="modalEditarLabel">Editar Carro</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                        @* EDITAR CARRO *@
                     <form class="needs-validation" novalidate>
-                        <div class="row justify-content-center">
-                            <div class="col-auto">
-                                <label for="inputEditMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
-                                <input id="inputEditMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputEditMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
-                                <input id="inputEditMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputEditAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
-                                <input id="inputEditAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputEditC" class="fw-medium col-auto fs-5 form-label">Cor:</label>
-                                <input id="inputEditC" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a cor do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputEditP" class="fw-medium col-auto fs-5 form-label">Preço:</label>
-                                <input id="inputEditP" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o valor do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="inputEditMa" class="form-label">Marca</label>
+                            <input id="inputEditMa" type="text" class="form-control rounded-2" required />
+                            <div class="invalid-feedback">Campo obrigatório</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEditMo" class="form-label">Modelo</label>
+                            <input id="inputEditMo" type="text" class="form-control rounded-2" required />
+                            <div class="invalid-feedback">Campo obrigatório</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEditAF" class="form-label">Ano de Fabricação</label>
+                            <input id="inputEditAF" type="number" class="form-control rounded-2" min="1900" max="2100" required />
+                            <div class="invalid-feedback">Informe um ano válido</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEditC" class="form-label">Cor</label>
+                            <input id="inputEditC" type="text" class="form-control rounded-2" required />
+                            <div class="invalid-feedback">Campo obrigatório</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEditP" class="form-label">Preço (R$)</label>
+                            <input id="inputEditP" type="number" class="form-control rounded-2" step="0.01" min="0" required />
+                            <div class="invalid-feedback">Informe um preço válido</div>
                         </div>
                     </form>
-
                 </div>
+
                 <div class="modal-footer">
-                    <button id="editCarro" type="button" class="btn btn-primary">Confirmar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="editCarro" type="button" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </div>
         </div>
     </div>
-
 }
 
 @section Scripts {
