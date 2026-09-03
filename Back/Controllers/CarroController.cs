@@ -25,22 +25,20 @@ namespace Back.Controllers
         [HttpPost]
         public async Task<ActionResult> PostCarro(Carro carro2)
         {
-            // 1. Limpamos as propriedades de navegação para evitar que o EF Core tente criar 
-            // um novo modelo ou uma nova marca se eles vierem nulos ou parcialmente preenchidos.
+          
             carro2.Modelo = null;
 
-            // 2. Adicionamos e salvamos o carro usando apenas as FKs (ex: ModeloId, Preco, Ano, Cor...)
+     
             _context.Carros.Add(carro2);
             await _context.SaveChangesAsync();
 
-            // 3. Buscamos o carro recém-criado do banco carregando os relacionamentos 
-            // exatamente como faz no GET, para que a Marca e o Modelo não fiquem null no Postman
+         
             var carroSalvoComRelacionamentos = await _context.Carros
                 .Include(c => c.Modelo)
                     .ThenInclude(m => m.Marca)
                 .FirstOrDefaultAsync(c => c.Id == carro2.Id);
 
-            // 4. Retornamos o status 201 Created com os dados completos
+        
             return Created("Carro criado com sucesso.", carroSalvoComRelacionamentos);
         }
 

@@ -72,7 +72,7 @@ builder.Services.AddDbContext<Contexto>(options =>
 });
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    options.SuppressModelStateInvalidFilter = true;
+    options.SuppressModelStateInvalidFilter = true;//isso
 });
 
 

@@ -25,16 +25,15 @@ namespace Back.Controllers
                 MarcaId = modelo.MarcaId
             };
 
-            // 2. Adicionamos e salvamos no banco de dados
+           
             _context.Modelos.Add(novoModelo);
             await _context.SaveChangesAsync();
 
-            // 3. O SEGREDO ESTÁ AQUI: Mandamos o Entity Framework ir ao banco buscar a Marca atribuída
+           
             await _context.Entry(novoModelo)
                           .Reference(m => m.Marca)
                           .LoadAsync();
 
-            // 4. Agora que a propriedade 'Marca' está cheia, enviamos a resposta
             return CreatedAtAction("GetModelo", new { id = novoModelo.Id }, novoModelo);
         }
         [HttpGet]
@@ -49,19 +48,19 @@ namespace Back.Controllers
             if (paginaAtual < 1) paginaAtual = 1;
             if (tamanhoPagina < 1) tamanhoPagina = 10;
 
-            // O SEGREDO ESTÁ AQUI: Adicionamos o Include para carregar a Marca do banco de dados
+          
             var query = _context.Modelos.Include(c => c.Marca).AsQueryable();
 
-            // Filtro por Modelo (Caso queira reativar)
+            
             if (!string.IsNullOrEmpty(modelo))
             {
                 query = query.Where(c => c.NomeModelo.Contains(modelo));
             }
 
-            // Filtro por Marca (Caso queira filtrar pelo nome da marca enviado na URL)
+            
             if (!string.IsNullOrEmpty(marca))
             {
-                query = query.Where(c => c.Marca.NomeMarca.Contains(marca)); // Ajuste 'NomeMarca' para a propriedade real da sua classe Marca
+                query = query.Where(c => c.Marca.NomeMarca.Contains(marca)); 
             }
 
             var totalRegistro = await query.CountAsync();
@@ -73,10 +72,9 @@ namespace Back.Controllers
                 {
                     NomeModelo = c.NomeModelo,
                     MarcaId = c.MarcaId,
-                    Marca = c.Marca // Mapeamos o objeto Marca completo para o DTO
+                    Marca = c.Marca 
 
-                    // Se optou por exibir apenas o nome, usaria: 
-                    // NomeMarca = c.Marca.NomeMarca
+             
                 })
                 .ToListAsync();
 
@@ -133,7 +131,7 @@ namespace Back.Controllers
             var modelo = await _context.Modelos.FindAsync(id);
             if (modelo == null) return NotFound("Modelo não encontrado.");
 
-            // Verifica se existe alguma reserva para este carro
+        
             bool possuiCarros = await _context.Carros.AnyAsync(r => r.ModeloId == id);
 
             if (possuiCarros)
