@@ -8,11 +8,38 @@
             <h1>@ViewData["Title"]</h1>
         </div>
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-between gap-5">
+
+            <input class="form-control me-1 border rounded-3 w-25" type="search" placeholder="Pesquisar" aria-label="Search">
+
             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCadCliente">
                 Cadastrar Cliente
             </button>
         </div>
+
+        <table class="table table-striped ">
+            <thead >
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col" class="ms-">Nome</th>
+                </tr>
+            </thead>
+            <tbody id="exibirClientes">
+                <tr>
+                    <th scope="row">1</th>
+                    <td class="text-start">Mark Popó joe</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td class="text-start">Jacob da Silva de Santana Pereira Nunes Monteiro Lobato Pikachu</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td colspan="2" class="text-start">Virgulino Ferreira da Silva</td>
+                </tr>
+            </tbody>
+        </table>
+
     </div>
 </div>
 

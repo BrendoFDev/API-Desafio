@@ -17,7 +17,7 @@ namespace Front.Controllers
             return View();
         }
 
-        public IActionResult CadastroCliente()
+        public IActionResult clienteView()
         {
             return View();
         }
