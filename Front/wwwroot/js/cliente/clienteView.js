@@ -2,11 +2,13 @@
 const cpf = document.getElementById("cpf");
 const btnEnviar = document.getElementById("enviar");
 
-const tableExibirClientes = getElementById("exibirClientes");
+const tableExibirClientes = document.getElementById("exibirClientes");
 
-const dados;
+let dados = "";
 
 try {
+    renderClientes()
+
     btnEnviar.addEventListener('click', async () => {
 
         const payload = {
@@ -32,4 +34,18 @@ async function renderClientes() {
     });
 
     dados = await getClientes.json();
+
+    let cliente = ""
+    dados.items.forEach((item) => {
+
+        cliente += `
+            <tr>
+                <th scope="row">${item.cpf}</th>
+                <td class="text-start">${item.nome}</td>
+            </tr>
+        `
+
+    });
+
+    tableExibirClientes.innerHTML = cliente;
 }

@@ -1,4 +1,4 @@
-﻿    //CAD CARRO MODAL
+﻿//CAD CARRO MODAL
 let inputMarca = document.getElementById("inputMa");
 let inputModelo = document.getElementById("inputMo");
 let inputAnoF = document.getElementById("inputAF");
@@ -98,7 +98,7 @@ async function renderCarros() {
     });
 
     const totalPages = `
-        <span>Total de Páginas: ${dados.totalPagina}</span>
+        <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPagina} </span>
     `
     totalPaginas = dados.totalPagina;
     paginaInfo.innerHTML = totalPages;
@@ -137,10 +137,9 @@ function mudarPagina() {
         page = novaPagina;
         renderCarros(page);
     } else {
-        inputpage.value = paginaAtual;
+        inputpage.value = page;
     }
 }
-
 function pagAnterior() {
     if (page > 1) {
         page = page - 1;
