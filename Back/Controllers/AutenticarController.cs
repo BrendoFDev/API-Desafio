@@ -12,7 +12,6 @@ using Back.DTO_s;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 
-
 namespace Back.Controllers
 {
     [Route("api/auth")]

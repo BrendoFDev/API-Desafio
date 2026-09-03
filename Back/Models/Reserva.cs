@@ -7,7 +7,7 @@ namespace Back.Models
     {
         public int Id { get; set; }
 
-        public long CarroId { get; set; }
+        public int CarroId { get; set; }
         [JsonIgnore]
         [ForeignKey("CarroId")]
         public Carro carro { get; set; } = default!;
