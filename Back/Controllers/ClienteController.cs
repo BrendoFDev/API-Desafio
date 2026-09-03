@@ -47,17 +47,60 @@ namespace Back.Controllers
         }
        
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteController>> GetCliente(int id)
+        [HttpGet]
+        public async Task<ActionResult<Paginacao<ClienteDTO>>> GetClientes(
+           [FromQuery] int paginaAtual = 1,
+           [FromQuery] int tamanhoPagina = 10,
+           [FromQuery] string? nome = null,
+           [FromQuery] string? cpf = null)
+     
         {
-            var Cliente = await _context.Clientes.FindAsync(id);
 
-            if (Cliente == null)
+            if (paginaAtual < 1) paginaAtual = 1;
+            if (tamanhoPagina < 1) tamanhoPagina = 10;
+            var query = _context.Clientes.AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(nome))
             {
-                return NotFound("Não existe nenhum cliente");
+                query = query.Where(c => EF.Functions.Like(c.Nome, $"%{nome}%"));
             }
 
-            return Ok(Cliente);
+
+            if (!string.IsNullOrEmpty(cpf))
+            {
+                query = query.Where(c => EF.Functions.Like(c.Cpf, $"%{cpf}%"));
+            }
+
+
+            
+
+
+
+
+            var totalRegistro = await query.CountAsync();
+
+
+            var items = await query
+                .Select(c => new ClienteDTO
+                {
+                    Nome = c.Nome,
+                    Cpf = c.Cpf
+                    
+                })
+                .Skip((paginaAtual - 1) * tamanhoPagina)
+                .Take(tamanhoPagina)
+                .ToListAsync();
+
+            var resultado = new Paginacao<ClienteDTO>
+            {
+                Items = items,
+                TotalRegistro = totalRegistro,
+                PaginaAtual = paginaAtual,
+                TamanhoPagina = tamanhoPagina
+            };
+
+            return Ok(resultado);
         }
 
         [HttpPut("{id}")]
