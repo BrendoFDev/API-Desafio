@@ -87,10 +87,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-<<<<<<< HEAD
-    //.RequireAuthorization();
-=======
-//.RequireAuthorization()
->>>>>>> 0ba0d8ca326ac92a0e11ea7b8069c3d8a4b13389
+
+//.RequireAuthorization();
 
 app.Run();
