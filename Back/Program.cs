@@ -70,10 +70,10 @@ builder.Services.AddDbContext<Contexto>(options =>
 {
     options.UseNpgsql(connectionString);
 });
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;//isso
-});
+//builder.Services.Configure<ApiBehaviorOptions>(options =>
+//{
+  //  options.SuppressModelStateInvalidFilter = true;//isso
+//});
 
 
 var app = builder.Build();

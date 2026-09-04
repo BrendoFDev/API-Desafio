@@ -6,13 +6,13 @@ namespace Back.DTO_s
     public class CarroDTO
     {
         [Required(ErrorMessage = "O preço é obrigatório.")]
-        public float? Preco { get; set; }
+        public float Preco { get; set; }
 
         [Required(ErrorMessage = "A cor é obrigatória.")]
-        public string? Cor { get; set; }
+        public string Cor { get; set; }
 
         [Required(ErrorMessage = "O ano é obrigatório.")]
-        public int? Ano { get; set; }
+        public int Ano { get; set; }
 
        
 

@@ -21,22 +21,22 @@ namespace Back.Controllers
         private readonly Contexto _context;
 
 
+       
         [HttpPost]
-        [HttpPost]
-        public async Task<ActionResult> PostCarro(Carro carro2)
+        public async Task<ActionResult> PostCarro(CarroDTO carro2)
         {
-          
-            carro2.Modelo = null;
+
+            Carro carro = new Carro() {Preco=carro2.Preco,ModeloId=carro2.ModeloId,MarcaId=carro2.MarcaId,Cor=carro2.Cor ,Ano=carro2.Ano, };
 
      
-            _context.Carros.Add(carro2);
+            _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
          
             var carroSalvoComRelacionamentos = await _context.Carros
                 .Include(c => c.Modelo)
                     .ThenInclude(m => m.Marca)
-                .FirstOrDefaultAsync(c => c.Id == carro2.Id);
+                .FirstOrDefaultAsync(c => c.Id == carro.Id);
 
         
             return Created("Carro criado com sucesso.", carroSalvoComRelacionamentos);
@@ -128,10 +128,10 @@ namespace Back.Controllers
              //       carro.Modelo = requisicao.Modelo;
              //   if (!string.IsNullOrEmpty(requisicao.Marca))
              //       carro.Marca = requisicao.Marca;
-                if (requisicao.Ano.HasValue)
-                    carro.Ano = requisicao.Ano.Value;
-                if (requisicao.Preco.HasValue)
-                    carro.Preco = requisicao.Preco.Value;
+               // if (requisicao.Ano.HasValue)
+                 //   carro.Ano = requisicao.Ano.Value;
+              //  if (requisicao.Preco.HasValue)
+             //       carro.Preco = requisicao.Preco.Value;
 
 
                 await _context.SaveChangesAsync();
