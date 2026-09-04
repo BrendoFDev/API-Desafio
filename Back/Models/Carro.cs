@@ -21,7 +21,7 @@ namespace Back.Models
         [StringLength(50, ErrorMessage = "A cor deve ter no máximo 50 caracteres.")]
         public string Cor { get; set; }
 
-        public string ModeloNome { get; set; }
+     //   public string ModeloNome { get; set; }
       //  public string? MarcaNome { get; set; }
 
         [Required(ErrorMessage = "O preço é obrigatório.")]

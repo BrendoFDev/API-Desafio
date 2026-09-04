@@ -12,6 +12,6 @@ namespace Back.DTO_s
         [Required(ErrorMessage = "O Id da Marca é obrigatório.")]
         public int MarcaId { get; set; }
 
-        public Marca Marca { get; set; }
+        public Marca? Marca { get; set; }
     }
 }

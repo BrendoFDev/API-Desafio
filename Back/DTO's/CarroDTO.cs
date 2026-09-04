@@ -14,7 +14,10 @@ namespace Back.DTO_s
         [Required(ErrorMessage = "O ano é obrigatório.")]
         public int Ano { get; set; }
 
+        public Modelo? Modelo { get; set; }
+
        
+        public Marca? Marca { get; set; }
 
         [Required(ErrorMessage = "O ID da Marca é obrigatório.")]
         public int MarcaId { get; set; }

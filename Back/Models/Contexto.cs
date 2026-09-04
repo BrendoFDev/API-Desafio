@@ -18,7 +18,7 @@ namespace Back.Models
             modelBuilder.Entity<Carro>(x =>
             {
                 x.HasKey(c => c.Id);
-                x.Property(c => c.ModeloNome).HasMaxLength(100); 
+               // x.Property(c => c.ModeloNome).HasMaxLength(100); 
                 x.Property(c => c.Preco).HasMaxLength(100);
                 x.Property(c => c.Ano);
                 x.Property(c => c.Cor).HasMaxLength(50);
@@ -46,11 +46,11 @@ namespace Back.Models
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Relacionamento: Carro -> Marca (Muitos para Um)
-          //  modelBuilder.Entity<Carro>()
-              //  .HasOne(c => c.Marca)
-              //  .WithMany(m => m.Carros)
-              //  .HasForeignKey(c => c.MarcaId)
-              //  .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Carro>()
+                .HasOne(c => c.Marca)
+                .WithMany(m => m.Carros)
+                .HasForeignKey(c => c.MarcaId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Relacionamento: Carro -> Modelo (Muitos para Um)
             modelBuilder.Entity<Carro>()

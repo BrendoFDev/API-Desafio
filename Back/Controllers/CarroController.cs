@@ -28,18 +28,20 @@ namespace Back.Controllers
 
             Carro carro = new Carro() {Preco=carro2.Preco,ModeloId=carro2.ModeloId,MarcaId=carro2.MarcaId,Cor=carro2.Cor ,Ano=carro2.Ano, };
 
-     
-            _context.Carros.Add(carro);
-            await _context.SaveChangesAsync();
 
-         
+
             var carroSalvoComRelacionamentos = await _context.Carros
                 .Include(c => c.Modelo)
                     .ThenInclude(m => m.Marca)
                 .FirstOrDefaultAsync(c => c.Id == carro.Id);
 
+            _context.Carros.Add(carro);
+            await _context.SaveChangesAsync();
+
+         
+
         
-            return Created("Carro criado com sucesso.", carroSalvoComRelacionamentos);
+            return Created("Carro criado com sucesso.", carro);
         }
 
         [HttpGet]
@@ -47,8 +49,8 @@ namespace Back.Controllers
     [FromQuery] string? termoBusca,
     [FromQuery] int pagina = 1,
     [FromQuery] int itensPorPagina = 10,
-    [FromQuery] string? marca = null,
-    [FromQuery] string? modelo = null,
+    [FromQuery] string? NomeMarca = null,
+    [FromQuery] string? NomeModelo= null,
     [FromQuery] int? ano = null,
     [FromQuery] string? cor = null)
         {
@@ -71,11 +73,11 @@ namespace Back.Controllers
             }
 
             
-            if (!string.IsNullOrWhiteSpace(marca))
-                query = query.Where(c => c.Modelo.Marca.NomeMarca.Contains(marca.Trim()));
+            if (!string.IsNullOrWhiteSpace(NomeMarca))
+                query = query.Where(c => c.Modelo.Marca.NomeMarca.Contains(NomeMarca.Trim()));
 
-            if (!string.IsNullOrWhiteSpace(modelo))
-                query = query.Where(c => c.Modelo.NomeModelo.Contains(modelo.Trim()));
+            if (!string.IsNullOrWhiteSpace(NomeModelo))
+                query = query.Where(c => c.Modelo.NomeModelo.Contains(NomeModelo.Trim()));
 
             if (ano.HasValue)
                 query = query.Where(c => c.Ano == ano.Value);
@@ -93,9 +95,11 @@ namespace Back.Controllers
                 .Select(c => new
                 {
                     CarroId = c.Id,
+                    
                     c.Ano,
                     c.ModeloId,
-                    ModeloNome = c.Modelo.NomeModelo,
+                    c.Modelo.NomeModelo,
+
                     c.Modelo.MarcaId, 
                     MarcaNome = c.Modelo.Marca.NomeMarca
                 })
