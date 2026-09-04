@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -14,6 +15,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
 })
 .AddJwtBearer(options =>
 {
@@ -68,6 +70,11 @@ builder.Services.AddDbContext<Contexto>(options =>
 {
     options.UseNpgsql(connectionString);
 });
+//builder.Services.Configure<ApiBehaviorOptions>(options =>
+//{
+  //  options.SuppressModelStateInvalidFilter = true;//isso
+//});
+
 
 var app = builder.Build();
 
@@ -80,6 +87,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+<<<<<<< HEAD
     //.RequireAuthorization();
+=======
+//.RequireAuthorization()
+>>>>>>> 0ba0d8ca326ac92a0e11ea7b8069c3d8a4b13389
 
 app.Run();

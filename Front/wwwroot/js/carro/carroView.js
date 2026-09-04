@@ -17,8 +17,7 @@ const adcarro = document.getElementById("adcarro");
 const editCarroModal = document.getElementById("btnEditar");
 const modalview = document.getElementById("staticBackdrop");
 const divCarros = document.getElementById("divRenderCars");
-const paginas = document.querySelectorAll(".page-item")
-const voltar = document.getElementById("liVoltar");
+
 //PAGINACAO
 const inputpage = document.getElementById("inputpage");
 const btnVoltar = document.getElementById("btnVoltar");
@@ -29,7 +28,6 @@ const paginaInfo = document.getElementById("paginaInfo");
 let dados;
 let page = 1;
 let totalPaginas = 1;
-let carroSelecionado;
 
 try {
     renderCarros(page);
@@ -50,6 +48,13 @@ try {
     });
     btnVoltar.addEventListener('click', () => {
         pagAnterior();
+    });
+
+    divCarros.addEventListener('click', (event) => {
+        selecionarCarro();
+    });
+    editcarro.addEventListener('click', () => {
+        atualizarCarro();
     });
 }
 catch (err) {
@@ -81,16 +86,16 @@ async function renderCarros() {
     dados.items.forEach((item) => {
 
         cardCarros += `
-            <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;" id='${item.id}'>
+            <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;">
                 <div class="card-body rounded-3">
                     <h3 class="card-title">${item.modelo}</h3>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">${item.marca}</h6>
-                    <p class="card-text text-start fw-bold mb-1">Ano: ${item.ano}</p>
-                    <p class="card-text text-start fw-bold mb-1">Cor: ${item.cor}</p>
-                    <h3 class="card-title mb-3">R$ ${item.preco}</h3>
+                    <h6 class="card-subtitle mb-2 text-body-secondary" >${item.marca}</h6>
+                    <p class="card-text text-start fw-bold mb-1" >Ano: ${item.ano}</p>
+                    <p class="card-text text-start fw-bold mb-1" >Cor: ${item.cor}</p>
+                    <h3 class="card-title mb-3" >R$ ${item.preco}</h3>
                     <div class="justify-content-between d-flex">
-                        <button id="btnEditar" class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-id=${item.id} data-bs-target="#modalEditar">Editar</button>
-                        <button class="btn reservar btn-success fs-6 fw-bold rounded-pill">Reservar</button>
+                        <button id="btnEditar" data-modelo=${item.modelo} data-marca=${item.marca} data-ano=${item.ano} data-cor=${item.cor} data-preco=${item.preco} class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                        <button class="btn reservar btn-success fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
                     </div>
                 </div>
             </div>
@@ -153,40 +158,18 @@ function proxPagina() {
     }
 }
 
-// function atualizarPaginacao() {
-//     inputpage.value = paginaAtual;
-//     inputpage.max = totalPaginas;
-
-//     btnPrevious.disabled = paginaAtual <= 1;
-//     btnNext.disabled = paginaAtual >= totalPaginas;
-// }
-
-
-
-
-
-
-inputpage.addEventListener('change', async () => {
-    limitePage = await renderCarros(page);
-    console.log(limitePage)
-    page = inputpage.value
-    if (limitePage <= page) {
-        renderCarros(page)
-    }
-
-});
-
-
-
-divCarros.addEventListener('click', (event) => {
+function selecionarCarro() {
     const btnEditar = event.target.closest('.editar');
     if (btnEditar) {
-        carroSelecionado = btnEditar.getAttribute("data-id");
+
+        inputEditMarca.value = btnEditar.getAttribute("data-marca");
+        inputEditModelo.value = btnEditar.getAttribute("data-modelo");
+        inputEditAnoF.value = btnEditar.getAttribute("data-ano");
+        inputEditCor.value = btnEditar.getAttribute("data-cor");
+        inputEditPreco.value = btnEditar.getAttribute("data-preco");
     }
-});
-
-editcarro.addEventListener('click', async () => {
-
+}
+async function atualizarCarro() {
     const marca = inputEditMarca.value;
     const modelo = inputEditModelo.value;
     const ano = inputEditAnoF.value;
@@ -205,9 +188,9 @@ editcarro.addEventListener('click', async () => {
     }
 
 
-    const atualizar = await fetch(`https:localhost:7063/api/carro/${carroSelecionado}`, {
+    const atualizar = await fetch(`https:localhost:7063/api/carro/${marca}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });
-});
+}

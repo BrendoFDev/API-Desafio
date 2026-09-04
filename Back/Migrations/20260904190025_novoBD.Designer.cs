@@ -3,6 +3,7 @@ using System;
 using Back.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Back.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20260904190025_novoBD")]
+    partial class novoBD
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +46,11 @@ namespace Back.Migrations
 
                     b.Property<int>("ModeloId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ModeloNome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<float>("Preco")
                         .HasMaxLength(100)
@@ -215,7 +223,7 @@ namespace Back.Migrations
                     b.HasOne("Back.Models.Marca", "Marca")
                         .WithMany("Carros")
                         .HasForeignKey("MarcaId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Back.Models.Modelo", "Modelo")

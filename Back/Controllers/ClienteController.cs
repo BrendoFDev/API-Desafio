@@ -82,8 +82,9 @@ namespace Back.Controllers
 
 
             var items = await query
-                .Select(c => new ClienteDTO
+                .Select(c => new Cliente
                 {
+                    id= c.id,
                     Nome = c.Nome,
                     Cpf = c.Cpf
                     
@@ -92,7 +93,7 @@ namespace Back.Controllers
                 .Take(tamanhoPagina)
                 .ToListAsync();
 
-            var resultado = new Paginacao<ClienteDTO>
+            var resultado = new Paginacao<Cliente>
             {
                 Items = items,
                 TotalRegistro = totalRegistro,

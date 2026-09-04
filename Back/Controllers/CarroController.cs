@@ -21,90 +21,102 @@ namespace Back.Controllers
         private readonly Contexto _context;
 
 
+       
         [HttpPost]
-        public async Task<ActionResult<CarroController>> PostCarro(Carro carro2)
+        public async Task<ActionResult> PostCarro(CarroDTO carro2)
         {
-            
-            _context.Carros.Add(carro2);
+
+            Carro carro = new Carro() {Preco=carro2.Preco,ModeloId=carro2.ModeloId,MarcaId=carro2.MarcaId,Cor=carro2.Cor ,Ano=carro2.Ano, };
+
+
+
+            var carroSalvoComRelacionamentos = await _context.Carros
+                .Include(c => c.Modelo)
+                    .ThenInclude(m => m.Marca)
+                .FirstOrDefaultAsync(c => c.Id == carro.Id);
+
+            _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
-            return Created("Carro criado com sucesso. ", carro2);
+         
+
+        
+            return Created("Carro criado com sucesso.", carro);
         }
 
-       [HttpGet]
-        public async Task<ActionResult<Paginacao<CarroDTO>>> GetCarros(
-           [FromQuery] int paginaAtual = 1, 
-           [FromQuery] int tamanhoPagina = 10,
-           [FromQuery] string? marca = null,
-           [FromQuery] string? modelo = null,
-           [FromQuery] int? ano = null,
-           [FromQuery] string? cor = null)
+        [HttpGet]
+        public async Task<IActionResult> GetCarrosPaginados(
+    [FromQuery] string? termoBusca,
+    [FromQuery] int pagina = 1,
+    [FromQuery] int itensPorPagina = 10,
+    [FromQuery] string? NomeMarca = null,
+    [FromQuery] string? NomeModelo= null,
+    [FromQuery] int? ano = null,
+    [FromQuery] string? cor = null)
         {
+            if (pagina < 1) pagina = 1;
+            int quantidadeParaPular = (pagina - 1) * itensPorPagina;
+
+            var query = _context.Carros
+                .Include(c => c.Modelo)
+                    .ThenInclude(m => m.Marca)
+                .AsQueryable();
+
             
-            if (paginaAtual < 1) paginaAtual = 1;
-            if (tamanhoPagina < 1) tamanhoPagina = 10;
-            var query = _context.Carros.AsQueryable();
-
-
-            if (!string.IsNullOrEmpty(marca))
+            if (!string.IsNullOrWhiteSpace(termoBusca))
             {
-                query = query.Where(c => EF.Functions.Like(c.Marca, $"%{marca}%"));
+                termoBusca = termoBusca.Trim();
+                query = query.Where(c =>
+                    c.Modelo.NomeModelo.Contains(termoBusca) ||
+                    c.Modelo.Marca.NomeMarca.Contains(termoBusca)
+                );
             }
 
-             
-            if (!string.IsNullOrEmpty(modelo))
-            {
-                query = query.Where(c => EF.Functions.Like(c.Modelo, $"%{modelo}%"));
-            }
+            
+            if (!string.IsNullOrWhiteSpace(NomeMarca))
+                query = query.Where(c => c.Modelo.Marca.NomeMarca.Contains(NomeMarca.Trim()));
 
+            if (!string.IsNullOrWhiteSpace(NomeModelo))
+                query = query.Where(c => c.Modelo.NomeModelo.Contains(NomeModelo.Trim()));
 
             if (ano.HasValue)
-            {
                 query = query.Where(c => c.Ano == ano.Value);
-            }
 
+            if (!string.IsNullOrWhiteSpace(cor))
+                query = query.Where(c => c.Cor.Contains(cor.Trim())); 
 
-            if (!string.IsNullOrEmpty(cor))
-            {
-                query = query.Where(c => EF.Functions.Like(c.Cor, $"%{cor}%"));
-            }
+            query = query.OrderBy(c => c.Id);
 
+            var totalRegistros = await query.CountAsync();
 
-
-
-            var totalRegistro = await query.CountAsync();
-
-            
-            var items = await query
-                .Select(c => new CarroDTO
+            var itens = await query
+                .Skip(quantidadeParaPular)
+                .Take(itensPorPagina)
+                .Select(c => new
                 {
-                    Modelo = c.Modelo,
-                    Ano = c.Ano,
-                    Preco = c.Preco,
-                    Marca = c.Marca,
-                    Cor = c.Cor
+                    CarroId = c.Id,
+                    
+                    c.Ano,
+                    c.ModeloId,
+                    c.Modelo.NomeModelo,
+
+                    c.Modelo.MarcaId, 
+                    MarcaNome = c.Modelo.Marca.NomeMarca
                 })
-                .Skip((paginaAtual - 1) * tamanhoPagina)
-                .Take(tamanhoPagina)
                 .ToListAsync();
 
-            var resultado = new Paginacao<CarroDTO>
+            return Ok(new
             {
-                Items = items,
-                TotalRegistro = totalRegistro,
-                PaginaAtual = paginaAtual,
-                TamanhoPagina = tamanhoPagina
-            };
-
-            return Ok(resultado);
+                TotalItens = totalRegistros,
+                PaginaAtual = pagina,
+                TotalPaginas = (int)Math.Ceiling((double)totalRegistros / itensPorPagina),
+                Dados = itens
+            });
         }
-
-
-
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarro(long id, [FromBody] CarroDTO requisicao)
+        public async Task<IActionResult> PutCarro(int id, [FromBody] CarroDTO requisicao)
         {
             try
             {
@@ -116,14 +128,14 @@ namespace Back.Controllers
 
                 if (!string.IsNullOrEmpty(requisicao.Cor))
                     carro.Cor = requisicao.Cor;
-                if (!string.IsNullOrEmpty(requisicao.Modelo))
-                    carro.Modelo = requisicao.Modelo;
-                if (!string.IsNullOrEmpty(requisicao.Marca))
-                    carro.Marca = requisicao.Marca;
-                if (requisicao.Ano.HasValue)
-                    carro.Ano = requisicao.Ano.Value;
-                if (requisicao.Preco.HasValue)
-                    carro.Preco = requisicao.Preco.Value;
+             //   if (!string.IsNullOrEmpty(requisicao.Modelo))
+             //       carro.Modelo = requisicao.Modelo;
+             //   if (!string.IsNullOrEmpty(requisicao.Marca))
+             //       carro.Marca = requisicao.Marca;
+               // if (requisicao.Ano.HasValue)
+                 //   carro.Ano = requisicao.Ano.Value;
+              //  if (requisicao.Preco.HasValue)
+             //       carro.Preco = requisicao.Preco.Value;
 
 
                 await _context.SaveChangesAsync();
@@ -145,13 +157,13 @@ namespace Back.Controllers
 
         }
 
-        private bool CarroExists(long id)
+        private bool CarroExists(int id)
         {
             return _context.Carros.Any(e => e.Id == id);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarro(long id)
+        public async Task<IActionResult> DeleteCarro(int id)
         {
             var carro = await _context.Carros.FindAsync(id);
             if (carro == null) return NotFound("Carro não encontrado.");
