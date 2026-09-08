@@ -23,7 +23,7 @@ namespace Back.Controllers
 
        
         [HttpPost]
-        public async Task<ActionResult> PostCarro(CarroDTO carro2)
+        public async Task<ActionResult> PostCarro(Carro carro2)
         {
 
             Carro carro = new Carro() {Preco=carro2.Preco,ModeloId=carro2.ModeloId,MarcaId=carro2.MarcaId,Cor=carro2.Cor ,Ano=carro2.Ano, };
@@ -38,9 +38,6 @@ namespace Back.Controllers
             _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
-         
-
-        
             return Created("Carro criado com sucesso.", carro);
         }
 
@@ -52,7 +49,9 @@ namespace Back.Controllers
     [FromQuery] string? NomeMarca = null,
     [FromQuery] string? NomeModelo= null,
     [FromQuery] int? ano = null,
-    [FromQuery] string? cor = null)
+    [FromQuery] string? cor = null,
+            [FromQuery] float? preco= null,
+            [FromQuery] bool ProximaPagina = true)
         {
             if (pagina < 1) pagina = 1;
             int quantidadeParaPular = (pagina - 1) * itensPorPagina;
@@ -97,21 +96,31 @@ namespace Back.Controllers
                     CarroId = c.Id,
                     
                     c.Ano,
+                    c.Cor,
+                    c.Preco,
                     c.ModeloId,
                     c.Modelo.NomeModelo,
 
                     c.Modelo.MarcaId, 
-                    MarcaNome = c.Modelo.Marca.NomeMarca
+                    MarcaNome = c.Modelo.Marca.NomeMarca,
+
+
+                    Fotos = c.Fotos.Select(f => f.FotoBytes).ToList(),
+
+                 
+                    
+
                 })
                 .ToListAsync();
 
-            return Ok(new
+            return Ok(new 
             {
                 TotalItens = totalRegistros,
                 PaginaAtual = pagina,
                 TotalPaginas = (int)Math.Ceiling((double)totalRegistros / itensPorPagina),
-                Dados = itens
-            });
+                Dados = itens,
+               // ProximaPagina = ProximaPagina = ;
+        });
         }
 
 
@@ -128,14 +137,11 @@ namespace Back.Controllers
 
                 if (!string.IsNullOrEmpty(requisicao.Cor))
                     carro.Cor = requisicao.Cor;
-             //   if (!string.IsNullOrEmpty(requisicao.Modelo))
-             //       carro.Modelo = requisicao.Modelo;
-             //   if (!string.IsNullOrEmpty(requisicao.Marca))
-             //       carro.Marca = requisicao.Marca;
-               // if (requisicao.Ano.HasValue)
-                 //   carro.Ano = requisicao.Ano.Value;
-              //  if (requisicao.Preco.HasValue)
-             //       carro.Preco = requisicao.Preco.Value;
+           
+                if (requisicao.Ano.HasValue)
+                    carro.Ano = requisicao.Ano.Value;
+                if (requisicao.Preco.HasValue)
+                    carro.Preco = requisicao.Preco.Value;
 
 
                 await _context.SaveChangesAsync();

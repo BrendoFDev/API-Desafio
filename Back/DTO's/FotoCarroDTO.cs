@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Back.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Back.Models
+namespace Back.DTO_s
 {
-    public class FotoCarro
+    public class FotoCarroDTO
     {
-        public int Id { get; set; }
+        [Required(ErrorMessage = "O conteúdo é obrigatório.")]
 
         [NotMapped]
         public IFormFile Conteudo { get; set; }
@@ -18,5 +20,7 @@ namespace Back.Models
         [BindNever]
         [JsonIgnore]
         public Carro? Carro { get; set; }
+
+
     }
 }

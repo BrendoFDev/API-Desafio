@@ -29,6 +29,7 @@ namespace Back.Models
         public float Preco { get; set; }
 
         public ICollection<Reserva> Reservas { get; set; } = [];
+        public List<FotoCarro> Fotos { get; set; } = new List<FotoCarro>();
 
     }
 }
