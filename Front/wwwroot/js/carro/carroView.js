@@ -1,16 +1,23 @@
 ﻿//CAD CARRO MODAL
-let inputMarca = document.getElementById("inputMa");
-let inputModelo = document.getElementById("inputMo");
+const btnCarro = document.getElementById("btnCarro");
 let inputAnoF = document.getElementById("inputAF");
 let inputCor = document.getElementById("inputC");
 let inputPreco = document.getElementById("inputP");
+const selectMarcaCarro = document.getElementById("marcasCarro");
+const selectModeloCarro = document.getElementById("modelosCarro");
 //EDIT CARRO MODAL
-const inputEditMarca = document.getElementById("inputEditMa");
-const inputEditModelo = document.getElementById("inputEditMo");
 const inputEditAnoF = document.getElementById("inputEditAF");
 const inputEditCor = document.getElementById("inputEditC");
 const inputEditPreco = document.getElementById("inputEditP");
 const editcarro = document.getElementById("editCarro");
+//ADD MARCA CARRO MODAL
+let inputMarca = document.getElementById("inputAddMod");
+const btnAddMarca = document.getElementById("btnAddMarca");
+//ADD MODELO CARRO MODAL
+const selectMarca = document.getElementById("marcas");
+let inputModelo = document.getElementById("inputAddModelo");
+const btnModelo = document.getElementById("btnModelo");
+const btnAddModelo = document.getElementById("btnAddModelo");
 //GERAL
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
@@ -33,8 +40,6 @@ try {
     renderCarros(page);
     adcarro.addEventListener('click', async () => {
         enviarCarro()
-        inputMarca.value = "";
-        inputModelo.value = "";
         inputAnoF.value = "";
         inputCor.value = "";
         inputPreco.value = "";
@@ -56,6 +61,19 @@ try {
     editcarro.addEventListener('click', () => {
         atualizarCarro();
     });
+
+    btnAddMarca.addEventListener('click', () => {
+        salvarMarca();
+    });
+    btnAddModelo.addEventListener('click', () => {
+        salvarModelo();
+    });
+    btnModelo.addEventListener('click', () => {
+        renderSelectMarca();
+    });
+    btnCarro.addEventListener('click', () => {
+        renderSelectModelo();
+    });
 }
 catch (err) {
     console.log(err);
@@ -75,26 +93,27 @@ function validacaoForm() {
 }
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&tamanhoPagina=10`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=1&itensPorPagina=10`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
 
     dados = await requisicaoRender.json();
+    console.log(dados)
 
     let cardCarros = "";
-    dados.items.forEach((item) => {
+    dados.dados.forEach((item) => {
 
         cardCarros += `
             <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;">
                 <div class="card-body rounded-3">
-                    <h3 class="card-title">${item.modelo}</h3>
-                    <h6 class="card-subtitle mb-2 text-body-secondary" >${item.marca}</h6>
+                    <h3 class="card-title">${item.nomeModelo}</h3>
+                    <h6 class="card-subtitle mb-2 text-body-secondary" >${item.nomeMarca}</h6>
                     <p class="card-text text-start fw-bold mb-1" >Ano: ${item.ano}</p>
                     <p class="card-text text-start fw-bold mb-1" >Cor: ${item.cor}</p>
                     <h3 class="card-title mb-3" >R$ ${item.preco}</h3>
                     <div class="justify-content-between d-flex">
-                        <button id="btnEditar" data-modelo=${item.modelo} data-marca=${item.marca} data-ano=${item.ano} data-cor=${item.cor} data-preco=${item.preco} class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                        <button id="btnEditar" data-modelo=${item.modelo} data-marca=${item.marca} data-ano=${item.ano}  data-preco=${item.preco} class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                         <button class="btn reservar btn-success fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
                     </div>
                 </div>
@@ -103,16 +122,17 @@ async function renderCarros() {
     });
 
     const totalPages = `
-        <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPagina} </span>
+        <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPaginas} </span>
     `
     totalPaginas = dados.totalPagina;
+    PageVarAvancar = dados.proximaPagina;
     paginaInfo.innerHTML = totalPages;
     divCarros.innerHTML = cardCarros;
 }
 
 async function enviarCarro() {
-    const marca = inputMarca.value;
-    const modelo = inputModelo.value;
+    const marca = selectMarcaCarro.value;
+    const modelo = selectModeloCarro.value;
     const ano = inputAnoF.value;
     const cor = inputCor.value;
     const preco = inputPreco.value;
@@ -121,8 +141,8 @@ async function enviarCarro() {
         return;
 
     const payload = {
-        marca: marca,
-        modelo: modelo,
+        marcaId: marca,
+        modeloId: modelo,
         ano: ano,
         cor: cor,
         preco: preco
@@ -150,12 +170,22 @@ function pagAnterior() {
         page = page - 1;
         renderCarros(page);
     }
+    if (page <= 1) {
+        btnVoltar.classList.add("disabled");
+        return
+    }
+    btnVoltar.classList.remove("disabled");
 }
 function proxPagina() {
     if (page < totalPaginas) {
         page++;
         renderCarros(page);
     }
+    if (!PageVarAvancar) {
+        btnAvancar.classList.add("disabled");
+        return
+    }
+    btnAvancar.classList.remove("disabled");
 }
 
 function selecionarCarro() {
@@ -193,4 +223,86 @@ async function atualizarCarro() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });
+}
+
+async function salvarMarca() {
+    const marca = inputMarca.value
+
+    const payload = {
+        nomeMarca: marca,
+    }
+
+    const enviarMarca = await fetch(`https://localhost:7063/api/marca`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+
+    inputMarca.value = "";
+}
+async function renderSelectMarca() {
+    const requisicao = await fetch(`https://localhost:7063/api/marca`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    const data = await requisicao.json();
+
+    let optionsMarcas = "<option selected disabled>Selecione uma marca</option>";
+    data.items.forEach((item) => {
+
+        optionsMarcas += `
+            <option value=${item.id}>${item.nomeMarca}</option>
+        `;
+    });
+
+    selectMarca.innerHTML = optionsMarcas;
+}
+async function salvarModelo() {
+    const modelo = inputModelo.value
+    const idMarca = selectMarca.value;
+    console.log(idMarca)
+    console.log(modelo)
+
+    const payload = {
+        marcaId: idMarca,
+        nomeModelo: modelo,
+    }
+
+    const enviarModelo = await fetch(`https://localhost:7063/api/modelo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+
+    inputModelo.value = "";
+}
+
+async function renderSelectModelo() {
+    const requisicao = await fetch(`https://localhost:7063/api/modelo`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    const data = await requisicao.json();
+
+    let optionsModelo = "<option selected disabled>Selecione um modelo</option>";
+    data.items.forEach((item) => {
+
+        optionsModelo += `
+            <option value=${item.id}>${item.nomeModelo}</option>
+        `;
+        console.log(item.id)
+    });
+
+    let optionsMarcas = "<option selected disabled>Selecione uma marca</option>";
+    data.items.forEach((item) => {
+
+        optionsMarcas += `
+            <option value=${item.marca.id}>${item.marca.nomeMarca}</option>
+        `;
+    });
+
+    selectMarcaCarro.innerHTML = optionsMarcas;
+    selectModeloCarro.innerHTML = optionsModelo;
 }

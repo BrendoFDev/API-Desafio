@@ -5,7 +5,13 @@
 <div class="text-center">
 
     <div class="text-end">
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalAdicionarMarca">
+            Adicionar Marca
+        </button>
+        <button id="btnModelo" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalAdicionarModelo">
+            Adicionar Modelo
+        </button>
+        <button id="btnCarro" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             Adicionar Carro
         </button>
     </div>
@@ -15,7 +21,7 @@
 
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-between mt-5">
-            <li class="page-item" id="btnVoltar"><a class="page-link" href="#">Voltar</a></li>
+            <li class="page-item disabled" id="btnVoltar"><a class="page-link" href="#">Voltar</a></li>
             <li class="page-item"><input placeholder="Digite uma Página" id="inputpage" type="number" class="form-control"/></li>
             <li class="page-item" id="paginaInfo"></li>
             <li class="page-item" id="btnAvancar"><a class="page-link" href="#">Avançar</a></li>
@@ -36,19 +42,21 @@
                 <div class="modal-body">
                         @* CADASTRAR CARRO *@
                     <form class="needs-validation" novalidate>
-                        <div class="row justify-content-center">
-                            <div class="col-auto">
-                                <label for="inputMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
-                                <input id="inputMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
+                        <div class="row justify-content-center d-flex flex-column gap-3">
+                            <div class="d-flex flex-column gap-3">
+                                <div class="col-auto">
+                                    <div>
+                                        <label for="marcasCarro" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
+                                        <select id="marcasCarro" class="form-select rounded-2 col-auto fs-5 ">
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
-                                <input id="inputMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
+                                <div class="col-auto">
+                                    <div>
+                                        <label for="modelosCarro" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
+                                        <select id="modelosCarro" class="form-select rounded-2 col-auto fs-5 ">
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -77,7 +85,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button id="adcarro" type="button" class="btn btn-primary">Adicionar</button>
+                    <button id="adcarro" type="button" class="btn btn-primary">ADICIONAR</button>
                 </div>
             </div>
         </div>
@@ -165,7 +173,75 @@
 
                 </div>
                 <div class="modal-footer d-flex justify-content-center mt-4">
-                    <button id="btnReserva" type="button" class="btn btn-success">Reservar</button>
+                    <button id="btnReserva" type="button" class="btn btn-success">RESERVAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAdicionarMarca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Marca</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @* ADCIONAR MARCA *@
+                    <form class="needs-validation" novalidate>
+                        <div class="row justify-content-center">
+                            <div class="col-auto">
+                                <label for="inputAddMod" class="fw-medium col-auto fs-5 form-label">Marca:</label>
+                                <input id="inputAddMod" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca" required />
+                                <div class="invalid-feedback">
+                                    <span>Preencha o campo!</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center mt-4">
+                    <button id="btnAddMarca" type="button" class="btn btn-success">ADICIONAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAdicionarModelo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar Modelo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @* ADICIONAR MODELO *@
+                    <form class="needs-validation" novalidate>
+                        <div class="row justify-content-center">
+                            <div class="col-auto d-flex flex-column gap-3">
+                                <div>
+                                    <label for="marcas" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
+                                    <select id="marcas" class="form-select rounded-2 col-auto fs-5 ">
+                                        
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="inputAddModelo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
+                                    <input id="inputAddModelo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
+                                    <div class="invalid-feedback">
+                                        <span>Preencha o campo!</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer d-flex justify-content-center mt-4">
+                    <button id="btnAddModelo" type="button" class="btn btn-success">ADICIONAR</button>
                 </div>
             </div>
         </div>
