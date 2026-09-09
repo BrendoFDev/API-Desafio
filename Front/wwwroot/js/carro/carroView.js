@@ -102,7 +102,7 @@ async function renderCarros() {
 
 
     let cardCarros = "";
-    dados.dados.forEach((item) => {
+    dados.items.forEach((item) => {
 
         cardCarros += `
             <div class="card mt-5 rounded-3 col-3" style="width: 18rem; background: #FFDEAD;">
@@ -122,7 +122,7 @@ async function renderCarros() {
     });
 
     const totalPages = `
-        <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPaginas} </span>
+        <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPagina} </span>
     `
     totalPaginas = dados.totalPagina;
     PageVarAvancar = dados.proximaPagina;
@@ -142,7 +142,7 @@ async function enviarCarro() {
 
     const payload = {
         marcaId: marca,
-        nomeModelo: modelo,
+        modeloId: modelo,
         ano: ano,
         cor: cor,
         preco: preco
@@ -261,8 +261,6 @@ async function renderSelectMarca() {
 async function salvarModelo() {
     const modelo = inputModelo.value
     const idMarca = selectMarca.value;
-    console.log(idMarca)
-    console.log(modelo)
 
     const payload = {
         marcaId: idMarca,
