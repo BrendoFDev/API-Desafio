@@ -5,6 +5,7 @@ namespace Back.DTO_s
 {
     public class ModeloDTO
     {
+        public int? id {  get; set; }
         [Required(ErrorMessage = "O Modelo é obrigatório.")]
         [StringLength(100, ErrorMessage = "O Modelo deve ter no máximo 100 caracteres.")]
         public string NomeModelo { get; set; }

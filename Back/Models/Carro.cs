@@ -8,9 +8,10 @@ namespace Back.Models
         public int Id { get; set; }
 
         public int ModeloId { get; set; }
-        public Modelo Modelo { get; set; }
+       public Modelo Modelo { get; set; }
 
         public int MarcaId { get; set; }
+
         public Marca Marca { get; set; }
 
         [Required(ErrorMessage = "O ano é obrigatório.")]
@@ -29,6 +30,7 @@ namespace Back.Models
         public float Preco { get; set; }
 
         public ICollection<Reserva> Reservas { get; set; } = [];
+        public List<FotoCarro> Fotos { get; set; } = new List<FotoCarro>();
 
     }
 }

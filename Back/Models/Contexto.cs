@@ -61,8 +61,8 @@ namespace Back.Models
 
             // Relacionamento: FotoCarro -> Carro (Muitos para Um)
             modelBuilder.Entity<FotoCarro>()
-                .HasOne<Carro>()
-                .WithMany()
+                .HasOne(f => f.Carro)
+                .WithMany(c => c.Fotos)
                 .HasForeignKey(f => f.CarroId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -118,7 +118,7 @@ namespace Back.Models
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<FotoCarro> FotoCarros { get; set; }
         public DbSet<Modelo> Modelos {get; set; }
         public DbSet<Marca> Marcas { get; set; }
     }
