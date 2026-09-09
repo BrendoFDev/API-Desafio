@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Update="Deletes\DeleteCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Deletes\DeleteReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Deletes\DeleteSubCarros\DeleteCarro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Deletes\DeleteSubCarros\DeleteMarca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Deletes\DeleteSubCarros\DeleteModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Gets\GetCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Gets\GetResenha.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Gets\GetSubCarros\GetCarro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Gets\GetSubCarros\GetMarca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Gets\GetSubCarros\GetModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Posts\PostReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Posts\PostSubCarros\PostCarros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Posts\PostSubCarros\PostCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Posts\PostSubCarros\PostMarca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Posts\PostSubCarros\PostModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Puts\PutCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Puts\PutReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Puts\PutSubCarros\PutCarro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Puts\PutSubCarros\PutMarca.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Puts\PutSubCarros\PutModelo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Usuario\Cadastro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Indexes\Carro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Indexes\Cliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Indexes\Index.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Usuario\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Indexes\Reservas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
