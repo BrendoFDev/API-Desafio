@@ -89,9 +89,7 @@ public class FotoCarroController : ControllerBase
 
                 foto.FotoBytes = requisicao.FotoBytes;
             }
-            
-
-            // atualizar foto carro aqui.
+      
 
             await _context.SaveChangesAsync();
 

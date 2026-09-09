@@ -24,8 +24,12 @@ namespace Back.Controllers
                 NomeModelo = modelo.NomeModelo,
                 MarcaId = modelo.MarcaId
             };
+            var modelo1 = await _context.Marcas.FindAsync(modelo.MarcaId);
 
-           
+            if (modelo1 == null)
+                return BadRequest("Marca não existe.");
+
+
             _context.Modelos.Add(novoModelo);
             await _context.SaveChangesAsync();
 
@@ -70,6 +74,7 @@ namespace Back.Controllers
                 .Take(tamanhoPagina)
                 .Select(c => new ModeloDTO
                 {
+                   id= c.Id,
                     NomeModelo = c.NomeModelo,
                     MarcaId = c.MarcaId,
                     Marca = c.Marca 

@@ -21,24 +21,36 @@ namespace Back.Controllers
         private readonly Contexto _context;
 
 
-       
+
         [HttpPost]
-        public async Task<ActionResult> PostCarro(Carro carro2)
+        public async Task<ActionResult> PostCarro(CarroDTO carro2) 
         {
+            
+            Carro carro = new Carro()
+            {
+                Preco = carro2.Preco.Value,
+                ModeloId = carro2.ModeloId,
+                MarcaId = carro2.MarcaId,
+                Cor = carro2.Cor,
+                Ano = carro2.Ano.Value
+            };
 
-            Carro carro = new Carro() {Preco=carro2.Preco,ModeloId=carro2.ModeloId,MarcaId=carro2.MarcaId,Cor=carro2.Cor ,Ano=carro2.Ano, };
+            bool ModeloExiste = await _context.Modelos.AnyAsync(r => r.Id == carro2.ModeloId);
+            bool MarcaExiste = await _context.Marcas.AnyAsync(r => r.Id == carro2.MarcaId);
+            if (ModeloExiste == false)
+            {
+                return BadRequest("Digite um modeloID válido");
+                
+            }
+            if (MarcaExiste == false)
+            {
+                return BadRequest("Digite um marcaID válido");
 
-
-
-            var carroSalvoComRelacionamentos = await _context.Carros
-                .Include(c => c.Modelo)
-                    .ThenInclude(m => m.Marca)
-                .FirstOrDefaultAsync(c => c.Id == carro.Id);
-
+            }
             _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
-            return Created("Carro criado com sucesso.", carro);
+            return Created("Carro criado com sucesso",carro);
         }
 
         [HttpGet]
@@ -47,11 +59,11 @@ namespace Back.Controllers
     [FromQuery] int pagina = 1,
     [FromQuery] int itensPorPagina = 10,
     [FromQuery] string? NomeMarca = null,
-    [FromQuery] string? NomeModelo= null,
+    [FromQuery] string? NomeModelo = null,
     [FromQuery] int? ano = null,
     [FromQuery] string? cor = null,
-            [FromQuery] float? preco= null,
-            [FromQuery] bool ProximaPagina = true)
+    [FromQuery] float? preco = null,
+    [FromQuery] bool ProximaPagina = true)
         {
             if (pagina < 1) pagina = 1;
             int quantidadeParaPular = (pagina - 1) * itensPorPagina;
@@ -61,7 +73,7 @@ namespace Back.Controllers
                     .ThenInclude(m => m.Marca)
                 .AsQueryable();
 
-            
+
             if (!string.IsNullOrWhiteSpace(termoBusca))
             {
                 termoBusca = termoBusca.Trim();
@@ -71,7 +83,7 @@ namespace Back.Controllers
                 );
             }
 
-            
+
             if (!string.IsNullOrWhiteSpace(NomeMarca))
                 query = query.Where(c => c.Modelo.Marca.NomeMarca.Contains(NomeMarca.Trim()));
 
@@ -82,111 +94,102 @@ namespace Back.Controllers
                 query = query.Where(c => c.Ano == ano.Value);
 
             if (!string.IsNullOrWhiteSpace(cor))
-                query = query.Where(c => c.Cor.Contains(cor.Trim())); 
+                query = query.Where(c => c.Cor.Contains(cor.Trim()));
 
             query = query.OrderBy(c => c.Id);
 
             var totalRegistros = await query.CountAsync();
 
             var itens = await query
-                .Skip(quantidadeParaPular)
-                .Take(itensPorPagina)
-                .Select(c => new
-                {
-                    CarroId = c.Id,
-                    
-                    c.Ano,
-                    c.Cor,
-                    c.Preco,
-                    c.ModeloId,
-                    c.Modelo.NomeModelo,
+    .Skip(quantidadeParaPular)
+    .Take(itensPorPagina)
+    .Select(c => new CarroDTO
+    {
+        id = c.Id, 
+        Ano = c.Ano,
+        Cor = c.Cor,
+        Preco = c.Preco,
+        ModeloId = c.ModeloId,
+        NomeModelo = c.Modelo.NomeModelo,
+        MarcaId = c.Modelo.MarcaId,
+        NomeMarca = c.Modelo.Marca.NomeMarca, 
+        Fotos = c.Fotos.Select(f => f.FotoBytes != null ? Convert.ToBase64String(f.FotoBytes) : string.Empty).ToList()
+    })
+    .ToListAsync();
 
-                    c.Modelo.MarcaId, 
-                    MarcaNome = c.Modelo.Marca.NomeMarca,
 
-
-                    Fotos = c.Fotos.Select(f => f.FotoBytes).ToList(),
-
-                 
-                    
-
-                })
-                .ToListAsync();
-
-            return Ok(new 
+            return Ok(new Paginacao<CarroDTO>
             {
-                TotalItens = totalRegistros,
+                TotalRegistro = totalRegistros,
                 PaginaAtual = pagina,
-                TotalPaginas = (int)Math.Ceiling((double)totalRegistros / itensPorPagina),
-                Dados = itens,
-               // ProximaPagina = ProximaPagina = ;
-        });
+                Items = itens
+            });
         }
 
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarro(int id, [FromBody] CarroDTO requisicao)
-        {
-            try
+            [HttpPut("{id}")]
+            public async Task<IActionResult> PutCarro(int id, [FromBody] CarroDTO requisicao)
             {
+                try
+                {
 
+                    var carro = await _context.Carros.FindAsync(id);
+
+                    if (carro == null)
+                        return BadRequest("carro não existe.");
+
+                    if (!string.IsNullOrEmpty(requisicao.Cor))
+                        carro.Cor = requisicao.Cor;
+
+                    if (requisicao.Ano.HasValue)
+                        carro.Ano = requisicao.Ano.Value;
+                    if (requisicao.Preco.HasValue)
+                        carro.Preco = requisicao.Preco.Value;
+
+
+                    await _context.SaveChangesAsync();
+
+                    return Ok("Carro atualizado com sucesso");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CarroExists(id))
+                    {
+                        return NotFound("Carro não encontrado.");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+
+            }
+
+            private bool CarroExists(int id)
+            {
+                return _context.Carros.Any(e => e.Id == id);
+            }
+
+            [HttpDelete("{id}")]
+            public async Task<IActionResult> DeleteCarro(int id)
+            {
                 var carro = await _context.Carros.FindAsync(id);
+                if (carro == null) return NotFound("Carro não encontrado.");
 
-                if (carro == null)
-                    return BadRequest("carro não existe.");
+                // Verifica se existe alguma reserva para este carro
+                bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == id);
 
-                if (!string.IsNullOrEmpty(requisicao.Cor))
-                    carro.Cor = requisicao.Cor;
-           
-                if (requisicao.Ano.HasValue)
-                    carro.Ano = requisicao.Ano.Value;
-                if (requisicao.Preco.HasValue)
-                    carro.Preco = requisicao.Preco.Value;
+                if (possuiReserva)
+                {
+                    return BadRequest("Não é possível remover o carro porque ele possui reservas vinculadas.");
+                }
 
-
+                _context.Carros.Remove(carro);
                 await _context.SaveChangesAsync();
 
-                return Ok("Carro atualizado com sucesso");
+                return NoContent();
+
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CarroExists(id))
-                {
-                    return NotFound("Carro não encontrado.");
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-
         }
+    } 
 
-        private bool CarroExists(int id)
-        {
-            return _context.Carros.Any(e => e.Id == id);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCarro(int id)
-        {
-            var carro = await _context.Carros.FindAsync(id);
-            if (carro == null) return NotFound("Carro não encontrado.");
-
-            // Verifica se existe alguma reserva para este carro
-            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == id);
-
-            if (possuiReserva)
-            {
-                return BadRequest("Não é possível remover o carro porque ele possui reservas vinculadas.");
-            }
-
-            _context.Carros.Remove(carro);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-
-        }
-    }
-}
