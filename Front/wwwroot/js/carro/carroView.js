@@ -93,19 +93,19 @@ function validacaoForm() {
 }
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=1&itensPorPagina=10`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&itensPorPagina=10`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
 
     dados = await requisicaoRender.json();
-    console.log(dados)
+
 
     let cardCarros = "";
     dados.dados.forEach((item) => {
 
         cardCarros += `
-            <div class="card mt-5 rounded-3 col-4" style="width: 18rem; background: #FFDEAD;">
+            <div class="card mt-5 rounded-3 col-3" style="width: 18rem; background: #FFDEAD;">
                 <div class="card-body rounded-3">
                     <h3 class="card-title">${item.nomeModelo}</h3>
                     <h6 class="card-subtitle mb-2 text-body-secondary" >${item.nomeMarca}</h6>
@@ -131,7 +131,7 @@ async function renderCarros() {
 }
 
 async function enviarCarro() {
-    const marca = selectMarcaCarro.value;
+    const marca = selectModeloCarro.options[selectModeloCarro.selectedIndex].getAttribute("data-marcaId");
     const modelo = selectModeloCarro.value;
     const ano = inputAnoF.value;
     const cor = inputCor.value;
@@ -142,7 +142,7 @@ async function enviarCarro() {
 
     const payload = {
         marcaId: marca,
-        modeloId: modelo,
+        nomeModelo: modelo,
         ano: ano,
         cor: cor,
         preco: preco
@@ -290,19 +290,19 @@ async function renderSelectModelo() {
     data.items.forEach((item) => {
 
         optionsModelo += `
-            <option value=${item.id}>${item.nomeModelo}</option>
-        `;
-        console.log(item.id)
-    });
-
-    let optionsMarcas = "<option selected disabled>Selecione uma marca</option>";
-    data.items.forEach((item) => {
-
-        optionsMarcas += `
-            <option value=${item.marca.id}>${item.marca.nomeMarca}</option>
+            <option data-marcaId=${item.marca.id} value=${item.id}>${item.nomeModelo}</option>
         `;
     });
 
-    selectMarcaCarro.innerHTML = optionsMarcas;
+    // let optionsMarcas = "<option selected disabled>Selecione uma marca</option>";
+    // data.items.forEach((item) => {
+
+    //     optionsMarcas += `
+    //         <option value=${item.marca.id}>${item.marca.nomeMarca}</option>
+    //     `;
+    // });
+
+    // selectMarcaCarro.innerHTML = optionsMarcas;
+
     selectModeloCarro.innerHTML = optionsModelo;
 }

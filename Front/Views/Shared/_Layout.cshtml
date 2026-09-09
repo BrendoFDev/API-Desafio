@@ -8,39 +8,35 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Front.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm ps-5 navbar-light border-bottom box-shadow mb-3" style="background-color: #B0E0E6">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Front</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Carros</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="clienteView">Clientes</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+<body class="d-flex">
+    <header class="col-2 fs-5 shadow-lg position-fixed top-0 start-0 vh-100" style="background-color:lightsteelblue">
+
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link  text-dark" asp-area="" asp-controller="Home" asp-action="Index">Carros</a>
+                </li>
+            </ul>
+
+                
+            <ul class="nav flex-column mb-2">
+                <li class="nav-item">
+                    <a class="nav-link  text-dark" asp-area="" asp-controller="Home" asp-action="clienteView">Clientes</a>
+                </li>
+            </ul>
+        </div>
     </header>
-    <div class="container">
+    <div class="container col-9 mt-5">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted" style="background-color: #B0E0E6">
+    @* <footer class="border-top footer text-muted" style="background-color: #B0E0E6">
         <div class="container">
             &copy; 2026 - Front - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @RenderSection("Modals", required: false);

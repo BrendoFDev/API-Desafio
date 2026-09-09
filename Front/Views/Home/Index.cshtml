@@ -2,32 +2,36 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="col-10 offset-2 d-flex justify-content-center">
+    <div class="card shadow p-4 my-4 col-12" style="max-width: 950px;">
+        <div class="text-center">
 
-    <div class="text-end">
-        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalAdicionarMarca">
-            Adicionar Marca
-        </button>
-        <button id="btnModelo" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalAdicionarModelo">
-            Adicionar Modelo
-        </button>
-        <button id="btnCarro" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Adicionar Carro
-        </button>
+            <div class="text-end mb-4 justify-content-center d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalAdicionarMarca">
+                    Adicionar Marca
+                </button>
+                <button id="btnModelo" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalAdicionarModelo">
+                    Adicionar Modelo
+                </button>
+                <button id="btnCarro" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Adicionar Carro
+                </button>
+            </div>
+
+            <div id="divRenderCars" class="row justify-content-center d-flex gap-sm-5">
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-between mt-5">
+                    <li class="page-item disabled" id="btnVoltar"><a class="page-link" href="#">Voltar</a></li>
+                    <li class="page-item"><input placeholder="Digite uma Página" id="inputpage" type="number" class="form-control" /></li>
+                    <li class="page-item" id="paginaInfo"></li>
+                    <li class="page-item" id="btnAvancar"><a class="page-link" href="#">Avançar</a></li>
+                </ul>
+            </nav>
+
+        </div>
     </div>
-
-    <div id="divRenderCars" class="row justify-content-start d-flex gap-sm-5">
-    </div>
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-between mt-5">
-            <li class="page-item disabled" id="btnVoltar"><a class="page-link" href="#">Voltar</a></li>
-            <li class="page-item"><input placeholder="Digite uma Página" id="inputpage" type="number" class="form-control"/></li>
-            <li class="page-item" id="paginaInfo"></li>
-            <li class="page-item" id="btnAvancar"><a class="page-link" href="#">Avançar</a></li>
-        </ul>
-    </nav>
-
 </div>
 
 @section Modals {
@@ -44,13 +48,13 @@
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center d-flex flex-column gap-3">
                             <div class="d-flex flex-column gap-3">
-                                <div class="col-auto">
+                                @* <div class="col-auto">
                                     <div>
                                         <label for="marcasCarro" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
                                         <select id="marcasCarro" class="form-select rounded-2 col-auto fs-5 ">
                                         </select>
                                     </div>
-                                </div>
+                                </div> *@
                                 <div class="col-auto">
                                     <div>
                                         <label for="modelosCarro" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
