@@ -21,28 +21,32 @@ namespace Back.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
-
+            var cliente2 = new Cliente
+            {
+                Nome = cliente.Nome.ToUpper().Trim(),
+                Cpf = cliente.Cpf,
+            };
 
             bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
 
-            
+
 
             if (cpfExiste)
             {
-               return BadRequest("Este CPF já está cadastrado no sistema.");
+                return BadRequest("Este CPF já está cadastrado no sistema.");
             }
             string cpfLimpo = cliente.Cpf.Replace(".", "").Replace("-", "").Trim();
 
-           
+
             if (!cpfLimpo.All(char.IsDigit) || cpfLimpo.Length != 11)
             {
                 return BadRequest("CPF inválido... ");
             }
 
-            _context.Clientes.Add(cliente);
+            _context.Clientes.Add(cliente2);
             await _context.SaveChangesAsync();
 
-            return Created("Cliente criado com sucesso", cliente);
+            return Created("Cliente criado com sucesso", cliente2);
 
         }
 
