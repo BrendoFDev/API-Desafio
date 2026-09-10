@@ -45,7 +45,7 @@ namespace Back.Controllers
             return Created("Cliente criado com sucesso", cliente);
 
         }
-       
+
 
         [HttpGet]
         public async Task<ActionResult<Paginacao<ClienteDTO>>> GetClientes(
@@ -53,17 +53,19 @@ namespace Back.Controllers
            [FromQuery] int tamanhoPagina = 10,
            [FromQuery] string? nome = null,
            [FromQuery] string? cpf = null)
-     
+
         {
 
             if (paginaAtual < 1) paginaAtual = 1;
             if (tamanhoPagina < 1) tamanhoPagina = 10;
             var query = _context.Clientes.AsQueryable();
+            var busca = nome?.ToUpper();
 
 
-            if (!string.IsNullOrEmpty(nome))
+            if (!string.IsNullOrEmpty(busca))
             {
-                query = query.Where(c => EF.Functions.Like(c.Nome, $"%{nome}%"));
+
+                query = query.Where(c => EF.Functions.Like(c.Nome, $"%{busca}%"));
             }
 
 
@@ -73,7 +75,7 @@ namespace Back.Controllers
             }
 
 
-            
+
 
 
 
@@ -84,10 +86,10 @@ namespace Back.Controllers
             var items = await query
                 .Select(c => new Cliente
                 {
-                    id= c.id,
+                    id = c.id,
                     Nome = c.Nome,
                     Cpf = c.Cpf
-                    
+
                 })
                 .Skip((paginaAtual - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
