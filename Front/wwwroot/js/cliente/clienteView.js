@@ -60,6 +60,7 @@ try {
         }
         const btnEditar = event.target.closest('.editar');
         if (btnEditar) {
+            //resolver o problema em que nao esta salvando o novo data-alguma coisa
             idClienteParaEditar = btnEditar.getAttribute('data-id');
             nomeClienteParaEditar = btnEditar.getAttribute('data-nome');
             cpfClienteParaEditar = btnEditar.getAttribute('data-cpf');
