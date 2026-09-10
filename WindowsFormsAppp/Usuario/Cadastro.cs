@@ -12,6 +12,9 @@ namespace WindowsFormsAppp
 {
     public partial class Cadastro : Form
     {
+
+        private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri("https://localhost:7063") };
+
         public Cadastro()
         {
             InitializeComponent();
@@ -20,6 +23,11 @@ namespace WindowsFormsAppp
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -21,7 +21,9 @@ namespace Back.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
-
+            var cliente2 = new Cliente { Nome = cliente.Nome.ToUpper().Trim(),
+            Cpf=cliente.Cpf,
+            };
 
             bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
 
@@ -39,10 +41,10 @@ namespace Back.Controllers
                 return BadRequest("CPF inválido... ");
             }
 
-            _context.Clientes.Add(cliente);
+            _context.Clientes.Add(cliente2);
             await _context.SaveChangesAsync();
 
-            return Created("Cliente criado com sucesso", cliente);
+            return Created("Cliente criado com sucesso", cliente2);
 
         }
        
@@ -51,7 +53,7 @@ namespace Back.Controllers
         public async Task<ActionResult<Paginacao<ClienteDTO>>> GetClientes(
            [FromQuery] int paginaAtual = 1,
            [FromQuery] int tamanhoPagina = 10,
-           [FromQuery] string? nome = null,
+           [FromQuery] string? nome= null,
            [FromQuery] string? cpf = null)
      
         {
@@ -59,11 +61,13 @@ namespace Back.Controllers
             if (paginaAtual < 1) paginaAtual = 1;
             if (tamanhoPagina < 1) tamanhoPagina = 10;
             var query = _context.Clientes.AsQueryable();
+            var busca = nome?.ToUpper();
 
 
-            if (!string.IsNullOrEmpty(nome))
+            if (!string.IsNullOrEmpty(busca))
             {
-                query = query.Where(c => EF.Functions.Like(c.Nome, $"%{nome}%"));
+               
+                query = query.Where(c => EF.Functions.Like(c.Nome, $"%{busca}%"));
             }
 
 
