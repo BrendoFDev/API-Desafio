@@ -73,10 +73,10 @@
     <Compile Update="Indexes\Cliente.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Usuario\Login.cs">
+    <Compile Update="Indexes\Reservas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Indexes\Reservas.cs">
+    <Compile Update="Usuario\Login.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

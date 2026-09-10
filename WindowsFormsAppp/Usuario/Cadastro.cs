@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net.Http.Json;
 using static System.Windows.Forms.DataFormats;
+using WindowsFormsAppp.Usuario;
+using System.Text.Json;
 
 namespace WindowsFormsAppp
 {
     public partial class Cadastro : Form
     {
 
+        
 
 
         public Cadastro()
@@ -31,20 +34,21 @@ namespace WindowsFormsAppp
 
         private async void button1_Click(object sender, EventArgs e)
         {
+           
             var user = new
             {
                 username = userCAD.Text,
                 email = emailCAD.Text,
-                senha = emailCAD.Text,
+                senha = senhaCAD.Text
             };
 
-            string url = "https://localhost:7063/api/user/";
+          
+            string url = "https://localhost:7063/api/user";
 
             try
             {
-
+               
                 HttpResponseMessage response = await client.PostAsJsonAsync(url, user);
-
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -52,16 +56,12 @@ namespace WindowsFormsAppp
                     emailCAD.Clear();
                     senhaCAD.Clear();
                     userCAD.Clear();
-
-                    Cadastro novaPagina = new Cadastro();
-
-
-                    novaPagina.Show();
-                    this.Hide();
                 }
                 else
                 {
-                    MessageBox.Show($"Erro ao cadastrar: {response.StatusCode}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                  
+                    string erroDetalhado = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao cadastrar: {response.StatusCode}\nDetalhes: {erroDetalhado}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
@@ -70,6 +70,7 @@ namespace WindowsFormsAppp
             }
         }
 
+
         private void Cadastro_Load(object sender, EventArgs e)
         {
 
@@ -77,6 +78,11 @@ namespace WindowsFormsAppp
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            Login novaPagina = new Login();
+
+
+            novaPagina.Show();
+            this.Hide();
 
         }
     }
