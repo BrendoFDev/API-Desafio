@@ -89,7 +89,7 @@
             label2.Name = "label2";
             label2.Size = new Size(36, 15);
             label2.TabIndex = 5;
-            label2.Text = "email";
+            label2.Text = "Email";
             // 
             // label3
             // 
@@ -98,7 +98,8 @@
             label3.Name = "label3";
             label3.Size = new Size(39, 15);
             label3.TabIndex = 6;
-            label3.Text = "cenha";
+            label3.Text = "Senha";
+            label3.Click += label3_Click;
             // 
             // Login
             // 

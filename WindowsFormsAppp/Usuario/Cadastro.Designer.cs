@@ -36,15 +36,16 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            linkLabel1 = new LinkLabel();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Showcard Gothic", 69.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(305, 54);
+            label1.Font = new Font("Ravie", 69.75F);
+            label1.Location = new Point(237, 54);
             label1.Name = "label1";
-            label1.Size = new Size(516, 114);
+            label1.Size = new Size(629, 125);
             label1.TabIndex = 0;
             label1.Text = "Cadastro";
             // 
@@ -73,11 +74,11 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button1.Location = new Point(496, 416);
+            button1.Location = new Point(494, 416);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 4;
-            button1.Text = "cadastrar";
+            button1.Text = "Cadastrar";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -108,11 +109,23 @@
             label4.TabIndex = 7;
             label4.Text = "Senha";
             // 
+            // linkLabel1
+            // 
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(482, 389);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(103, 15);
+            linkLabel1.TabIndex = 8;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "Voltar para o login";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            // 
             // Cadastro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1107, 576);
+            Controls.Add(linkLabel1);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -123,6 +136,7 @@
             Controls.Add(label1);
             Name = "Cadastro";
             Text = "Cadastro";
+            Load += Cadastro_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -137,5 +151,6 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private LinkLabel linkLabel1;
     }
 }

@@ -26,5 +26,10 @@ namespace WindowsFormsAppp
         {
 
         }
+
+        private void Cliente_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

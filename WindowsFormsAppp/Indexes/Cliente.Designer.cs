@@ -95,6 +95,7 @@
             Controls.Add(label1);
             Name = "Cliente";
             Text = "Cliente";
+            Load += Cliente_Load;
             ResumeLayout(false);
             PerformLayout();
         }

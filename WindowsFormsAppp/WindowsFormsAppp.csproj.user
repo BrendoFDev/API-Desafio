@@ -31,6 +31,9 @@
     <Compile Update="Gets\GetSubCarros\GetModelo.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Indexes\Index.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Posts\PostReserva.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,9 +71,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Indexes\Cliente.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Indexes\Index.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Usuario\Login.cs">

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsAppp
+namespace WindowsFormsAppp.Indexes
 {
     public partial class Index : Form
     {
