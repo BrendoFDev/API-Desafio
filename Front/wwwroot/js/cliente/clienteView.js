@@ -2,8 +2,14 @@
 const cpf = document.getElementById("cpf");
 const btnEnviar = document.getElementById("enviar");
 
+const nomeEditar = document.getElementById("nomeEditar");
+const cpfEditar = document.getElementById("cpfEditar");
+const btnConfirmarEdicao = document.getElementById("enviarAtualizacao");
+
 const tableExibirClientes = document.getElementById("exibirClientes");
 const btnExcluirCliente = document.getElementById("comfirmarExcluir");
+const inputPesquisa = document.getElementById("pesquisarCliente");
+const btnPesquisar = document.getElementById("buscar")
 
 //PAGINACAO
 const inputpage = document.getElementById("inputpage");
@@ -14,6 +20,10 @@ const paginaInfo = document.getElementById("paginaInfo");
 let dados = "";
 let page = 1;
 let totalPaginas = 1;
+let idClienteParaExcluir;
+let idClienteParaEditar;
+let nomeClienteParaEditar;
+let cpfClienteParaEditar;
 
 try {
     renderClientes()
@@ -43,21 +53,54 @@ try {
         pagAnterior();
     });
 
+    tableExibirClientes.addEventListener('click', (event) => {
+        const btnExcluir = event.target.closest('.excluir');
+        if (btnExcluir) {
+            idClienteParaExcluir = btnExcluir.getAttribute('data-id');
+        }
+        const btnEditar = event.target.closest('.editar');
+        if (btnEditar) {
+            idClienteParaEditar = btnEditar.getAttribute('data-id');
+            nomeClienteParaEditar = btnEditar.getAttribute('data-nome');
+            cpfClienteParaEditar = btnEditar.getAttribute('data-cpf');
+            nomeEditar.value = nomeClienteParaEditar;
+            cpfEditar.value = cpfClienteParaEditar;
+        }
+    });
     btnExcluirCliente.addEventListener('click', () => {
         selecionarExcluirCliente()
     });
+    btnConfirmarEdicao.addEventListener('click', () => {
+        selecionarEditarCliente();
+        nomeEditar.value = "";
+        cpfEditar.value = "";
+    });
+
+    inputPesquisa.addEventListener('change', () => {
+        pesquisar();
+    });
+    btnPesquisar.addEventListener('click', () => {
+        pesquisar();
+    });
+
+
 
 } catch (err) {
     console.log(err);
 }
 
-async function renderClientes() {
-    const getClientes = await fetch(`https://localhost:7063/api/cliente?paginaAtual=${page}&tamanhoPagina=10`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-    });
+async function renderClientes(dadosRecebidos) {
+    let dados;
 
-    dados = await getClientes.json();
+    if (dadosRecebidos) {
+        dados = dadosRecebidos;
+    } else {
+        const res = await fetch(`https://localhost:7063/api/cliente?paginaAtual=${page}&tamanhoPagina=10`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        });
+        dados = await res.json();
+    }
 
     let cliente = ""
     dados.items.forEach((item) => {
@@ -67,7 +110,7 @@ async function renderClientes() {
                 <th scope="row">${item.id}</th>
                 <td class="text-center">${item.nome}</td>
                 <td class="d-flex justify-content-center gap-3">
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarCliente">
+                    <button class="btn btn-warning editar" data-bs-toggle="modal" data-bs-target="#modalEditarCliente" data-id=${item.id} data-nome=${item.nome} data-cpf=${item.cpf}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -117,16 +160,60 @@ function proxPagina() {
     }
 }
 
-async function selecionarExcluirCliente() {
-    const btnModalExcluir = event.target.closest('.excluir');
-    if (btnModalExcluir) {
+async function selecionarExcluirCliente(event) {
+    if (!idClienteParaExcluir) {
+        return
+    }
 
-        confirmacao = btnModalExcluir.getAttribute("data-id");
+    const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaExcluir}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    });
 
-
-        const getClientes = await fetch(`https://localhost:7063/api/cliente/${comfirmacao}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        });
+    if (res.ok) {
+        // Fecha o modal e atualiza a tabela
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalExcluirCliente'));
+        modal.hide();
+        renderClientes();
     }
 }
+async function selecionarEditarCliente(event) {
+    if (!idClienteParaEditar) {
+        return
+    }
+
+    const payload = {
+        nome: nomeEditar.value,
+        cpf: cpfEditar.value
+    }
+
+    const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaEditar}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+        // Fecha o modal e atualiza a tabela
+        console.log("oi")
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente'));
+        modal.hide();
+        renderClientes();
+    }
+}
+
+async function pesquisar() {
+    const nomePesquisa = inputPesquisa.value.trim();
+    if (!nomePesquisa) {
+        renderClientes(); // volta para a lista normal
+        return;
+    }
+
+    const res = await fetch(`https://localhost:7063/api/cliente?nome=${encodeURIComponent(nomePesquisa)}&paginaAtual=${page}&tamanhoPagina=10`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    });
+
+    const dados = await res.json();
+    renderClientes(dados);
+}   
