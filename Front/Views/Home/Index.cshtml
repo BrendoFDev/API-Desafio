@@ -3,7 +3,7 @@
 }
 
 <div class="col-10 offset-2 d-flex justify-content-center">
-    <div class="card shadow p-4 my-4 col-12" style="max-width: 950px; background-color: rgba(255, 255, 255, 0.75);">
+    <div class="card shadow p-4 my-4 col-12" style="max-width: 950px; background-color: rgba(255, 255, 255); border-radius: 15px;">
         <div class="text-center">
 
             <div class="text-end mb-4 justify-content-center d-flex gap-2">
@@ -18,7 +18,7 @@
                 </button>
             </div>
 
-            <div id="divRenderCars" class="row justify-content-center d-flex gap-sm-5">
+            <div id="divRenderCars" class="row justify-content-center d-flex">
             </div>
 
             <nav aria-label="Page navigation example">
@@ -44,17 +44,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                        @* CADASTRAR CARRO *@
+                    @* CADASTRAR CARRO *@
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center d-flex flex-column gap-3">
                             <div class="d-flex flex-column gap-3">
-                                @* <div class="col-auto">
-                                    <div>
-                                        <label for="marcasCarro" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
-                                        <select id="marcasCarro" class="form-select rounded-2 col-auto fs-5 ">
-                                        </select>
-                                    </div>
-                                </div> *@
                                 <div class="col-auto">
                                     <div>
                                         <label for="modelosCarro" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
@@ -64,8 +57,8 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <label for="inputAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
-                                <input id="inputAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
+                                <label for="inputAF" class="fw-medium col-auto fs-5 form-label">Ano do Veículo:</label>
+                                <input id="inputAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano do veículo" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
@@ -104,26 +97,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                        @* EDITAR CARRO *@
+                    @* EDITAR CARRO *@
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center">
                             <div class="col-auto">
-                                <label for="inputEditMa" class="fw-medium col-auto fs-5 form-label">Marca:</label>
-                                <input id="inputEditMa" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe a marca do veículo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
+                                <div class="input-group mb-1">
+                                    <input type="file" class="btn-check rounded-3" id="imagemInput" autocomplete="off">
+                                    <label class="btn btn-outline-secondary rounded-start" for="customFile">Escolher imagem</label>
+                                    <span class="form-control text-start" id="fileName" style="cursor:default;">Nenhuma imagem selecionada</span>
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <label for="inputEditMo" class="fw-medium col-auto fs-5 form-label">Modelo:</label>
-                                <input id="inputEditMo" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o modelo" required />
-                                <div class="invalid-feedback">
-                                    <span>Preencha o campo!</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <label for="inputEditAF" class="fw-medium col-auto fs-5 form-label">Ano de Fabricação:</label>
-                                <input id="inputEditAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano de fabricação" required />
+                                <label for="inputEditAF" class="fw-medium col-auto fs-5 form-label">Ano do veículo:</label>
+                                <input id="inputEditAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano do veículo" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
@@ -147,6 +133,9 @@
 
                 </div>
                 <div class="modal-footer">
+                    <button id="modalAddImg" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAddImagem">
+                        Adicionar Imagem
+                    </button>
                     <button id="editCarro" type="button" class="btn btn-primary">Confirmar</button>
                 </div>
             </div>
@@ -157,7 +146,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Reservar</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -228,7 +217,6 @@
                                 <div>
                                     <label for="marcas" class="fw-medium col-auto fs-5 form-label">Escolha uma opção:</label>
                                     <select id="marcas" class="form-select rounded-2 col-auto fs-5 ">
-                                        
                                     </select>
                                 </div>
                                 <div>
@@ -250,7 +238,29 @@
             </div>
         </div>
     </div>
+    @* NÃO PRECISA CRIAR UMA NOVA FUNÇÃO PARA EDITAR CARRO / ERIC MUDA OS IDS DOS MODAIS*@
+    @* ADICIONAR IMAGENS *@
+    <div id="modalAddImagem" class="modal fade" id="modalAddImg" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar/Editar Imagem</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+                        <div class="row justify-content-center">
+                        </div>
+                    </form>
 
+                </div>
+                <div class="modal-footer">
+                    <button id="editCarro" type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</>
 }
 
 @section Scripts {
