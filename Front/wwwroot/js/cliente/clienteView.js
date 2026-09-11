@@ -41,6 +41,15 @@ try {
             body: JSON.stringify(payload),
         });
 
+        nome.value = "";
+        cpf.value = "";
+
+        if (cadCliente.ok) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalCadCliente'));
+            modal.hide();
+            renderClientes();
+        }
+
     });
 
     btnAvancar.addEventListener('click', () => {
@@ -196,7 +205,6 @@ async function selecionarEditarCliente(event) {
 
     if (res.ok) {
         // Fecha o modal e atualiza a tabela
-        console.log("oi")
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente'));
         modal.hide();
         renderClientes();

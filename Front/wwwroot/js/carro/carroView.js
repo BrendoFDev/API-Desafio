@@ -148,12 +148,17 @@ async function enviarCarro() {
         preco: preco
     }
 
-
     const sendRequest = await fetch("https://localhost:7063/api/carro", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });
+
+    if (sendRequest.ok) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('staticBackdrop'));
+        modal.hide();
+        renderCarros(page);
+    }
 }
 
 function mudarPagina() {
@@ -239,6 +244,11 @@ async function salvarMarca() {
     });
 
     inputMarca.value = "";
+
+    if (enviarMarca.ok) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAdicionarMarca'));
+        modal.hide();
+    }
 }
 async function renderSelectMarca() {
     const requisicao = await fetch(`https://localhost:7063/api/marca`, {
@@ -274,6 +284,11 @@ async function salvarModelo() {
     });
 
     inputModelo.value = "";
+
+    if (enviarModelo.ok) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAdicionarModelo'));
+        modal.hide();
+    }
 }
 
 async function renderSelectModelo() {
