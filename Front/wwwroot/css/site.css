@@ -1,5 +1,7 @@
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,15 +10,371 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+:root {
+  --app-blue: #1b6ec2;
+  --app-blue-dark: #1861ac;
+  --app-surface: rgba(255, 255, 255, 0.86);
+  --app-line: rgba(36, 55, 76, 0.14);
+  --app-shadow: 0 1rem 2.5rem rgba(39, 59, 82, 0.14);
+  --app-shadow-soft: 0 0.5rem 1.25rem rgba(39, 59, 82, 0.12);
+  --app-radius: 1rem;
 }
 
 body {
+  min-height: 100vh;
+  margin: 0;
   margin-bottom: 60px;
+  color: #24374c;
+  background-color: lightsteelblue;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+/* Mantém o destaque de foco do Bootstrap, com um acabamento mais suave. */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.9), 0 0 0 0.35rem rgba(37, 140, 251, 0.45);
+}
+
+/* Navegação lateral compartilhada pelo layout. */
+body > header {
+  z-index: 1030;
+  border-right: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0.5rem 0 1.5rem rgba(39, 59, 82, 0.12) !important;
+  backdrop-filter: blur(8px);
+}
+
+body > header img {
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0.35rem 0.35rem rgba(39, 59, 82, 0.16));
+  transition: transform 180ms ease;
+}
+
+body > header img:hover {
+  transform: translateY(-2px);
+}
+
+body > header hr {
+  border: 0;
+  opacity: 0.45;
+  background-color: currentColor;
+}
+
+body > header .nav-item {
+  margin: 0.3rem 0.65rem 0.3rem 0;
+  border-radius: 0.7rem;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+body > header .nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.34);
+  transform: translateX(3px);
+}
+
+body > header .nav-link {
+  flex: 1;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.7rem;
+  font-weight: 600;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+body > header .nav-link:hover {
+  color: #fff !important;
+  background-color: transparent;
+}
+
+body > header .nav-item > svg {
+  flex: 0 0 auto;
+  margin-left: 0.75rem;
+}
+
+/* Superfície principal sem alterar a posição definida nas Views. */
+body > .container {
+  min-height: calc(100vh - 4rem);
+}
+
+main[role="main"] {
+  animation: content-appear 280ms ease-out both;
+}
+
+@keyframes content-appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards das páginas e cards de carros renderizados pelo JavaScript. */
+main > .card,
+#divRenderCars > .card {
+  border: 1px solid var(--app-line);
+  border-radius: var(--app-radius) !important;
+  box-shadow: var(--app-shadow) !important;
+}
+
+main > .card {
+  background-color: var(--app-surface);
+  backdrop-filter: blur(5px);
+}
+
+#divRenderCars > .card {
+  overflow: hidden;
+  border-color: rgba(186, 139, 69, 0.28);
+  box-shadow: var(--app-shadow-soft) !important;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+#divRenderCars > .card:hover {
+  transform: translateY(-0.3rem);
+  box-shadow: 0 0.9rem 1.6rem rgba(39, 59, 82, 0.18) !important;
+}
+
+#divRenderCars > .card .card-body {
+  padding: 1.25rem;
+}
+
+#divRenderCars > .card .card-title {
+  color: #24374c;
+  letter-spacing: 0.01em;
+}
+
+#divRenderCars > .card .card-subtitle {
+  opacity: 0.78;
+}
+
+/* Barras de ações, busca e controles de paginação. */
+main .text-end.mb-4,
+main table + nav,
+main .text-center > .d-flex.justify-content-between {
+  border-radius: 0.85rem;
+}
+
+main .text-end.mb-4 {
+  padding: 0.25rem;
+}
+
+main .btn {
+  border-radius: 0.65rem;
+  font-weight: 600;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+main .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.35rem 0.75rem rgba(39, 59, 82, 0.14);
+}
+
+main .btn:active {
+  transform: translateY(0);
+}
+
+main .btn-primary {
+  color: #fff;
+  background-color: var(--app-blue);
+  border-color: var(--app-blue-dark);
+}
+
+main .btn-primary:hover {
+  background-color: var(--app-blue-dark);
+  border-color: var(--app-blue-dark);
+  filter: brightness(1.04);
+}
+
+main .form-control,
+main .form-select {
+  min-height: 2.6rem;
+  border-color: rgba(36, 55, 76, 0.2);
+  border-radius: 0.65rem !important;
+  background-color: rgba(255, 255, 255, 0.88);
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+main .form-control:hover,
+main .form-select:hover {
+  border-color: rgba(27, 110, 194, 0.5);
+  background-color: #fff;
+}
+
+main .pagination {
+  align-items: center;
+  gap: 0.4rem;
+}
+
+main .pagination .page-link {
+  border-radius: 0.6rem !important;
+  border-color: rgba(27, 110, 194, 0.2);
+  box-shadow: 0 0.2rem 0.5rem rgba(39, 59, 82, 0.08);
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+main .pagination .page-link:hover {
+  transform: translateY(-1px);
+}
+
+main .pagination .page-item input {
+  min-width: 10rem;
+}
+
+#paginaInfo {
+  align-items: center;
+  display: flex;
+  min-height: 2.4rem;
+  padding: 0.35rem 0.75rem;
+  color: #24374c;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Tabela de clientes. */
+main table {
+  overflow: hidden;
+  border: 1px solid var(--app-line);
+  border-radius: 0.8rem;
+  vertical-align: middle;
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+main table thead th {
+  color: #24374c;
+  background-color: rgba(176, 196, 222, 0.42);
+  border-bottom-width: 1px;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+main table tbody tr {
+  transition: background-color 160ms ease;
+}
+
+main table tbody tr:hover {
+  --bs-table-accent-bg: rgba(176, 196, 222, 0.25);
+}
+
+main table td,
+main table th {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+}
+
+main table td .btn {
+  min-width: 2.55rem;
+}
+
+/* Modais e formulários, preservando seus gatilhos e IDs. */
+.modal-content {
+  overflow: hidden;
+  border: 1px solid rgba(36, 55, 76, 0.14);
+  border-radius: 1rem;
+  box-shadow: 0 1.25rem 3rem rgba(39, 59, 82, 0.22);
+}
+
+.modal-header {
+  background-color: rgba(176, 196, 222, 0.28);
+  border-bottom-color: var(--app-line);
+}
+
+.modal-title {
+  color: #24374c;
+  font-weight: 700;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top-color: var(--app-line);
+}
+
+.modal .form-label {
+  color: #24374c;
+}
+
+.invalid-feedback {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Página de erro: apenas acabamento visual do conteúdo existente. */
+main > .text-danger {
+  text-shadow: 0 1px 1px rgba(39, 59, 82, 0.08);
+}
+
+/* Regras padrão mantidas para componentes compartilhados. */
+a {
+  color: #0077cc;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: var(--app-blue);
+  border-color: var(--app-blue-dark);
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+@media (max-width: 767.98px) {
+  body > header {
+    width: 25% !important;
+  }
+
+  body > .container {
+    width: 75%;
+    margin-left: 25%;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  main > .card {
+    padding: 1rem !important;
+  }
+
+  #divRenderCars > .card {
+    width: 100% !important;
+    margin-top: 1rem !important;
+  }
+
+  main .text-center > .d-flex.justify-content-between {
+    flex-wrap: wrap;
+    gap: 0.75rem !important;
+  }
+
+  main .pagination {
+    flex-wrap: wrap;
+  }
 }
