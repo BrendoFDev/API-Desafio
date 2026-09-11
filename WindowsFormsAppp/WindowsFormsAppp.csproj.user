@@ -31,16 +31,19 @@
     <Compile Update="Gets\GetSubCarros\GetModelo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Indexes\Index.cs">
+    <Compile Update="Gets\Index.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Gets\SubCarro.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Posts\PostReserva.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Posts\PostSubCarros\PostCarros.cs">
+    <Compile Update="Posts\PostSubCarros\PostCarro.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Posts\PostSubCarros\PostCliente.cs">
+    <Compile Update="Posts\PostCliente.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Posts\PostSubCarros\PostMarca.cs">
@@ -65,15 +68,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Usuario\Cadastro.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Indexes\Carro.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Indexes\Cliente.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Indexes\Reservas.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Usuario\Login.cs">

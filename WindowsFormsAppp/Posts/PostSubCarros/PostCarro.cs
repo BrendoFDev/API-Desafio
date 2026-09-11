@@ -8,18 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WindowsFormsAppp.Indexes
+namespace WindowsFormsAppp.Posts.PostSubCarros
 {
-    public partial class Index : Form
+    public partial class PostCarro : Form
     {
-        public Index()
+        public PostCarro()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

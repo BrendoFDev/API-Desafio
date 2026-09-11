@@ -41,7 +41,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Viner Hand ITC", 72F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            label1.Location = new Point(251, 64);
+            label1.Location = new Point(260, 65);
             label1.Name = "label1";
             label1.Size = new Size(548, 155);
             label1.TabIndex = 0;
@@ -105,7 +105,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1091, 633);
+            ClientSize = new Size(1115, 605);
             Controls.Add(linkLabel1);
             Controls.Add(label3);
             Controls.Add(label2);

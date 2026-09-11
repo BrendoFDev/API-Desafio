@@ -16,5 +16,26 @@ namespace WindowsFormsAppp.Gets
         {
             InitializeComponent();
         }
+
+        private void Atualizar_Click(object sender, EventArgs e)
+        {
+            WindowsFormsAppp.Puts.PutCliente pagina = new WindowsFormsAppp.Puts.PutCliente();
+            pagina.Show();
+            this.Hide();
+        }
+
+        private void Criar_Click(object sender, EventArgs e)
+        {
+            WindowsFormsAppp.Posts.SubCarros.PostCliente pagina = new WindowsFormsAppp.Posts.SubCarros.PostCliente();
+            pagina.Show();
+            this.Hide();
+        }
+
+        private void Deletar_Click(object sender, EventArgs e)
+        {
+            WindowsFormsAppp.Deletes.DeleteCliente pagina = new WindowsFormsAppp.Deletes.DeleteCliente();
+            pagina.Show();
+            this.Hide();
+        }
     }
 }

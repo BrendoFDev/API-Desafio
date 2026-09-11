@@ -42,10 +42,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Ravie", 69.75F);
-            label1.Location = new Point(237, 54);
+            label1.Font = new Font("Viner Hand ITC", 72F, FontStyle.Bold | FontStyle.Italic);
+            label1.Location = new Point(306, 54);
             label1.Name = "label1";
-            label1.Size = new Size(629, 125);
+            label1.Size = new Size(464, 155);
             label1.TabIndex = 0;
             label1.Text = "Cadastro";
             // 

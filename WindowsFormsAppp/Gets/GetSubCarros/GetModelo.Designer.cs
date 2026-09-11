@@ -28,12 +28,67 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "GetModelo";
+            listView1 = new ListView();
+            Atualizar = new Button();
+            Criar = new Button();
+            Deletar = new Button();
+            SuspendLayout();
+            // 
+            // listView1
+            // 
+            listView1.Location = new Point(12, 12);
+            listView1.Name = "listView1";
+            listView1.Size = new Size(778, 623);
+            listView1.TabIndex = 0;
+            listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // Atualizar
+            // 
+            Atualizar.Location = new Point(906, 297);
+            Atualizar.Name = "Atualizar";
+            Atualizar.Size = new Size(111, 36);
+            Atualizar.TabIndex = 1;
+            Atualizar.Text = "Atualizar";
+            Atualizar.UseVisualStyleBackColor = true;
+            // 
+            // Criar
+            // 
+            Criar.Location = new Point(906, 241);
+            Criar.Name = "Criar";
+            Criar.Size = new Size(111, 36);
+            Criar.TabIndex = 4;
+            Criar.Text = "Criar";
+            Criar.UseVisualStyleBackColor = true;
+            Criar.Click += Criar_Click;
+            // 
+            // Deletar
+            // 
+            Deletar.Location = new Point(906, 353);
+            Deletar.Name = "Deletar";
+            Deletar.Size = new Size(111, 36);
+            Deletar.TabIndex = 5;
+            Deletar.Text = "Deletar";
+            Deletar.UseVisualStyleBackColor = true;
+            // 
+            // GetModelo
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1095, 650);
+            Controls.Add(Deletar);
+            Controls.Add(Criar);
+            Controls.Add(Atualizar);
+            Controls.Add(listView1);
+            Name = "GetModelo";
+            Text = "GetModelo";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private ListView listView1;
+        private Button Atualizar;
+        private Button Criar;
+        private Button Deletar;
     }
 }
