@@ -93,7 +93,7 @@ function validacaoForm() {
 }
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?paginaAtual=${page}&itensPorPagina=10`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&itensPorPagina=10`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
@@ -113,8 +113,8 @@ async function renderCarros() {
                     <p class="card-text text-start fw-bold mb-1" >Cor: ${item.cor}</p>
                     <h3 class="card-title mb-3" >R$ ${item.preco}</h3>
                     <div class="justify-content-between d-flex">
-                        <button id="btnEditar" data-modelo=${item.modelo} data-marca=${item.marca} data-ano=${item.ano}  data-preco=${item.preco} class="btn editar btn-warning fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
-                        <button class="btn reservar btn-success fs-6 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
+                        <button id="btnEditar" data-modelo=${item.modelo} data-marca=${item.marca} data-ano=${item.ano}  data-preco=${item.preco} class="btn editar btn-warning fs-6 fw-bold rounded-3" data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                        <button class="btn reservar btn-success fs-6 fw-bold rounded-3" data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
                     </div>
                 </div>
             </div>
