@@ -28,12 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "DeleteMarca";
+            textBox1 = new TextBox();
+            label2 = new Label();
+            button1 = new Button();
+            SuspendLayout();
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(80, 100);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(100, 23);
+            textBox1.TabIndex = 10;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(75, 81);
+            label2.Name = "label2";
+            label2.Size = new Size(111, 15);
+            label2.TabIndex = 9;
+            label2.Text = "Digite o ID do Carro";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(94, 129);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 11;
+            button1.Text = "Enviar";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // DeleteMarca
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(273, 226);
+            Controls.Add(button1);
+            Controls.Add(textBox1);
+            Controls.Add(label2);
+            Name = "DeleteMarca";
+            Text = "DeleteMarca";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private TextBox textBox1;
+        private Label label2;
+        private Button button1;
     }
 }

@@ -7,7 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Back", "Back\Back.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Front", "Front\Front.csproj", "{2C4F2391-8DE4-4036-A067-6E9B9EB910AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsAppp", "WindowsFormsAppp\WindowsFormsAppp.csproj", "{DFF7A75B-5030-4B0A-BEA9-4CA187B6E698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsAppp", "WindowsFormsAppp\WindowsFormsAppp.csproj", "{DFF7A75B-5030-4B0A-BEA9-4CA187B6E698}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E329ED22-EF96-49A2-8C2B-200B6F54818A} = {E329ED22-EF96-49A2-8C2B-200B6F54818A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
