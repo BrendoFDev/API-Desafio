@@ -2,8 +2,8 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="col-10 offset-2 d-flex justify-content-center">
-    <div class="card shadow p-4 my-4 col-12" style="max-width: 950px; background-color: rgba(255, 255, 255); border-radius: 15px;">
+<div class="offset-2 d-flex justify-content-center">
+    <div class="card shadow p-4 my-4" style="max-width: 1280px; background-color: rgba(255, 255, 255); border-radius: 15px;">
         <div class="text-center">
 
             <div class="text-end mb-4 justify-content-center d-flex gap-2">
@@ -18,7 +18,7 @@
                 </button>
             </div>
 
-            <div id="divRenderCars" class="row justify-content-center d-flex">
+            <div id="divRenderCars" class="row justify-content-between d-flex gap-0">
             </div>
 
             <nav aria-label="Page navigation example">
@@ -101,13 +101,6 @@
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center">
                             <div class="col-auto">
-                                <div class="input-group mb-1">
-                                    <input type="file" class="btn-check rounded-3" id="imagemInput" autocomplete="off">
-                                    <label class="btn btn-outline-secondary rounded-start" for="customFile">Escolher imagem</label>
-                                    <span class="form-control text-start" id="fileName" style="cursor:default;">Nenhuma imagem selecionada</span>
-                                </div>
-                            </div>
-                            <div class="col-auto">
                                 <label for="inputEditAF" class="fw-medium col-auto fs-5 form-label">Ano do veículo:</label>
                                 <input id="inputEditAF" type="number" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o ano do veículo" required />
                                 <div class="invalid-feedback">
@@ -133,7 +126,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button id="modalAddImg" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAddImagem">
+                    <button id="modalAddImg" class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAddImagem">
                         Adicionar Imagem
                     </button>
                     <button id="editCarro" type="button" class="btn btn-primary">Confirmar</button>
@@ -240,22 +233,30 @@
     </div>
     @* NÃO PRECISA CRIAR UMA NOVA FUNÇÃO PARA EDITAR CARRO / ERIC MUDA OS IDS DOS MODAIS*@
     @* ADICIONAR IMAGENS *@
-    <div id="modalAddImagem" class="modal fade" id="modalAddImg" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div id="modalAddImagem" class="modal fade" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar/Editar Imagem</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form class="p-4">
+                    <div class="col-auto">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <input type="file" class="btn-check rounded-3" id="imagemInput" accept="image/*" required>
+                            <label for="imagemInput" class="btn btn-outline-primary rounded-3">Escolher imagem</label>
+                            <span id="fileName" class="text-muted small text-truncate" style="max-width:200px;"></span>
+                        </div>
+                    </div>
+                </form>
                 <div class="modal-body">
                     <form class="needs-validation" novalidate>
                         <div class="row justify-content-center">
                         </div>
                     </form>
-
                 </div>
                 <div class="modal-footer">
-                    <button id="editCarro" type="button" class="btn btn-primary">Confirmar</button>
+                    <button id="btnEnviarImg" type="button" class="btn btn-primary">Confirmar</button>
                 </div>
             </div>
         </div>

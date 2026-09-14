@@ -12,6 +12,11 @@ const inputEditAnoF = document.getElementById("inputEditAF");
 const inputEditCor = document.getElementById("inputEditC");
 const inputEditPreco = document.getElementById("inputEditP");
 const btnEditCarro = document.getElementById("editCarro");
+
+const btnEnviarImg = document.getElementById("btnEnviarImg");
+const inputImg = document.getElementById("imagemInput");
+const spanFileName = document.getElementById("fileName");
+const btnAbrirModalImg = document.getElementById("modalAddImg");
 //ADD MARCA CARRO MODAL
 let inputMarca = document.getElementById("inputAddMod");
 const btnAddMarca = document.getElementById("btnAddMarca");
@@ -26,7 +31,6 @@ const adcarro = document.getElementById("adcarro");
 const editCarroModal = document.getElementById("btnEditar");
 const modalview = document.getElementById("staticBackdrop");
 const divCarros = document.getElementById("divRenderCars");
-
 //PAGINACAO
 const inputpage = document.getElementById("inputpage");
 const btnVoltar = document.getElementById("btnVoltar");
@@ -64,9 +68,15 @@ try {
     divCarros.addEventListener('click', (event) => {
         selecionarCarro();
     });
-    editcarro.addEventListener('click', () => {
+    btnEditCarro.addEventListener('click', () => {
         atualizarCarro();
     });
+    btnEnviarImg.addEventListener('click', () => {
+        enviarImagem();
+    });
+    inputImg.addEventListener('change', (e) => {
+        spanFileName.textContent = e.target.files[0]?.name || '';
+    });   
 
     btnAddMarca.addEventListener('click', () => {
         salvarMarca();
@@ -109,10 +119,13 @@ async function renderCarros() {
 
     let cardCarros = "";
     dados.items.forEach((item) => {
+        const imageUrl = `data:image/jpeg;base64,${item.fotos[0]}`;
+
+        const altImagem = "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1a091a20952%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1a091a20952%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.9453125%22%20y%3D%22117.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
 
         cardCarros += `
-            <div class="col-md-4 card shadow p-4 my-4 col-12">
-                        <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1a091a20952%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1a091a20952%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.9453125%22%20y%3D%22117.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
+            <div class="col-4 card shadow p-3 my-2">
+                        <img onerror="this.src='${altImagem}'" class="card-img-top rounded-3" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="${imageUrl}" data-holder-rendered="true">
                         <div class="card-body">
                             <p class="card-text text-start m-1">Marca: ${item.nomeMarca}</p>
                             <p class="card-text text-start m-1">Modelo: ${item.nomeModelo}</p>
@@ -122,7 +135,7 @@ async function renderCarros() {
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-success reservar" data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
-                                    <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-modelo=${item.modelo} data-marca=${item.marca} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                                    <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                                 </div>
                             </div>
                         </div>
@@ -206,38 +219,43 @@ function proxPagina() {
 function selecionarCarro() {
     const btnEditar = event.target.closest('.editar');
     if (btnEditar) {
-
-        inputEditMarca.value = btnEditar.getAttribute("data-marca");
-        inputEditModelo.value = btnEditar.getAttribute("data-modelo");
         inputEditAnoF.value = btnEditar.getAttribute("data-ano");
         inputEditCor.value = btnEditar.getAttribute("data-cor");
         inputEditPreco.value = btnEditar.getAttribute("data-preco");
+
+        const idCarro = btnEditar.getAttribute("data-id");
+
+        btnAbrirModalImg.setAttribute('data-id', idCarro);
     }
 }
 async function atualizarCarro() {
-    const marca = inputEditMarca.value;
-    const modelo = inputEditModelo.value;
     const ano = inputEditAnoF.value;
     const cor = inputEditCor.value;
     const preco = inputEditPreco.value;
 
-    if (!validacaoForm())
-        return;
+    const carro = btnAbrirModalImg.getAttribute("data-id");
 
     const payload = {
-        marca: marca,
-        modelo: modelo,
+        carroId: carro,
         ano: ano,
         cor: cor,
         preco: preco
     }
 
-
-    const atualizar = await fetch(`https:localhost:7063/api/carro/${marca}`, {
+    const atualizar = await fetch(`https://localhost:7063/api/carro/${carro}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });
+
+    if (!atualizar.ok) {
+        console.log("Erro")
+    }
+
+    const modal2 = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+    modal2.hide();
+
+    renderCarros();
 }
 
 async function salvarMarca() {
@@ -330,6 +348,27 @@ async function renderSelectModelo() {
     selectModeloCarro.innerHTML = optionsModelo;
 }
 
-async function editarCarro() {
+async function enviarImagem() {
+    const arquivoImagem = inputImg.files[0];
+    const carroId = btnAbrirModalImg.getAttribute("data-id");
+    
+    const formData = new FormData();
+    formData.append('carroId', carroId);
+    formData.append('Conteudo', arquivoImagem);
+
+    const response = await fetch(`https://localhost:7063/api/fotocarro`, {
+        method: 'POST',
+        body: formData,
+    });
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalAddImagem'));
+    const modal2 = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+    modal.hide();
+    modal2.hide();
+    renderCarros(page);
+
+    if (!response.ok) {
+        console.log("Err0!!");
+    }
 
 }

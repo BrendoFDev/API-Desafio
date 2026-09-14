@@ -21,5 +21,9 @@ namespace Front.Controllers
         {
             return View();
         }
+        public IActionResult reservaView()
+        {
+            return View();
+        }
     }
 }
