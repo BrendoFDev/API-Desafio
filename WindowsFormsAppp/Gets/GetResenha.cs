@@ -37,5 +37,10 @@ namespace WindowsFormsAppp.Gets
             pagina.Show();
             this.Hide();
         }
+
+        private void GetResenha_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

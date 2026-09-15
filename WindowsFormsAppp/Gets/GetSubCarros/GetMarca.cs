@@ -5,8 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Back.Models;
 using WindowsFormsAppp.Posts;
 
 namespace WindowsFormsAppp.Gets.GetSubCarros
@@ -37,6 +39,45 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
             WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteMarca pagina = new WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteMarca();
             pagina.Show();
             this.Hide();
+        }
+
+        private void GetMarca_Load(object sender, EventArgs e)
+        {
+            listaMarca.View = View.Details;
+            listaMarca.FullRowSelect = true;
+
+            listaMarca.Columns.Add("ID Marca", 80);
+            listaMarca.Columns.Add("Nome", 200);
+        }
+        private async Task PreencherColunasDaListView()
+        {
+            listaMarca.Items.Clear();
+
+            string urlApiLocal = "https://localhost:7063/api/marca";
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string jsonResponse = await client.GetStringAsync(urlApiLocal);
+                    var opcoes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+                    // Converte o JSON para a lista de objetos
+                    List<Marca> listaUsuarios = JsonSerializer.Deserialize<List<Marca>>(jsonResponse, opcoes);
+
+                    foreach (var usuario in listaUsuarios)
+                    {
+
+                        ListViewItem linha = new ListViewItem(usuario.Id.ToString());
+                        linha.SubItems.Add(usuario.NomeMarca);
+                        listaMarca.Items.Add(linha);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
+                }
+            }
         }
     }
 }

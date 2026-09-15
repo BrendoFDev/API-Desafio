@@ -28,33 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listView1 = new ListView();
+            Deletar = new Button();
             Criar = new Button();
             Atualizar = new Button();
-            Deletar = new Button();
+            listaCarro = new ListView();
             SuspendLayout();
             // 
-            // listView1
+            // Deletar
             // 
-            listView1.Location = new Point(12, 12);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(778, 623);
-            listView1.TabIndex = 3;
-            listView1.UseCompatibleStateImageBehavior = false;
+            Deletar.Location = new Point(906, 352);
+            Deletar.Name = "Deletar";
+            Deletar.Size = new Size(111, 36);
+            Deletar.TabIndex = 7;
+            Deletar.Text = "Deletar";
+            Deletar.UseVisualStyleBackColor = true;
+            Deletar.Click += Deletar_Click;
             // 
             // Criar
             // 
             Criar.Location = new Point(906, 241);
             Criar.Name = "Criar";
             Criar.Size = new Size(111, 36);
-            Criar.TabIndex = 4;
+            Criar.TabIndex = 6;
             Criar.Text = "Criar";
             Criar.UseVisualStyleBackColor = true;
             Criar.Click += Criar_Click;
             // 
             // Atualizar
             // 
-            Atualizar.Location = new Point(906, 297);
+            Atualizar.Location = new Point(906, 295);
             Atualizar.Name = "Atualizar";
             Atualizar.Size = new Size(111, 36);
             Atualizar.TabIndex = 5;
@@ -62,35 +64,35 @@
             Atualizar.UseVisualStyleBackColor = true;
             Atualizar.Click += Atualizar_Click;
             // 
-            // Deletar
+            // listaCarro
             // 
-            Deletar.Location = new Point(906, 353);
-            Deletar.Name = "Deletar";
-            Deletar.Size = new Size(111, 36);
-            Deletar.TabIndex = 6;
-            Deletar.Text = "Deletar";
-            Deletar.UseVisualStyleBackColor = true;
-            Deletar.Click += Deletar_Click;
+            listaCarro.Location = new Point(12, 12);
+            listaCarro.Name = "listaCarro";
+            listaCarro.Size = new Size(778, 623);
+            listaCarro.TabIndex = 4;
+            listaCarro.UseCompatibleStateImageBehavior = false;
+            listaCarro.View = View.Details;
             // 
             // GetCarro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1089, 651);
+            ClientSize = new Size(1097, 647);
             Controls.Add(Deletar);
-            Controls.Add(Atualizar);
             Controls.Add(Criar);
-            Controls.Add(listView1);
+            Controls.Add(Atualizar);
+            Controls.Add(listaCarro);
             Name = "GetCarro";
             Text = "GetCarro";
+            Load += GetCarro_Load;
             ResumeLayout(false);
         }
 
         #endregion
 
-        private ListView listView1;
+        private Button Deletar;
         private Button Criar;
         private Button Atualizar;
-        private Button Deletar;
+        private ListView listaCarro;
     }
 }

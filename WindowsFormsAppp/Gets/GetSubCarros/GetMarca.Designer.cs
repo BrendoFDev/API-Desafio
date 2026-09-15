@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listView1 = new ListView();
+            listaMarca = new ListView();
             Atualizar = new Button();
             Criar = new Button();
             Deletar = new Button();
             SuspendLayout();
             // 
-            // listView1
+            // listaMarca
             // 
-            listView1.Location = new Point(12, 12);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(778, 623);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
+            listaMarca.Location = new Point(12, 12);
+            listaMarca.Name = "listaMarca";
+            listaMarca.Size = new Size(778, 623);
+            listaMarca.TabIndex = 0;
+            listaMarca.UseCompatibleStateImageBehavior = false;
             // 
             // Atualizar
             // 
@@ -80,16 +80,17 @@
             Controls.Add(Deletar);
             Controls.Add(Criar);
             Controls.Add(Atualizar);
-            Controls.Add(listView1);
+            Controls.Add(listaMarca);
             Location = new Point(906, 241);
             Name = "GetMarca";
             Text = "GetMarca";
+            Load += GetMarca_Load;
             ResumeLayout(false);
         }
 
         #endregion
 
-        private ListView listView1;
+        private ListView listaMarca;
         private Button Atualizar;
         private Button Criar;
         private Button Deletar;

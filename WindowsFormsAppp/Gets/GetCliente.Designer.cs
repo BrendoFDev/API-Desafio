@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listView1 = new ListView();
+            listaCliente = new ListView();
             Deletar = new Button();
             Criar = new Button();
             Atualizar = new Button();
             SuspendLayout();
             // 
-            // listView1
+            // listaCliente
             // 
-            listView1.Location = new Point(12, 12);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(778, 623);
-            listView1.TabIndex = 1;
-            listView1.UseCompatibleStateImageBehavior = false;
+            listaCliente.Location = new Point(12, 12);
+            listaCliente.Name = "listaCliente";
+            listaCliente.Size = new Size(778, 623);
+            listaCliente.TabIndex = 1;
+            listaCliente.UseCompatibleStateImageBehavior = false;
             // 
             // Deletar
             // 
@@ -79,15 +79,16 @@
             Controls.Add(Deletar);
             Controls.Add(Criar);
             Controls.Add(Atualizar);
-            Controls.Add(listView1);
+            Controls.Add(listaCliente);
             Name = "GetCliente";
             Text = "GetClientes";
+            Load += GetCliente_Load;
             ResumeLayout(false);
         }
 
         #endregion
 
-        private ListView listView1;
+        private ListView listaCliente;
         private Button Deletar;
         private Button Criar;
         private Button Atualizar;

@@ -83,6 +83,7 @@
             Controls.Add(listView1);
             Name = "GetResenha";
             Text = "GetResenha";
+            Load += GetResenha_Load;
             ResumeLayout(false);
         }
 
