@@ -28,19 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listView1 = new ListView();
+            listaReserva = new ListView();
             Criar = new Button();
             Atualizar = new Button();
             Deletar = new Button();
             SuspendLayout();
             // 
-            // listView1
+            // listaReserva
             // 
-            listView1.Location = new Point(12, 12);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(778, 623);
-            listView1.TabIndex = 2;
-            listView1.UseCompatibleStateImageBehavior = false;
+            listaReserva.Location = new Point(12, 12);
+            listaReserva.Name = "listaReserva";
+            listaReserva.Size = new Size(778, 623);
+            listaReserva.TabIndex = 2;
+            listaReserva.UseCompatibleStateImageBehavior = false;
             // 
             // Criar
             // 
@@ -80,7 +80,7 @@
             Controls.Add(Deletar);
             Controls.Add(Atualizar);
             Controls.Add(Criar);
-            Controls.Add(listView1);
+            Controls.Add(listaReserva);
             Name = "GetResenha";
             Text = "GetResenha";
             Load += GetResenha_Load;
@@ -89,7 +89,7 @@
 
         #endregion
 
-        private ListView listView1;
+        private ListView listaReserva;
         private Button Criar;
         private Button Atualizar;
         private Button Deletar;

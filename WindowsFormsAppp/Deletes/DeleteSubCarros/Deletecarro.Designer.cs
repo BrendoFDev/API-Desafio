@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
+            txtId = new TextBox();
             label2 = new Label();
             button1 = new Button();
             SuspendLayout();
             // 
-            // textBox1
+            // txtId
             // 
-            textBox1.Location = new Point(77, 109);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 10;
+            txtId.Location = new Point(77, 109);
+            txtId.Name = "txtId";
+            txtId.Size = new Size(100, 23);
+            txtId.TabIndex = 10;
             // 
             // label2
             // 
@@ -57,6 +57,7 @@
             button1.TabIndex = 11;
             button1.Text = "Enviar";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // Deletecarro
             // 
@@ -64,7 +65,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(273, 226);
             Controls.Add(button1);
-            Controls.Add(textBox1);
+            Controls.Add(txtId);
             Controls.Add(label2);
             Name = "Deletecarro";
             Text = "Deletecarro";
@@ -74,7 +75,7 @@
 
         #endregion
 
-        private TextBox textBox1;
+        private TextBox txtId;
         private Label label2;
         private Button button1;
     }

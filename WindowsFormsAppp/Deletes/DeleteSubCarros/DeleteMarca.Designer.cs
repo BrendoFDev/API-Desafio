@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
+            txtId = new TextBox();
             label2 = new Label();
             button1 = new Button();
             SuspendLayout();
             // 
-            // textBox1
+            // txtId
             // 
-            textBox1.Location = new Point(80, 100);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 10;
+            txtId.Location = new Point(80, 100);
+            txtId.Name = "txtId";
+            txtId.Size = new Size(100, 23);
+            txtId.TabIndex = 10;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Location = new Point(75, 81);
             label2.Name = "label2";
-            label2.Size = new Size(111, 15);
+            label2.Size = new Size(114, 15);
             label2.TabIndex = 9;
-            label2.Text = "Digite o ID do Carro";
+            label2.Text = "Digite o ID da Marca";
             // 
             // button1
             // 
@@ -57,6 +57,7 @@
             button1.TabIndex = 11;
             button1.Text = "Enviar";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // DeleteMarca
             // 
@@ -64,7 +65,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(273, 226);
             Controls.Add(button1);
-            Controls.Add(textBox1);
+            Controls.Add(txtId);
             Controls.Add(label2);
             Name = "DeleteMarca";
             Text = "DeleteMarca";
@@ -74,7 +75,7 @@
 
         #endregion
 
-        private TextBox textBox1;
+        private TextBox txtId;
         private Label label2;
         private Button button1;
     }

@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             label2 = new Label();
-            textBox1 = new TextBox();
+            txtId = new TextBox();
             label1 = new Label();
-            textBox3 = new TextBox();
-            textBox2 = new TextBox();
-            textBox4 = new TextBox();
+            txtAno = new TextBox();
+            txtPreco = new TextBox();
+            txtCor = new TextBox();
             button1 = new Button();
             SuspendLayout();
             // 
@@ -46,12 +46,13 @@
             label2.TabIndex = 7;
             label2.Text = "Digite o ID do Carro";
             // 
-            // textBox1
+            // txtId
             // 
-            textBox1.Location = new Point(77, 50);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 8;
+            txtId.Location = new Point(77, 50);
+            txtId.Name = "txtId";
+            txtId.PlaceholderText = "Id";
+            txtId.Size = new Size(100, 23);
+            txtId.TabIndex = 8;
             // 
             // label1
             // 
@@ -62,29 +63,29 @@
             label1.TabIndex = 9;
             label1.Text = "O que você deseja atualizar?";
             // 
-            // textBox3
+            // txtAno
             // 
-            textBox3.Location = new Point(77, 178);
-            textBox3.Name = "textBox3";
-            textBox3.PlaceholderText = "Ano";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 10;
+            txtAno.Location = new Point(77, 178);
+            txtAno.Name = "txtAno";
+            txtAno.PlaceholderText = "Ano";
+            txtAno.Size = new Size(100, 23);
+            txtAno.TabIndex = 10;
             // 
-            // textBox2
+            // txtPreco
             // 
-            textBox2.Location = new Point(77, 149);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Preço";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 11;
+            txtPreco.Location = new Point(77, 149);
+            txtPreco.Name = "txtPreco";
+            txtPreco.PlaceholderText = "Preço";
+            txtPreco.Size = new Size(100, 23);
+            txtPreco.TabIndex = 11;
             // 
-            // textBox4
+            // txtCor
             // 
-            textBox4.Location = new Point(77, 120);
-            textBox4.Name = "textBox4";
-            textBox4.PlaceholderText = "Cor";
-            textBox4.Size = new Size(100, 23);
-            textBox4.TabIndex = 11;
+            txtCor.Location = new Point(77, 120);
+            txtCor.Name = "txtCor";
+            txtCor.PlaceholderText = "Cor";
+            txtCor.Size = new Size(100, 23);
+            txtCor.TabIndex = 11;
             // 
             // button1
             // 
@@ -94,6 +95,7 @@
             button1.TabIndex = 12;
             button1.Text = "Atualizar";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // PutCarro
             // 
@@ -101,25 +103,26 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(273, 379);
             Controls.Add(button1);
-            Controls.Add(textBox4);
-            Controls.Add(textBox2);
-            Controls.Add(textBox3);
+            Controls.Add(txtCor);
+            Controls.Add(txtPreco);
+            Controls.Add(txtAno);
             Controls.Add(label1);
-            Controls.Add(textBox1);
+            Controls.Add(txtId);
             Controls.Add(label2);
             Name = "PutCarro";
             Text = "PutCarro";
+            Load += PutCarro_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
         private Label label2;
-        private TextBox textBox1;
+        private TextBox txtId;
         private Label label1;
-        private TextBox textBox3;
-        private TextBox textBox2;
-        private TextBox textBox4;
+        private TextBox txtAno;
+        private TextBox txtPreco;
+        private TextBox txtCor;
         private Button button1;
     }
 }
