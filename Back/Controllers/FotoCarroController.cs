@@ -18,7 +18,7 @@ public class FotoCarroController : ControllerBase
     private readonly Contexto _context;
 
     [HttpPost]
-    public async Task<ActionResult<FotoCarro>> EnviarFoto([FromForm] FotoCarro foto,[FromForm] int carroId)
+    public async Task<ActionResult<FotoCarro>> EnviarFoto([FromForm] FotoCarro foto, [FromForm] int carroId)
     {
 
 
@@ -66,7 +66,7 @@ public class FotoCarroController : ControllerBase
 
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutFotoCarro(int id,  FotoCarroDTO requisicao)
+    public async Task<IActionResult> PutFotoCarro(int id, FotoCarroDTO requisicao)
     {
         try
         {
@@ -83,13 +83,13 @@ public class FotoCarroController : ControllerBase
                 using (var memoryStream = new MemoryStream())
                 {
                     await requisicao.Conteudo.CopyToAsync(memoryStream);
-               
+
                     requisicao.FotoBytes = memoryStream.ToArray();
                 }
 
                 foto.FotoBytes = requisicao.FotoBytes;
             }
-      
+
 
             await _context.SaveChangesAsync();
 
@@ -113,7 +113,8 @@ public class FotoCarroController : ControllerBase
     {
         var foto = await _context.FotoCarros.FindAsync(id);
 
-        if (foto == null) { 
+        if (foto == null)
+        {
             return NotFound("Foto não encontrado.");
         }
 
@@ -121,6 +122,51 @@ public class FotoCarroController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+    [HttpGet]
+
+    public async Task<ActionResult<Paginacao<FotoCarro>>> GetFoto(
+          [FromQuery] int paginaAtual = 1,
+          [FromQuery] int tamanhoPagina = 10,
+          [FromQuery] string? NomeMarca = null
+
+
+          )
+    {
+
+        if (paginaAtual < 1) paginaAtual = 1;
+        if (tamanhoPagina < 1) tamanhoPagina = 10;
+        var query = _context.FotoCarros.AsQueryable();
+
+
+
+
+
+
+        var totalRegistro = await query.CountAsync();
+
+
+        var items = await query
+            .Select(c => new FotoCarro
+            {
+                FotoBytes = c.FotoBytes,
+                Id = c.Id
+
+
+            })
+            .Skip((paginaAtual - 1) * tamanhoPagina)
+            .Take(tamanhoPagina)
+            .ToListAsync();
+
+        var resultado = new Paginacao<FotoCarro>
+        {
+            Items = items,
+            TotalRegistro = totalRegistro,
+            PaginaAtual = paginaAtual,
+            TamanhoPagina = tamanhoPagina
+        };
+
+        return Ok(resultado);
     }
 }
 
