@@ -20,6 +20,13 @@ public class FotoCarroController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<FotoCarro>> EnviarFoto([FromForm] FotoCarro foto, [FromForm] int carroId)
     {
+        var limite = await _context.FotoCarros.CountAsync(f => f.CarroId==carroId) ;
+
+        if(limite >= 3 ) {
+            return BadRequest("O carro só pode ter no máximo 3 fotos.");
+        }
+
+
 
 
         if (foto.Conteudo == null || foto.Conteudo.Length == 0)
