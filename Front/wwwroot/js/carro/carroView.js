@@ -25,6 +25,9 @@ const selectMarca = document.getElementById("marcas");
 let inputModelo = document.getElementById("inputAddModelo");
 const btnModelo = document.getElementById("btnModelo");
 const btnAddModelo = document.getElementById("btnAddModelo");
+//RESERVAR
+const cpfInput = document.getElementById("inputReserva");
+const btnReservar = document.getElementById("btnReserva");
 //GERAL
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
@@ -90,6 +93,10 @@ try {
     btnCarro.addEventListener('click', () => {
         renderSelectModelo();
     });
+
+    btnReservar.addEventListener('click', () => {
+        reservarCarro();
+    });
 }
 catch (err) {
     console.log(err);
@@ -134,7 +141,7 @@ async function renderCarros() {
                             <p class="card-text text-center m-1 mb-3 fs-3 text-success">R$ ${item.preco}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-success reservar" data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
+                                    <button type="button" class="btn btn-sm btn-outline-success reservar" data-id=${item.id} data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
                                     <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                                 </div>
                             </div>
@@ -218,14 +225,20 @@ function proxPagina() {
 
 function selecionarCarro() {
     const btnEditar = event.target.closest('.editar');
+    const btnReserv = event.target.closest('.reservar');
+
     if (btnEditar) {
         inputEditAnoF.value = btnEditar.getAttribute("data-ano");
         inputEditCor.value = btnEditar.getAttribute("data-cor");
         inputEditPreco.value = btnEditar.getAttribute("data-preco");
 
         const idCarro = btnEditar.getAttribute("data-id");
-
         btnAbrirModalImg.setAttribute('data-id', idCarro);
+    }
+
+    if (btnReserv) {
+        const idCarro = btnReserv.getAttribute("data-id");
+        btnReservar.setAttribute('data-id', idCarro);
     }
 }
 async function atualizarCarro() {
@@ -371,4 +384,39 @@ async function enviarImagem() {
         console.log("Err0!!");
     }
 
+}
+
+
+async function reservarCarro() {
+    const cpf = cpfInput.value;
+    const carroID = btnReservar.getAttribute('data-id');
+
+    const response = await fetch(`https://localhost:7063/api/cliente?cpf=${cpf}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    });
+
+    const data = await response.json();
+
+    let clienteID = "";
+    data.items.forEach((item) => {
+        clienteID = item.id;
+    });
+
+    const payload = {
+        clienteId: clienteID,
+        carroId: carroID,
+    }
+
+    const reservar = await fetch(`https://localhost:7063/api/reservas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+
+    console.log("Parabens pela reserva!");
+
+    if (!reservar.ok) {
+        console.log("Deu ruim!");
+    };
 }
