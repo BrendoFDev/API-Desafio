@@ -111,7 +111,6 @@
             Controls.Add(label2);
             Name = "PutCarro";
             Text = "PutCarro";
-            Load += PutCarro_Load;
             ResumeLayout(false);
             PerformLayout();
         }

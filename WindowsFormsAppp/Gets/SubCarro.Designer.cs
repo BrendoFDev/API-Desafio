@@ -32,6 +32,7 @@
             Marca = new Button();
             Carro = new Button();
             Modelo = new Button();
+            Voltar = new Button();
             SuspendLayout();
             // 
             // label1
@@ -77,11 +78,22 @@
             Modelo.UseVisualStyleBackColor = true;
             Modelo.Click += Modelo_Click;
             // 
+            // Voltar
+            // 
+            Voltar.Location = new Point(1008, 12);
+            Voltar.Name = "Voltar";
+            Voltar.Size = new Size(75, 23);
+            Voltar.TabIndex = 9;
+            Voltar.Text = "Voltar";
+            Voltar.UseVisualStyleBackColor = true;
+            Voltar.Click += Voltar_Click;
+            // 
             // SubCarro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1095, 646);
+            Controls.Add(Voltar);
             Controls.Add(Modelo);
             Controls.Add(Carro);
             Controls.Add(Marca);
@@ -98,5 +110,6 @@
         private Button Marca;
         private Button Carro;
         private Button Modelo;
+        private Button Voltar;
     }
 }

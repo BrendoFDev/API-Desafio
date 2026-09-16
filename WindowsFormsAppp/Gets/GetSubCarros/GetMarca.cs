@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Back.Models;
+//using WindowsFormsAppp.Models;
 using WindowsFormsAppp.Posts;
 
 namespace WindowsFormsAppp.Gets.GetSubCarros
@@ -24,21 +25,21 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             WindowsFormsAppp.Puts.PutSubCarros.PutMarca pagina = new WindowsFormsAppp.Puts.PutSubCarros.PutMarca();
             pagina.Show();
-            this.Hide();
+           
         }
 
         private void Criar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Posts.SubCarros.PostMarca pagina = new WindowsFormsAppp.Posts.SubCarros.PostMarca();
             pagina.Show();
-            this.Hide();
+           
         }
 
         private void Deletar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteMarca pagina = new WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteMarca();
             pagina.Show();
-            this.Hide();
+           
         }
 
         private void GetMarca_Load(object sender, EventArgs e)
@@ -78,6 +79,13 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
                     MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
                 }
             }
+        }
+
+        private void Voltar_Click(object sender, EventArgs e)
+        {
+            SubCarro pagina = new SubCarro();
+            pagina.Show();
+            this.Hide();
         }
     }
 }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            modelo = new ComboBox();
+            cmbModelo = new ComboBox();
             label1 = new Label();
             Ano = new TextBox();
             preco = new TextBox();
@@ -37,20 +37,22 @@
             label3 = new Label();
             label4 = new Label();
             button1 = new Button();
+            cmbMarca = new ComboBox();
+            label5 = new Label();
             SuspendLayout();
             // 
-            // modelo
+            // cmbModelo
             // 
-            modelo.FormattingEnabled = true;
-            modelo.Location = new Point(72, 83);
-            modelo.Name = "modelo";
-            modelo.Size = new Size(121, 23);
-            modelo.TabIndex = 0;
+            cmbModelo.FormattingEnabled = true;
+            cmbModelo.Location = new Point(71, 97);
+            cmbModelo.Name = "cmbModelo";
+            cmbModelo.Size = new Size(121, 23);
+            cmbModelo.TabIndex = 0;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(72, 65);
+            label1.Location = new Point(72, 79);
             label1.Name = "label1";
             label1.Size = new Size(111, 15);
             label1.TabIndex = 2;
@@ -114,11 +116,30 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // cmbMarca
+            // 
+            cmbMarca.FormattingEnabled = true;
+            cmbMarca.Location = new Point(71, 43);
+            cmbMarca.Name = "cmbMarca";
+            cmbMarca.Size = new Size(121, 23);
+            cmbMarca.TabIndex = 10;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(71, 25);
+            label5.Name = "label5";
+            label5.Size = new Size(102, 15);
+            label5.TabIndex = 11;
+            label5.Text = "Selecione a Marca";
+            // 
             // PostCarro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(273, 379);
+            Controls.Add(label5);
+            Controls.Add(cmbMarca);
             Controls.Add(button1);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -127,16 +148,17 @@
             Controls.Add(preco);
             Controls.Add(Ano);
             Controls.Add(label1);
-            Controls.Add(modelo);
+            Controls.Add(cmbModelo);
             Name = "PostCarro";
             Text = "PostCarro";
+            Load += PostCarro_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private ComboBox modelo;
+        private ComboBox cmbModelo;
         private Label label1;
         private TextBox Ano;
         private TextBox preco;
@@ -145,5 +167,7 @@
         private Label label3;
         private Label label4;
         private Button button1;
+        private ComboBox cmbMarca;
+        private Label label5;
     }
 }

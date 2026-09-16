@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using Back.Models;
 using static System.Windows.Forms.DataFormats;
 using System.Text.Json;
+using Back.DTO_s;
+//using WindowsFormsAppp.Models;
 
 namespace WindowsFormsAppp.Posts.SubCarros
 {
@@ -37,11 +39,13 @@ namespace WindowsFormsAppp.Posts.SubCarros
 
             try
             {
-                var marcas = await client.GetFromJsonAsync<List<Marca>>(apiGetMarcas);
+                var marcas = await client.GetFromJsonAsync<Paginacao<Marca>>(apiGetMarcas);
 
                 if (marcas != null)
                 {
-                    comboMarca.DataSource = marcas;
+                    
+
+                    comboMarca.DataSource = marcas.Items;
                     comboMarca.DisplayMember = "NomeMarca";
                     comboMarca.ValueMember = "Id";
                 }

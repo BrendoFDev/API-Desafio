@@ -1,4 +1,5 @@
 ﻿using Back.DTO_s;
+using Back.DTO_s.ModelosDTO;
 using Back.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace Back.Controllers
             _context.Modelos.Add(novoModelo);
             await _context.SaveChangesAsync();
 
-           
+
             await _context.Entry(novoModelo)
                           .Reference(m => m.Marca)
                           .LoadAsync();
@@ -52,19 +53,19 @@ namespace Back.Controllers
             if (paginaAtual < 1) paginaAtual = 1;
             if (tamanhoPagina < 1) tamanhoPagina = 10;
 
-          
+
             var query = _context.Modelos.Include(c => c.Marca).AsQueryable();
 
-            
+
             if (!string.IsNullOrEmpty(modelo))
             {
                 query = query.Where(c => c.NomeModelo.Contains(modelo));
             }
 
-            
+
             if (!string.IsNullOrEmpty(marca))
             {
-                query = query.Where(c => c.Marca.NomeMarca.Contains(marca)); 
+                query = query.Where(c => c.Marca.NomeMarca.Contains(marca));
             }
 
             var totalRegistro = await query.CountAsync();
@@ -74,12 +75,12 @@ namespace Back.Controllers
                 .Take(tamanhoPagina)
                 .Select(c => new ModeloDTO
                 {
-                   id= c.Id,
+                    id = c.Id,
                     NomeModelo = c.NomeModelo,
                     MarcaId = c.MarcaId,
-                    Marca = c.Marca 
+                    Marca = c.Marca
 
-             
+
                 })
                 .ToListAsync();
 
@@ -94,7 +95,26 @@ namespace Back.Controllers
             return Ok(resultado);
         }
 
+        [HttpGet("pormarca/{marcaId}")]
+        public async Task<ActionResult> GetModelo(int marcaId)
+        {
 
+            var modelos = await _context.Modelos
+                .Where(c => c.MarcaId == marcaId)
+                .Select(x => new ResponseModeloDTO
+                {
+                    Id = x.Id,
+                    Nome = x.NomeModelo,
+                })
+                .ToListAsync();
+
+            if (modelos == null)
+            {
+                return NotFound("Modelo não encontrado.");
+            }
+
+            return Ok(modelos);
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> PutModelo(int id, [FromBody] ModeloDTO requisicao)
         {
@@ -136,7 +156,7 @@ namespace Back.Controllers
             var modelo = await _context.Modelos.FindAsync(id);
             if (modelo == null) return NotFound("Modelo não encontrado.");
 
-        
+
             bool possuiCarros = await _context.Carros.AnyAsync(r => r.ModeloId == id);
 
             if (possuiCarros)
@@ -150,6 +170,9 @@ namespace Back.Controllers
             return NoContent();
 
         }
+
+
+
     }
 }
 

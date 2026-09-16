@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             label2 = new Label();
-            textBox1 = new TextBox();
+            txtId = new TextBox();
             label1 = new Label();
-            textBox2 = new TextBox();
+            txtNome = new TextBox();
             button1 = new Button();
             SuspendLayout();
             // 
@@ -44,12 +44,13 @@
             label2.TabIndex = 8;
             label2.Text = "Digite o ID do Modelo que deseja atualizar:";
             // 
-            // textBox1
+            // txtId
             // 
-            textBox1.Location = new Point(81, 91);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 9;
+            txtId.Location = new Point(81, 91);
+            txtId.Name = "txtId";
+            txtId.PlaceholderText = "Id";
+            txtId.Size = new Size(100, 23);
+            txtId.TabIndex = 9;
             // 
             // label1
             // 
@@ -60,12 +61,13 @@
             label1.TabIndex = 10;
             label1.Text = "Digite o novo nome que deseja:";
             // 
-            // textBox2
+            // txtNome
             // 
-            textBox2.Location = new Point(81, 163);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 11;
+            txtNome.Location = new Point(81, 163);
+            txtNome.Name = "txtNome";
+            txtNome.PlaceholderText = "Nome";
+            txtNome.Size = new Size(100, 23);
+            txtNome.TabIndex = 11;
             // 
             // button1
             // 
@@ -75,6 +77,7 @@
             button1.TabIndex = 12;
             button1.Text = "Atualizar";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // PutModelo
             // 
@@ -82,9 +85,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(273, 379);
             Controls.Add(button1);
-            Controls.Add(textBox2);
+            Controls.Add(txtNome);
             Controls.Add(label1);
-            Controls.Add(textBox1);
+            Controls.Add(txtId);
             Controls.Add(label2);
             Name = "PutModelo";
             Text = "PutModelo";
@@ -95,9 +98,9 @@
         #endregion
 
         private Label label2;
-        private TextBox textBox1;
+        private TextBox txtId;
         private Label label1;
-        private TextBox textBox2;
+        private TextBox txtNome;
         private Button button1;
     }
 }

@@ -33,7 +33,7 @@ namespace WindowsFormsAppp.Puts.PutSubCarros
             }
             string cor = string.IsNullOrWhiteSpace(txtCor.Text) ? null : txtCor.Text;
 
-            decimal? preco = string.IsNullOrWhiteSpace(txtPreco.Text) ? (decimal?)null : decimal.Parse(txtPreco.Text);
+            float? preco = string.IsNullOrWhiteSpace(txtPreco.Text) ? (float?)null : float.Parse(txtPreco.Text);
 
             int? ano = string.IsNullOrWhiteSpace(txtAno.Text) ? (int?)null : int.Parse(txtAno.Text);
 
@@ -76,11 +76,6 @@ namespace WindowsFormsAppp.Puts.PutSubCarros
             {
                 button1.Enabled = true;
             }
-        }
-
-        private void PutCarro_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

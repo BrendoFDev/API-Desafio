@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            txtId = new TextBox();
+            txtIdCliente = new TextBox();
             label2 = new Label();
-            textBox3 = new TextBox();
+            txtIdCarro = new TextBox();
             button1 = new Button();
             SuspendLayout();
             // 
@@ -45,21 +45,21 @@
             label1.TabIndex = 4;
             label1.Text = "Digite o ID da Reserva";
             // 
-            // textBox1
+            // txtId
             // 
-            textBox1.Location = new Point(85, 88);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "ID";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 7;
+            txtId.Location = new Point(85, 88);
+            txtId.Name = "txtId";
+            txtId.PlaceholderText = "ID";
+            txtId.Size = new Size(100, 23);
+            txtId.TabIndex = 7;
             // 
-            // textBox2
+            // txtIdCliente
             // 
-            textBox2.Location = new Point(83, 146);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "ID Cliente";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 11;
+            txtIdCliente.Location = new Point(83, 146);
+            txtIdCliente.Name = "txtIdCliente";
+            txtIdCliente.PlaceholderText = "ID Cliente";
+            txtIdCliente.Size = new Size(100, 23);
+            txtIdCliente.TabIndex = 11;
             // 
             // label2
             // 
@@ -70,13 +70,13 @@
             label2.TabIndex = 10;
             label2.Text = "Digite o que deseja atualizar:.";
             // 
-            // textBox3
+            // txtIdCarro
             // 
-            textBox3.Location = new Point(83, 175);
-            textBox3.Name = "textBox3";
-            textBox3.PlaceholderText = "ID Carro";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 12;
+            txtIdCarro.Location = new Point(83, 175);
+            txtIdCarro.Name = "txtIdCarro";
+            txtIdCarro.PlaceholderText = "ID Carro";
+            txtIdCarro.Size = new Size(100, 23);
+            txtIdCarro.TabIndex = 12;
             // 
             // button1
             // 
@@ -86,6 +86,7 @@
             button1.TabIndex = 13;
             button1.Text = "Atualizar ";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // PutReserva
             // 
@@ -93,10 +94,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(273, 379);
             Controls.Add(button1);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
+            Controls.Add(txtIdCarro);
+            Controls.Add(txtIdCliente);
             Controls.Add(label2);
-            Controls.Add(textBox1);
+            Controls.Add(txtId);
             Controls.Add(label1);
             Name = "PutReserva";
             Text = "PutReserva";
@@ -107,10 +108,10 @@
         #endregion
 
         private Label label1;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox txtId;
+        private TextBox txtIdCliente;
         private Label label2;
-        private TextBox textBox3;
+        private TextBox txtIdCarro;
         private Button button1;
     }
 }

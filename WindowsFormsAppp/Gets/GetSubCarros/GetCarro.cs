@@ -25,41 +25,46 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             WindowsFormsAppp.Puts.PutSubCarros.PutCarro pagina = new WindowsFormsAppp.Puts.PutSubCarros.PutCarro();
             pagina.Show();
-            this.Hide();
+
         }
 
         private void Criar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Posts.PostSubCarros.PostCarro pagina = new WindowsFormsAppp.Posts.PostSubCarros.PostCarro();
             pagina.Show();
-            this.Hide();
+
         }
 
         private void Deletar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Deletes.DeleteSubCarros.Deletecarro pagina = new WindowsFormsAppp.Deletes.DeleteSubCarros.Deletecarro();
             pagina.Show();
-            this.Hide();
+
         }
 
-        private void GetCarro_Load(object sender, EventArgs e)
+        private async void GetCarro_Load(object sender, EventArgs e)
         {
-            
+
             listaCarro.View = View.Details;
-            listaCarro.FullRowSelect = true; 
-  
+            listaCarro.FullRowSelect = true;
+
             listaCarro.Columns.Add("ID Carro", 80);
             listaCarro.Columns.Add("ID Marca", 80);
-            listaCarro.Columns.Add("ID Modelo", 80); 
-            listaCarro.Columns.Add("Cor", 100);        
+            listaCarro.Columns.Add("ID Modelo", 80);
+            listaCarro.Columns.Add("Cor", 100);
             listaCarro.Columns.Add("Ano", 100);
             listaCarro.Columns.Add("Preço", 200);
+
+            await PreencherColunasDaListView();
+            
+            
+
         }
         private async Task PreencherColunasDaListView()
         {
-            listaCarro.Items.Clear(); 
+            listaCarro.Items.Clear();
 
-            string urlApiLocal = "https://localhost:7063/api/carro"; 
+            string urlApiLocal = "https://localhost:7063/api/carro";
 
             using (HttpClient client = new HttpClient())
             {
@@ -68,12 +73,12 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
                     string jsonResponse = await client.GetStringAsync(urlApiLocal);
                     var opcoes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
-                    // Converte o JSON para a lista de objetos
+
                     List<CarroDTO> listaUsuarios = JsonSerializer.Deserialize<List<CarroDTO>>(jsonResponse, opcoes);
 
                     foreach (var usuario in listaUsuarios)
                     {
-                        
+
                         ListViewItem linha = new ListViewItem(usuario.id.ToString());
 
                         linha.SubItems.Add(usuario.MarcaId.ToString());
@@ -90,6 +95,28 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
                     MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
                 }
             }
+        }
+        private async void AdicionarCarroAoListView(CarroDTO carro)
+        {
+            ListViewItem item = new ListViewItem(new[]
+            {
+                carro.id?.ToString() ?? string.Empty,
+                carro.MarcaId.ToString(),
+                carro.ModeloId.ToString(),
+                carro.Cor ?? string.Empty,
+                carro.Ano?.ToString() ?? string.Empty,
+                carro.Preco?.ToString() ?? string.Empty
+            });
+
+            item.Tag = carro.id; 
+            listaCarro.Items.Add(item); 
+        }
+
+        private void Voltar_Click(object sender, EventArgs e)
+        {
+            SubCarro pagina = new SubCarro();
+            pagina.Show();
+            this.Hide();
         }
     }
 }

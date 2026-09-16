@@ -50,5 +50,12 @@ namespace WindowsFormsAppp.Gets
             formPrincipal.Show();
             this.Hide();
         }
+
+        private void Voltar_Click(object sender, EventArgs e)
+        {
+            Index pagina = new Index();
+            pagina.Show();
+            this.Hide();
+        }
     }
 }

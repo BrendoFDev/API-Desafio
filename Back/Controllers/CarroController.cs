@@ -161,14 +161,15 @@ namespace Back.Controllers
                         throw;
                     }
                 }
+            
 
-
-            }
+        }
 
             private bool CarroExists(int id)
             {
                 return _context.Carros.Any(e => e.Id == id);
             }
+
 
             [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteCarro(int id)

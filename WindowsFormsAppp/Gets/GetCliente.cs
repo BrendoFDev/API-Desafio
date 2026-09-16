@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Back.Models;
+//using WindowsFormsAppp.Models;
 
 namespace WindowsFormsAppp.Gets
 {
@@ -23,19 +24,16 @@ namespace WindowsFormsAppp.Gets
         {
             WindowsFormsAppp.Puts.PutCliente pagina = new WindowsFormsAppp.Puts.PutCliente();
             pagina.Show();
-            this.Hide();
         }
         private void Criar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Posts.SubCarros.PostCliente pagina = new WindowsFormsAppp.Posts.SubCarros.PostCliente();
             pagina.Show();
-            this.Hide();
         }
         private void Deletar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Deletes.DeleteCliente pagina = new WindowsFormsAppp.Deletes.DeleteCliente();
             pagina.Show();
-            this.Hide();
         }
         private void GetCliente_Load(object sender, EventArgs e)
         {
@@ -76,6 +74,13 @@ namespace WindowsFormsAppp.Gets
                     MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
                 }
             }
+        }
+
+        private void Voltar_Click(object sender, EventArgs e)
+        {
+            Index pagina = new Index();
+            pagina.Show();
+            this.Hide();
         }
     }
 }

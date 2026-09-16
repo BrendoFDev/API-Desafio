@@ -32,6 +32,7 @@
             Criar = new Button();
             Atualizar = new Button();
             listaCarro = new ListView();
+            Voltar = new Button();
             SuspendLayout();
             // 
             // Deletar
@@ -73,11 +74,22 @@
             listaCarro.UseCompatibleStateImageBehavior = false;
             listaCarro.View = View.Details;
             // 
+            // Voltar
+            // 
+            Voltar.Location = new Point(1010, 12);
+            Voltar.Name = "Voltar";
+            Voltar.Size = new Size(75, 23);
+            Voltar.TabIndex = 8;
+            Voltar.Text = "Voltar";
+            Voltar.UseVisualStyleBackColor = true;
+            Voltar.Click += Voltar_Click;
+            // 
             // GetCarro
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1097, 647);
+            Controls.Add(Voltar);
             Controls.Add(Deletar);
             Controls.Add(Criar);
             Controls.Add(Atualizar);
@@ -94,5 +106,6 @@
         private Button Criar;
         private Button Atualizar;
         private ListView listaCarro;
+        private Button Voltar;
     }
 }

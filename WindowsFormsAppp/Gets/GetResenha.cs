@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Back.Models;
+//using WindowsFormsAppp.Models;
 
 namespace WindowsFormsAppp.Gets
 {
@@ -23,21 +24,18 @@ namespace WindowsFormsAppp.Gets
         {
             WindowsFormsAppp.Puts.PutReserva pagina = new WindowsFormsAppp.Puts.PutReserva();
             pagina.Show();
-            this.Hide();
         }
 
         private void Criar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Posts.PostReserva pagina = new WindowsFormsAppp.Posts.PostReserva();
             pagina.Show();
-            this.Hide();
         }
 
         private void Deletar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Deletes.DeleteReserva pagina = new WindowsFormsAppp.Deletes.DeleteReserva();
             pagina.Show();
-            this.Hide();
         }
 
         private void GetResenha_Load(object sender, EventArgs e)
@@ -79,6 +77,13 @@ namespace WindowsFormsAppp.Gets
                     MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
                 }
             }
+        }
+
+        private void Voltar_Click(object sender, EventArgs e)
+        {
+            Index pagina = new Index();
+            pagina.Show();
+            this.Hide();
         }
     }
 }

@@ -90,6 +90,7 @@
             Controls.Add(comboMarca);
             Name = "PostModelo";
             Text = "PostModelo";
+            Load += PostModelo_Load;
             ResumeLayout(false);
             PerformLayout();
         }

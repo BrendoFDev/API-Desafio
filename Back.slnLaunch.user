@@ -8,9 +8,8 @@
         "DebugTarget": "https"
       },
       {
-        "Path": "Front\\Front.csproj",
-        "Action": "Start",
-        "DebugTarget": "https"
+        "Path": "WindowsFormsAppp\\WindowsFormsAppp.csproj",
+        "Action": "Start"
       }
     ]
   }

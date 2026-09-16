@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Back.Models;
+//using WindowsFormsAppp.Models;
 using WindowsFormsAppp.Posts;
 
 
@@ -25,14 +26,12 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             WindowsFormsAppp.Posts.SubCarros.PostModelo pagina = new WindowsFormsAppp.Posts.SubCarros.PostModelo();
             pagina.Show();
-            this.Hide();
         }
 
         private void Atualizar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Puts.PutSubCarros.PutModelo pagina = new WindowsFormsAppp.Puts.PutSubCarros.PutModelo();
             pagina.Show();
-            this.Hide();
         }
 
 
@@ -41,7 +40,6 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteModelo pagina = new WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteModelo();
             pagina.Show();
-            this.Hide();
         }
 
         private void GetModelo_Load(object sender, EventArgs e)
@@ -83,6 +81,13 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
                     MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
                 }
             }
+        }
+
+        private void Voltar_Click(object sender, EventArgs e)
+        {
+            SubCarro pagina = new SubCarro();
+            pagina.Show();
+            this.Hide();
         }
     }
 }

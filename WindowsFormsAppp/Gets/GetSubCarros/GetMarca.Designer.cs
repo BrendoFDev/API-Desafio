@@ -32,6 +32,7 @@
             Atualizar = new Button();
             Criar = new Button();
             Deletar = new Button();
+            Voltar = new Button();
             SuspendLayout();
             // 
             // listaMarca
@@ -72,11 +73,22 @@
             Deletar.UseVisualStyleBackColor = true;
             Deletar.Click += Deletar_Click;
             // 
+            // Voltar
+            // 
+            Voltar.Location = new Point(1010, 12);
+            Voltar.Name = "Voltar";
+            Voltar.Size = new Size(75, 23);
+            Voltar.TabIndex = 9;
+            Voltar.Text = "Voltar";
+            Voltar.UseVisualStyleBackColor = true;
+            Voltar.Click += Voltar_Click;
+            // 
             // GetMarca
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1097, 647);
+            Controls.Add(Voltar);
             Controls.Add(Deletar);
             Controls.Add(Criar);
             Controls.Add(Atualizar);
@@ -94,5 +106,6 @@
         private Button Atualizar;
         private Button Criar;
         private Button Deletar;
+        private Button Voltar;
     }
 }
