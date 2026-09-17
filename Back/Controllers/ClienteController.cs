@@ -56,7 +56,8 @@ namespace Back.Controllers
            [FromQuery] int paginaAtual = 1,
            [FromQuery] int tamanhoPagina = 10,
            [FromQuery] string? nome = null,
-           [FromQuery] string? cpf = null)
+           [FromQuery] string? cpf = null,
+           [FromQuery] int? id=null)
 
         {
 
@@ -65,7 +66,10 @@ namespace Back.Controllers
             var query = _context.Clientes.AsQueryable();
             var busca = nome?.ToUpper();
 
-
+            if(id.HasValue)
+            {
+                query = query.Where(c => c.id == id.Value);
+            }   
             if (!string.IsNullOrEmpty(busca))
             {
 

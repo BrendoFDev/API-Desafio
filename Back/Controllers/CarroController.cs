@@ -57,7 +57,7 @@ namespace Back.Controllers
         public async Task<IActionResult> GetCarrosPaginados(
     [FromQuery] string? termoBusca,
     [FromQuery] int pagina = 1,
-    [FromQuery] int itensPorPagina = 10,
+    [FromQuery] int TamanhoPagina = 10,
     [FromQuery] string? NomeMarca = null,
     [FromQuery] string? NomeModelo = null,
     [FromQuery] int? ano = null,
@@ -66,7 +66,7 @@ namespace Back.Controllers
     [FromQuery] bool ProximaPagina = true)
         {
             if (pagina < 1) pagina = 1;
-            int quantidadeParaPular = (pagina - 1) * itensPorPagina;
+            int quantidadeParaPular = (pagina - 1) * TamanhoPagina;
 
             var query = _context.Carros
                 .Include(c => c.Modelo)
@@ -102,7 +102,7 @@ namespace Back.Controllers
 
             var itens = await query
     .Skip(quantidadeParaPular)
-    .Take(itensPorPagina)
+    .Take(TamanhoPagina)
     .Select(c => new CarroDTO
     {
         id = c.Id, 
