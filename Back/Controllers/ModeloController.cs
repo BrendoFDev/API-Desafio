@@ -171,7 +171,21 @@ namespace Back.Controllers
 
         }
 
-
+        [HttpGet("total")]
+        public async Task<IActionResult> TotalModelo()
+        {
+            var modelos = await _context.Modelos
+                .Include(modelo => modelo.Marca)
+                .Select(modelo => new ModeloDTO
+                {
+                    id = modelo.Id,
+                    NomeModelo = modelo.NomeModelo,
+                    MarcaId = modelo.MarcaId,
+                    Marca = modelo.Marca
+                })
+                .ToListAsync();
+            return Ok(modelos);
+        }
 
     }
 }

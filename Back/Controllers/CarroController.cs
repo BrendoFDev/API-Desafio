@@ -191,6 +191,29 @@ namespace Back.Controllers
                 return NoContent();
 
             }
+
+
+        [HttpGet("total")]
+        public async Task<IActionResult> TotalCarro()
+        {
+            var carros = await _context.Carros
+                .Include(carro => carro.Modelo)
+                .ThenInclude(modelo => modelo.Marca)
+                .Select(c => new CarroDTO
+                {
+                    id = c.Id,
+                    NomeMarca = c.Modelo.Marca.NomeMarca,
+                    NomeModelo = c.Modelo.NomeModelo,
+                    Cor = c.Cor,
+                    Preco = c.Preco
+                })
+                .ToListAsync();
+
+            return Ok(carros);
+        }
+
+
+
         }
     } 
 

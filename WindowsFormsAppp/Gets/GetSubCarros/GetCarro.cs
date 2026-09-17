@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Back.DTO_s;
 using Back.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using WindowsFormsAppp.DTO_s;
 
 namespace WindowsFormsAppp.Gets.GetSubCarros
 {
@@ -44,18 +45,18 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
 
         private async void GetCarro_Load(object sender, EventArgs e)
         {
-
             listaCarro.View = View.Details;
             listaCarro.FullRowSelect = true;
 
             listaCarro.Columns.Add("ID Carro", 80);
-            listaCarro.Columns.Add("ID Marca", 80);
-            listaCarro.Columns.Add("ID Modelo", 80);
+            listaCarro.Columns.Add("Marca", 80);
+            listaCarro.Columns.Add("Modelo", 80);
             listaCarro.Columns.Add("Cor", 100);
             listaCarro.Columns.Add("Ano", 100);
             listaCarro.Columns.Add("Preço", 200);
 
             await PreencherColunasDaListView();
+           
             
             
 
@@ -64,52 +65,57 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             listaCarro.Items.Clear();
 
-            string urlApiLocal = "https://localhost:7063/api/carro";
+            const string urlApiLocal = "https://localhost:7063/api/carro/total";
 
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+
+            try
             {
-                try
+                var opcoes = new JsonSerializerOptions
                 {
-                    string jsonResponse = await client.GetStringAsync(urlApiLocal);
-                    var opcoes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    PropertyNameCaseInsensitive = true
+                };
 
+                string jsonResponse = await client.GetStringAsync(urlApiLocal);
 
-                    List<CarroDTO> listaUsuarios = JsonSerializer.Deserialize<List<CarroDTO>>(jsonResponse, opcoes);
+                List<CarroDTO>? carros =
+                    JsonSerializer.Deserialize<List<CarroDTO>>(
+                        jsonResponse,
+                        opcoes);
 
-                    foreach (var usuario in listaUsuarios)
-                    {
-
-                        ListViewItem linha = new ListViewItem(usuario.id.ToString());
-
-                        linha.SubItems.Add(usuario.MarcaId.ToString());
-                        linha.SubItems.Add(usuario.ModeloId.ToString());
-                        linha.SubItems.Add(usuario.Cor);
-                        linha.SubItems.Add(usuario.Ano.ToString());
-                        linha.SubItems.Add(usuario.Preco.ToString());
-
-                        listaCarro.Items.Add(linha);
-                    }
+                if (carros is null)
+                {
+                    return;
                 }
-                catch (Exception ex)
+
+                foreach (CarroDTO carro in carros)
                 {
-                    MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
+                    AdicionarCarroAoListView(carro);
                 }
             }
-        }
-        private async void AdicionarCarroAoListView(CarroDTO carro)
-        {
-            ListViewItem item = new ListViewItem(new[]
+            catch (Exception ex)
             {
+                MessageBox.Show(
+                    $"Erro ao preencher a lista de carros: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+        private void AdicionarCarroAoListView(CarroDTO carro)
+        {
+            ListViewItem item = new ListViewItem(
+            [
                 carro.id?.ToString() ?? string.Empty,
-                carro.MarcaId.ToString(),
-                carro.ModeloId.ToString(),
+                carro.NomeMarca,
+                carro.NomeModelo,
                 carro.Cor ?? string.Empty,
                 carro.Ano?.ToString() ?? string.Empty,
                 carro.Preco?.ToString() ?? string.Empty
-            });
+            ]);
 
-            item.Tag = carro.id; 
-            listaCarro.Items.Add(item); 
+            item.Tag = carro.id;
+            listaCarro.Items.Add(item);
         }
 
         private void Voltar_Click(object sender, EventArgs e)

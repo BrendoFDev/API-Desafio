@@ -130,5 +130,11 @@ namespace Back.Controllers
             return NoContent();
 
         }
+        [HttpGet("total")]
+        public async Task<ActionResult<IEnumerable<Marca>>> GetTotalMarcas()
+        {
+            var marcas = await _context.Marcas.ToListAsync();
+            return Ok(marcas);
+        }
     }
 }

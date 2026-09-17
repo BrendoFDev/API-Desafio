@@ -28,7 +28,7 @@ namespace Back.Controllers
             };
 
             bool possuiReserva = await _context.Reservas.AnyAsync(r => r.ClienteId == requisicao.ClienteId && r.CarroId == requisicao.CarroId);
-        
+
 
             bool ClienteExiste = await _context.Clientes.AnyAsync(r => r.id == requisicao.ClienteId);
             bool CarroExiste = await _context.Carros.AnyAsync(r => r.Id == requisicao.CarroId);
@@ -114,6 +114,19 @@ namespace Back.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Reserva deletada com sucesso");
+        }
+
+        [HttpGet("total")]
+        public async Task<ActionResult<List<ReservaDTO>>> GetTotalReservas()
+        {
+            var totalReservas = await _context.Reservas
+                .Select(r => new ReservaDTO
+                {
+                    ClienteId = r.ClienteId,
+                    CarroId = r.CarroId
+                })
+                .ToListAsync();
+            return Ok(totalReservas);
         }
     }
 }

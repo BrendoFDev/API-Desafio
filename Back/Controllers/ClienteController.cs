@@ -165,5 +165,11 @@ namespace Back.Controllers
 
         }
 
+        [HttpGet("total")]
+        public async Task<ActionResult<IEnumerable<Cliente>>> GetTotalClientes()
+        {
+            var clientes = await _context.Clientes.ToListAsync();
+            return Ok(clientes);
+        }
     }
 }
