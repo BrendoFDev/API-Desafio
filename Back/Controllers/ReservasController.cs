@@ -54,18 +54,63 @@ namespace Back.Controllers
             return Created("Reserva criada com sucesso", reserva);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ReservasController>> GetReserva(int id)
+        [HttpGet]
+        public async Task<ActionResult<Paginacao<ReservaDTO>>> GetReservas(
+           [FromQuery] int paginaAtual = 1,
+           [FromQuery] int tamanhoPagina = 10,
+           [FromQuery] int? CarroId = null,
+           [FromQuery] int? ClienteId = null,
+           [FromQuery] int? Id = null)
         {
-            var Reserva = await _context.Reservas.FindAsync(id);
+            if (paginaAtual < 1) paginaAtual = 1;
+            if (tamanhoPagina < 1) tamanhoPagina = 10;
+           
+            var query = _context.Reservas.AsQueryable();
 
-            if (Reserva == null)
+
+            if (!Id.HasValue)
             {
-                return NotFound("Reserva não encontrado.");
+
+                query = query.Where(c => EF.Functions.Like(c.Id.ToString(), $"%{Id}%"));
             }
 
-            return Ok(Reserva);
+
+            if (!ClienteId.HasValue)
+            {
+                query = query.Where(c => EF.Functions.Like(c.ClienteId.ToString(), $"%{ClienteId}%"));
+            }
+            
+            if (!CarroId.HasValue)
+            {
+                query = query.Where(c => EF.Functions.Like(c.CarroId.ToString(), $"%{CarroId}%"));
+            }
+
+            var totalRegistro = await query.CountAsync();
+
+
+            var items = await query
+                .Select(c => new Reserva
+                {
+                    Id = c.Id,
+                    ClienteId = c.ClienteId,
+                    CarroId = c.CarroId
+
+                })
+                .Skip((paginaAtual - 1) * tamanhoPagina)
+                .Take(tamanhoPagina)
+                .ToListAsync();
+
+            var resultado = new Paginacao<Reserva>
+            {
+                Items = items,
+                TotalRegistro = totalRegistro,
+                PaginaAtual = paginaAtual,
+                TamanhoPagina = tamanhoPagina
+            };
+
+            return Ok(resultado);
         }
+        
 
         private bool ReservaExists(int id)
         {
