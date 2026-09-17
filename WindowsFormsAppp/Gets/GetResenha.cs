@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Back.DTO_s;
 using Back.Models;
 //using WindowsFormsAppp.Models;
 
@@ -38,50 +39,81 @@ namespace WindowsFormsAppp.Gets
             pagina.Show();
         }
 
-        private void GetResenha_Load(object sender, EventArgs e)
+        private async void GetResenha_Load(object sender, EventArgs e)
         {
             listaReserva.View = View.Details;
             listaReserva.FullRowSelect = true;
+            listaReserva.GridLines = true;
 
             listaReserva.Columns.Add("ID da Reserva", 80);
             listaReserva.Columns.Add("ID do Cliente", 80);
             listaReserva.Columns.Add("ID do Carro", 200);
+            await PreencherColunasDaListView();
         }
         private async Task PreencherColunasDaListView()
         {
             listaReserva.Items.Clear();
 
-            string urlApiLocal = "https://localhost:7063/api/reserva";
+            const string urlApiLocal = "https://localhost:7063/api/reservas/total";
 
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+
+            try
             {
-                try
+                var opcoes = new JsonSerializerOptions
                 {
-                    string jsonResponse = await client.GetStringAsync(urlApiLocal);
-                    var opcoes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    PropertyNameCaseInsensitive = true
+                };
 
-                    // Converte o JSON para a lista de objetos
-                    List<Reserva> listaUsuarios = JsonSerializer.Deserialize<List<Reserva>>(jsonResponse, opcoes);
+                string jsonResponse = await client.GetStringAsync(urlApiLocal);
 
-                    foreach (var usuario in listaUsuarios)
-                    {
+                List<ReservaDTO>? reservas =
+                    JsonSerializer.Deserialize<List<ReservaDTO>>(
+                        jsonResponse,
+                        opcoes);
 
-                        ListViewItem linha = new ListViewItem(usuario.Id.ToString());
-                        linha.SubItems.Add(usuario.ClienteId.ToString());
-                        linha.SubItems.Add(usuario.CarroId.ToString());
-                        listaReserva.Items.Add(linha);
-                    }
+                if (reservas is null)
+                {
+                    return;
                 }
-                catch (Exception ex)
+
+                foreach (ReservaDTO reserva in reservas)
                 {
-                    MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
+                    AdicionarReservaAoListView(reserva);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Erro ao preencher a lista de reservas: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
+        private void AdicionarReservaAoListView(ReservaDTO reserva)
+        {
+            ListViewItem item = new ListViewItem(
+            [
+                reserva.Id.ToString(),
+                reserva.ClienteId.ToString(),
+                reserva.CarroId.ToString()
 
+            ]);
+
+            item.Tag = reserva.Id;
+            listaReserva.Items.Add(item);
+        }
         private void Voltar_Click(object sender, EventArgs e)
         {
             Index pagina = new Index();
+            pagina.Show();
+            this.Hide();
+        }
+
+        private void recarrega_Click(object sender, EventArgs e)
+        {
+            GetResenha pagina= new GetResenha();
             pagina.Show();
             this.Hide();
         }

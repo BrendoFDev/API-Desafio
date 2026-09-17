@@ -39,7 +39,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Viner Hand ITC", 72F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            label1.Location = new Point(241, 76);
+            label1.Location = new Point(253, 76);
             label1.Name = "label1";
             label1.Size = new Size(548, 155);
             label1.TabIndex = 2;
@@ -48,7 +48,7 @@
             // Marca
             // 
             Marca.Font = new Font("Segoe UI", 9F);
-            Marca.Location = new Point(203, 353);
+            Marca.Location = new Point(452, 313);
             Marca.Name = "Marca";
             Marca.Size = new Size(169, 47);
             Marca.TabIndex = 6;
@@ -59,7 +59,7 @@
             // Carro
             // 
             Carro.Font = new Font("Segoe UI", 9F);
-            Carro.Location = new Point(481, 299);
+            Carro.Location = new Point(452, 249);
             Carro.Name = "Carro";
             Carro.Size = new Size(169, 47);
             Carro.TabIndex = 7;
@@ -70,7 +70,7 @@
             // Modelo
             // 
             Modelo.Font = new Font("Segoe UI", 9F);
-            Modelo.Location = new Point(772, 353);
+            Modelo.Location = new Point(452, 377);
             Modelo.Name = "Modelo";
             Modelo.Size = new Size(169, 47);
             Modelo.TabIndex = 8;

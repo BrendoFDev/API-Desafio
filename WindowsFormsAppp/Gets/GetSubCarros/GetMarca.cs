@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Back.DTO_s;
 using Back.Models;
 //using WindowsFormsAppp.Models;
 using WindowsFormsAppp.Posts;
@@ -25,65 +26,98 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             WindowsFormsAppp.Puts.PutSubCarros.PutMarca pagina = new WindowsFormsAppp.Puts.PutSubCarros.PutMarca();
             pagina.Show();
-           
+
         }
 
         private void Criar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Posts.SubCarros.PostMarca pagina = new WindowsFormsAppp.Posts.SubCarros.PostMarca();
             pagina.Show();
-           
+
         }
 
         private void Deletar_Click(object sender, EventArgs e)
         {
             WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteMarca pagina = new WindowsFormsAppp.Deletes.DeleteSubCarros.DeleteMarca();
             pagina.Show();
-           
+
         }
 
-        private void GetMarca_Load(object sender, EventArgs e)
+        private async void GetMarca_Load(object sender, EventArgs e)
         {
             listaMarca.View = View.Details;
             listaMarca.FullRowSelect = true;
+            listaMarca.GridLines = true;
 
             listaMarca.Columns.Add("ID Marca", 80);
             listaMarca.Columns.Add("Nome", 200);
+
+            await PreencherColunasDaListView();
+
+
         }
         private async Task PreencherColunasDaListView()
         {
             listaMarca.Items.Clear();
 
-            string urlApiLocal = "https://localhost:7063/api/marca";
+            const string urlApiLocal = "https://localhost:7063/api/marca/total";
 
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+
+            try
             {
-                try
+                var opcoes = new JsonSerializerOptions
                 {
-                    string jsonResponse = await client.GetStringAsync(urlApiLocal);
-                    var opcoes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    PropertyNameCaseInsensitive = true
+                };
 
-                    // Converte o JSON para a lista de objetos
-                    List<Marca> listaUsuarios = JsonSerializer.Deserialize<List<Marca>>(jsonResponse, opcoes);
+                string jsonResponse = await client.GetStringAsync(urlApiLocal);
 
-                    foreach (var usuario in listaUsuarios)
-                    {
+                List<MarcaDTO>? marcas =
+                    JsonSerializer.Deserialize<List<MarcaDTO>>(
+                        jsonResponse,
+                        opcoes);
 
-                        ListViewItem linha = new ListViewItem(usuario.Id.ToString());
-                        linha.SubItems.Add(usuario.NomeMarca);
-                        listaMarca.Items.Add(linha);
-                    }
+                if (marcas is null)
+                {
+                    return;
                 }
-                catch (Exception ex)
+
+                foreach (MarcaDTO marca in marcas)
                 {
-                    MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
+                    AdicionarMarcaAoListView(marca);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Erro ao preencher a lista de marcas: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
+        private void AdicionarMarcaAoListView(MarcaDTO marca)
+        {
+            ListViewItem item = new ListViewItem(
+            [
+                marca.Id?.ToString() ?? string.Empty,
+                marca.NomeMarca
+            ]);
 
+            item.Tag = marca.Id;
+            listaMarca.Items.Add(item);
+        }
         private void Voltar_Click(object sender, EventArgs e)
         {
             SubCarro pagina = new SubCarro();
+            pagina.Show();
+            this.Hide();
+        }
+
+        private void recarrega_Click(object sender, EventArgs e)
+        {
+            GetMarca pagina = new GetMarca();
             pagina.Show();
             this.Hide();
         }

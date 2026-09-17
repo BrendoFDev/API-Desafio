@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Back.DTO_s;
 using Back.Models;
 //using WindowsFormsAppp.Models;
 using WindowsFormsAppp.Posts;
@@ -42,50 +43,80 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
             pagina.Show();
         }
 
-        private void GetModelo_Load(object sender, EventArgs e)
+        private async void GetModelo_Load(object sender, EventArgs e)
         {
             listaModelo.View = View.Details;
             listaModelo.FullRowSelect = true;
+            listaModelo.GridLines = true;
 
             listaModelo.Columns.Add("ID Marca", 80);
             listaModelo.Columns.Add("ID Modelo", 80);
             listaModelo.Columns.Add("Nome", 200);
+
+            await PreencherColunasDaListView();
         }
         private async Task PreencherColunasDaListView()
         {
             listaModelo.Items.Clear();
 
-            string urlApiLocal = "https://localhost:7063/api/modelo";
+            const string urlApiLocal = "https://localhost:7063/api/modelo/total";
 
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+
+            try
             {
-                try
+                var opcoes = new JsonSerializerOptions
                 {
-                    string jsonResponse = await client.GetStringAsync(urlApiLocal);
-                    var opcoes = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    PropertyNameCaseInsensitive = true
+                };
 
-                    // Converte o JSON para a lista de objetos
-                    List<Modelo> listaUsuarios = JsonSerializer.Deserialize<List<Modelo>>(jsonResponse, opcoes);
+                string jsonResponse = await client.GetStringAsync(urlApiLocal);
 
-                    foreach (var usuario in listaUsuarios)
-                    {
+                List<ModeloDTO>? modelos =
+                    JsonSerializer.Deserialize<List<ModeloDTO>>(
+                        jsonResponse,
+                        opcoes);
 
-                        ListViewItem linha = new ListViewItem(usuario.MarcaId.ToString());
-                        linha.SubItems.Add(usuario.Id.ToString());
-                        linha.SubItems.Add(usuario.NomeModelo);
-                        listaModelo.Items.Add(linha);
-                    }
+                if (modelos is null)
+                {
+                    return;
                 }
-                catch (Exception ex)
+
+                foreach (ModeloDTO modelo in modelos)
                 {
-                    MessageBox.Show($"Erro ao preencher colunas: {ex.Message}");
+                    AdicionarModeloAoListView(modelo);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Erro ao preencher a lista de modelos: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
+        private void AdicionarModeloAoListView(ModeloDTO modelo)
+        {
+            ListViewItem item = new ListViewItem(
+            [
+                modelo.id?.ToString() ?? string.Empty,
+                modelo.NomeModelo
+            ]);
 
+            item.Tag = modelo.id;
+            listaModelo.Items.Add(item);
+        }
         private void Voltar_Click(object sender, EventArgs e)
         {
             SubCarro pagina = new SubCarro();
+            pagina.Show();
+            this.Hide();
+        }
+
+        private void recarrega_Click(object sender, EventArgs e)
+        {
+            GetModelo pagina = new GetModelo();
             pagina.Show();
             this.Hide();
         }

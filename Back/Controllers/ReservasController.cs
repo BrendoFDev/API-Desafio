@@ -122,6 +122,7 @@ namespace Back.Controllers
             var totalReservas = await _context.Reservas
                 .Select(r => new ReservaDTO
                 {
+                    Id = r.Id,
                     ClienteId = r.ClienteId,
                     CarroId = r.CarroId
                 })

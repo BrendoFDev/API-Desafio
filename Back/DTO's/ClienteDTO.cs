@@ -5,7 +5,7 @@ namespace Back.DTO_s
     public class ClienteDTO
     {
 
-    
+        public int? id { get; set; }
         [StringLength(100, ErrorMessage = "O nome deve ter no máximo 100 caracteres.")]
         public string? Nome { get; set; }
 

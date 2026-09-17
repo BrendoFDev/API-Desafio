@@ -33,6 +33,7 @@
             Criar = new Button();
             Deletar = new Button();
             Voltar = new Button();
+            recarrega = new Button();
             SuspendLayout();
             // 
             // listaModelo
@@ -81,11 +82,22 @@
             Voltar.UseVisualStyleBackColor = true;
             Voltar.Click += Voltar_Click;
             // 
+            // recarrega
+            // 
+            recarrega.Location = new Point(927, 12);
+            recarrega.Name = "recarrega";
+            recarrega.Size = new Size(75, 23);
+            recarrega.TabIndex = 10;
+            recarrega.Text = "Recarregar";
+            recarrega.UseVisualStyleBackColor = true;
+            recarrega.Click += recarrega_Click;
+            // 
             // GetModelo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1095, 650);
+            Controls.Add(recarrega);
             Controls.Add(Voltar);
             Controls.Add(Deletar);
             Controls.Add(Criar);
@@ -104,5 +116,6 @@
         private Button Criar;
         private Button Deletar;
         private Button Voltar;
+        private Button recarrega;
     }
 }

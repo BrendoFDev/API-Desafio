@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Back.DTO_s;
 using Back.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using WindowsFormsAppp.DTO_s;
+using WindowsFormsAppp;
 
 namespace WindowsFormsAppp.Gets.GetSubCarros
 {
@@ -47,6 +47,7 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             listaCarro.View = View.Details;
             listaCarro.FullRowSelect = true;
+            listaCarro.GridLines = true;    
 
             listaCarro.Columns.Add("ID Carro", 80);
             listaCarro.Columns.Add("Marca", 80);
@@ -56,9 +57,9 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
             listaCarro.Columns.Add("Preço", 200);
 
             await PreencherColunasDaListView();
-           
-            
-            
+
+
+
 
         }
         private async Task PreencherColunasDaListView()
@@ -122,6 +123,13 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
         {
             SubCarro pagina = new SubCarro();
             pagina.Show();
+            this.Hide();
+        }
+
+        private void recarrega_Click(object sender, EventArgs e)
+        {
+            GetCarro pagina = new GetCarro();
+            pagina.Show(); 
             this.Hide();
         }
     }

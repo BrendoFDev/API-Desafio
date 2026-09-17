@@ -3,6 +3,7 @@
     public class MarcaDTO
     {
         public string? NomeMarca{ get; set; }
-        
+        public int? Id { get; set; }
+
     }
 }
