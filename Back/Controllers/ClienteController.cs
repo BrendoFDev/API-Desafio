@@ -19,11 +19,9 @@ namespace Back.Controllers
         private readonly Contexto _context;
 
         [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        public async Task<ActionResult<Cliente>> PostCliente(ClienteDTO cliente)
         {
-            var cliente2 = new Cliente { Nome = cliente.Nome.ToUpper().Trim(),
-            Cpf=cliente.Cpf,
-            };
+           
 
             bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
 
@@ -40,6 +38,11 @@ namespace Back.Controllers
             {
                 return BadRequest("CPF inválido... ");
             }
+            var cliente2 = new Cliente
+            {
+                Nome = cliente.Nome.ToUpper().Trim(),
+                Cpf = cpfLimpo,
+            };
 
             _context.Clientes.Add(cliente2);
             await _context.SaveChangesAsync();

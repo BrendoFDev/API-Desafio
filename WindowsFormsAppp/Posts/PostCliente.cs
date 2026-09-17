@@ -33,7 +33,7 @@ namespace WindowsFormsAppp.Posts.SubCarros
             var cliente = new
             {
                 nome=nome.Text,
-                cpf=cpf.Text,
+                cpf=cpf.Text
             };
 
             string url = "https:/localhost:7063/api/cliente";
