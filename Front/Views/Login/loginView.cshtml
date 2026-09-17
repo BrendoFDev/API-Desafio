@@ -10,17 +10,20 @@
     <link rel="stylesheet" href="~/Front.styles.css" asp-append-version="true" />
 </head>
 <body class="d-flex justify-content-center" style="background-color: lightsteelblue">
-    <div class="card shadow p-4 my-4" style="max-width: 1280px; background-color: rgba(255, 255, 255); border-radius: 15px;">
+
+    <div class="d-flex card shadow p-4 my-4 align-self-center" style="background-color: rgba(255, 255, 255); border-radius: 15px; height: 400px;  width: 700px;">
         <div class="text-center">
-            <h1>Login</h1>
+            <h1 class="mb-4">Login</h1>
             <form>
-                <div>
-                    <input type="text" placeholder="Usuário" />
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Senha" />
+
+                <div class="d-flex flex-column align-items-center gap-4 mb-3">
+                    <input type="text" class="form-control" placeholder="Usuário" />
+                    <input type="email" class="form-control" placeholder="Email" />
+                    <input type="password" class="form-control" placeholder="Senha" />
                 </div>
-                <button>Entrar</button>
+                <button class="btn btn-primary mt-4">Entrar</button>
             </form>
+            <span>Não tem uma conta? <a asp-action="cadastroView" asp-controller="Login" asp-area="">Cadastrar</a></span>
         </div>
     </div>
 

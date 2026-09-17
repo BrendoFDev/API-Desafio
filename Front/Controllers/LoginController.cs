@@ -7,4 +7,8 @@ public class LoginController: Controller
     {
         return View();
     }
+    public IActionResult cadastroView()
+    {
+        return View();
+    }
 }

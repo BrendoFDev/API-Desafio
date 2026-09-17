@@ -44,11 +44,12 @@ const paginaInfo = document.getElementById("paginaInfo");
 let dados;
 let page = 1;
 let totalPaginas = 1;
+let PageVarAvancar = "";
 
 try {
     input.addEventListener('change', function () {
         fileName.textContent = this.files[0]?.name ?? 'Nenhuma imagem selecionada';
-    });   
+    });
 
     renderCarros(page);
     adcarro.addEventListener('click', async () => {
@@ -79,7 +80,7 @@ try {
     });
     inputImg.addEventListener('change', (e) => {
         spanFileName.textContent = e.target.files[0]?.name || '';
-    });   
+    });
 
     btnAddMarca.addEventListener('click', () => {
         salvarMarca();
@@ -100,6 +101,8 @@ try {
 }
 catch (err) {
     console.log(err);
+} finally {
+    //disableBtns();
 }
 
 
@@ -116,7 +119,7 @@ function validacaoForm() {
 }
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&itensPorPagina=10`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&tamanhoPagina=8`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
@@ -155,7 +158,7 @@ async function renderCarros() {
         <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPagina} </span>
     `
     totalPaginas = dados.totalPagina;
-    PageVarAvancar = dados.proximaPagina;
+    PageVarAvancar = dados.ProximaPagina;
     paginaInfo.innerHTML = totalPages;
     divCarros.innerHTML = cardCarros;
 }
@@ -205,23 +208,26 @@ function pagAnterior() {
         page = page - 1;
         renderCarros(page);
     }
-    if (page <= 1) {
-        btnVoltar.classList.add("disabled");
-        return
-    }
-    btnVoltar.classList.remove("disabled");
 }
 function proxPagina() {
     if (page < totalPaginas) {
         page++;
         renderCarros(page);
     }
-    if (!PageVarAvancar) {
-        btnAvancar.classList.add("disabled");
-        return
-    }
-    btnAvancar.classList.remove("disabled");
 }
+//function disableBtns() {
+//    if (page <= 1) {
+//        btnVoltar.classList.add("disabled");
+//        return
+//    }
+//    btnVoltar.classList.remove("disabled");
+
+//    if (!PageVarAvancar) {
+//        btnAvancar.classList.add("disabled");
+//        return
+//    }
+//    btnAvancar.classList.remove("disabled");
+//}
 
 function selecionarCarro() {
     const btnEditar = event.target.closest('.editar');
