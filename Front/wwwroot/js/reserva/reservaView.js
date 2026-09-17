@@ -1,7 +1,10 @@
 ﻿//GERAL
-
+const tbReservas = document.getElementById("exibirReservas");
+let dados;
 
 try {
+
+    renderReservas();
 
 } catch (err) {
     console.log(err)
@@ -9,22 +12,32 @@ try {
 
 async function renderReservas() {
 
+    let tbodyReservas = "";
+
     const getReservas = await fetch('https://localhost:7063/api/reservas', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
     });
 
-    dados = await getReservas.json();
+    const dados = await getReservas.json();
 
-    let tbodyReservas = "";
-    
-    dados.items.forEach((reserva) => {
+    for (const item of dados.items) {
+        const idCliente = item.clienteId;
+
+        const getCliente = await fetch(`https://localhost:7063/api/cliente?id=${idCliente}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        });
+
+        const cliente = await getCliente.json();
+        const nomeCliente = cliente.items[0].nome; // ajuste conforme a estrutura da resposta
+
         tbodyReservas += `
             <tr>
                 <th scope="row">${item.id}</th>
                 <td class="text-center">${item.carroId}</td>
-                <td class="text-center">${item.clientId}</td>
-                <td class="text-center">${item.}</td>
+                <td class="text-center">${item.clienteId}</td>
+                <td class="text-center">${nomeCliente}</td>
                 <td class="text-center">16/09/2026</td>
                 <td class="text-center">
                     <button class="btn btn-danger" type="button">
@@ -35,8 +48,9 @@ async function renderReservas() {
                         </svg>
                     </button>
                 </td>
-
             </tr>
-        `
-    });
-}
+        `;
+    }
+
+    tbReservas.innerHTML = tbodyReservas;
+}   
