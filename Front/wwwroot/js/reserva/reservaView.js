@@ -3,7 +3,6 @@ const tbReservas = document.getElementById("exibirReservas");
 let dados;
 
 try {
-
     renderReservas();
 
 } catch (err) {
@@ -30,7 +29,7 @@ async function renderReservas() {
         });
 
         const cliente = await getCliente.json();
-        const nomeCliente = cliente.items[0].nome; // ajuste conforme a estrutura da resposta
+        const nomeCliente = cliente.items[0].nome; 
 
         tbodyReservas += `
             <tr>
