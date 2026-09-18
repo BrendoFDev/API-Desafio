@@ -103,6 +103,19 @@ catch (err) {
     console.log(err);
 } finally {
     //disableBtns();
+    document.addEventListener('DOMContentLoaded', function() {
+        if (page <= 1) {
+            btnVoltar.classList.add("disabled");
+            return
+        }
+        btnVoltar.classList.remove("disabled");
+
+        if (!PageVarAvancar) {
+            btnAvancar.classList.add("disabled");
+            return
+        }
+        btnAvancar.classList.remove("disabled");
+    });
 }
 
 
@@ -119,7 +132,7 @@ function validacaoForm() {
 }
 
 async function renderCarros() {
-    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&tamanhoPagina=8`, {
+    const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&tamanhoPagina=9`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
@@ -215,7 +228,7 @@ function proxPagina() {
         renderCarros(page);
     }
 }
-//function disableBtns() {
+// function disableBtns() {
 //    if (page <= 1) {
 //        btnVoltar.classList.add("disabled");
 //        return
@@ -227,7 +240,7 @@ function proxPagina() {
 //        return
 //    }
 //    btnAvancar.classList.remove("disabled");
-//}
+// }
 
 function selecionarCarro() {
     const btnEditar = event.target.closest('.editar');

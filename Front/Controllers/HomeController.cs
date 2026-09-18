@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Front.Atributos;
 
 namespace Front.Controllers
 {
+    [ValidarSessao]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

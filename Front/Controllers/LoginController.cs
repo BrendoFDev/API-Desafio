@@ -11,4 +11,10 @@ public class LoginController: Controller
     {
         return View();
     }
+
+    [HttpPost]
+    public async Task Logar()
+    {
+        HttpContext.Session.SetString("logado", "true");
+    }
 }
