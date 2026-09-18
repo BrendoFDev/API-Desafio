@@ -45,9 +45,11 @@ namespace WindowsFormsAppp.Gets
             listaReserva.FullRowSelect = true;
             listaReserva.GridLines = true;
 
-            listaReserva.Columns.Add("ID da Reserva", 80);
+            listaReserva.Columns.Add("ID da Reserva", 150);
             listaReserva.Columns.Add("ID do Cliente", 80);
-            listaReserva.Columns.Add("ID do Carro", 200);
+            listaReserva.Columns.Add("Nome do Cliente", 180);
+            listaReserva.Columns.Add("ID do Carro", 100);
+            listaReserva.Columns.Add("Nome do Carro", 200);
             await PreencherColunasDaListView();
         }
         private async Task PreencherColunasDaListView()
@@ -97,7 +99,9 @@ namespace WindowsFormsAppp.Gets
             [
                 reserva.Id.ToString(),
                 reserva.ClienteId.ToString(),
-                reserva.CarroId.ToString()
+                reserva.ClienteNome.ToString(),
+                reserva.CarroId.ToString(),
+                reserva.ModeloNome.ToString()
 
             ]);
 

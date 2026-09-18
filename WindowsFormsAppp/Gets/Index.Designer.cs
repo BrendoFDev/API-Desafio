@@ -33,6 +33,7 @@
             label2 = new Label();
             Carro = new Button();
             Reserva = new Button();
+            Deslogar = new Button();
             SuspendLayout();
             // 
             // label1
@@ -88,11 +89,22 @@
             Reserva.UseVisualStyleBackColor = true;
             Reserva.Click += Reserva_Click;
             // 
+            // Deslogar
+            // 
+            Deslogar.Location = new Point(967, 22);
+            Deslogar.Name = "Deslogar";
+            Deslogar.Size = new Size(75, 23);
+            Deslogar.TabIndex = 8;
+            Deslogar.Text = "Deslogar";
+            Deslogar.UseVisualStyleBackColor = true;
+            Deslogar.Click += Deslogar_Click;
+            // 
             // Index
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1096, 646);
+            Controls.Add(Deslogar);
             Controls.Add(Reserva);
             Controls.Add(Carro);
             Controls.Add(label2);
@@ -112,5 +124,6 @@
         private Label label2;
         private Button Carro;
         private Button Reserva;
+        private Button Deslogar;
     }
 }

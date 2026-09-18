@@ -120,11 +120,17 @@ namespace Back.Controllers
         public async Task<ActionResult<List<ReservaDTO>>> GetTotalReservas()
         {
             var totalReservas = await _context.Reservas
+              
+
+
                 .Select(r => new ReservaDTO
                 {
                     Id = r.Id,
                     ClienteId = r.ClienteId,
-                    CarroId = r.CarroId
+                    ClienteNome = r.cliente.Nome,
+ 
+                    CarroId = r.CarroId,
+                    ModeloNome = r.carro.Modelo.NomeModelo
                 })
                 .ToListAsync();
             return Ok(totalReservas);

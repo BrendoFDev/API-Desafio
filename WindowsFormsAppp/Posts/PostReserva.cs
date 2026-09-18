@@ -31,7 +31,7 @@ namespace WindowsFormsAppp.Posts
                 ClienteId = cId.Text,
             };
 
-            string url = "https:/localhost:7063/api/cliente";
+            string url = "https://localhost:7063/api/reservas";
 
             try
             {

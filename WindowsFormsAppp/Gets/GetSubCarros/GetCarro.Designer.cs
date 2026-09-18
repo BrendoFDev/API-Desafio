@@ -74,7 +74,6 @@
             listaCarro.TabIndex = 4;
             listaCarro.UseCompatibleStateImageBehavior = false;
             listaCarro.View = View.Details;
-            listaCarro.SelectedIndexChanged += GetCarro_Load;
             // 
             // Voltar
             // 

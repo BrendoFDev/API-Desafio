@@ -23,14 +23,7 @@ namespace Back.Controllers
         {
            
 
-            bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
-
             
-
-            if (cpfExiste)
-            {
-               return BadRequest("Este CPF já está cadastrado no sistema.");
-            }
             string cpfLimpo = cliente.Cpf.Replace(".", "").Replace("-", "").Trim();
 
            
@@ -38,12 +31,22 @@ namespace Back.Controllers
             {
                 return BadRequest("CPF inválido... ");
             }
+            
+
+            bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
+
+
+
+            if (cpfExiste)
+            {
+                return BadRequest("Este CPF já está cadastrado no sistema.");
+            }
+
             var cliente2 = new Cliente
             {
                 Nome = cliente.Nome.ToUpper().Trim(),
                 Cpf = cpfLimpo,
             };
-
             _context.Clientes.Add(cliente2);
             await _context.SaveChangesAsync();
 

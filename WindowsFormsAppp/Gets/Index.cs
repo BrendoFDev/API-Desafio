@@ -44,5 +44,12 @@ namespace WindowsFormsAppp.Gets
             novaPagina.Show();
             this.Hide();
         }
+
+        private void Deslogar_Click(object sender, EventArgs e)
+        {
+           Login pagina = new Login();
+            pagina.Show();
+            this.Hide();    
+        }
     }
 }

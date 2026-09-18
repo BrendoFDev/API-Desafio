@@ -30,6 +30,15 @@ namespace WindowsFormsAppp.Gets
         {
             WindowsFormsAppp.Posts.SubCarros.PostCliente pagina = new WindowsFormsAppp.Posts.SubCarros.PostCliente();
             pagina.Show();
+            if (pagina.DialogResult == DialogResult.OK)
+            {
+                MessageBox.Show(pagina.teste);
+            }
+            else
+            {
+                MessageBox.Show("nao fo possivel criar cliente");
+            }
+                
         }
         private void Deletar_Click(object sender, EventArgs e)
         {
@@ -111,6 +120,7 @@ namespace WindowsFormsAppp.Gets
         private void recarrega_Click(object sender, EventArgs e)
         {
             GetCliente pagina = new GetCliente();
+
             pagina.Show();
             this.Hide();
         }

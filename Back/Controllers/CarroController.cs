@@ -204,6 +204,7 @@ namespace Back.Controllers
                     id = c.Id,
                     NomeMarca = c.Modelo.Marca.NomeMarca,
                     NomeModelo = c.Modelo.NomeModelo,
+                    Ano = c.Ano,
                     Cor = c.Cor,
                     Preco = c.Preco
                 })

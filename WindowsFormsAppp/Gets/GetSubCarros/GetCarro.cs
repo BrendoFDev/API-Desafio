@@ -110,9 +110,9 @@ namespace WindowsFormsAppp.Gets.GetSubCarros
                 carro.id?.ToString() ?? string.Empty,
                 carro.NomeMarca,
                 carro.NomeModelo,
-                carro.Cor ?? string.Empty,
-                carro.Ano?.ToString() ?? string.Empty,
-                carro.Preco?.ToString() ?? string.Empty
+                carro.Cor,
+                carro.Ano?.ToString(),
+                carro.Preco?.ToString()
             ]);
 
             item.Tag = carro.id;
