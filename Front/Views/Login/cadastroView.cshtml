@@ -20,12 +20,12 @@
                 <h1 class="mb-3 fs-2">Cadastro</h1>
                 <form>
                     <div class="d-flex flex-column align-items-center gap-3 mb-3">
-                        <input type="text" class="form-control" placeholder="Digite o nome de usuário" />
-                        <input type="email" class="form-control" placeholder="Digite o email a ser cadastrado" />
-                        <input type="password" class="form-control" placeholder="Digite a sua senha" />
-                        <input type="password" class="form-control" placeholder="Confirme sua senha" />
+                        <input id="inputNome" type="text" class="form-control" placeholder="Digite o nome de usuário" />
+                        <input id="inputEmail" type="email" class="form-control" placeholder="Digite o email a ser cadastrado" />
+                        <input id="inputSenha" type="password" class="form-control" placeholder="Digite a sua senha" />
+                        <input id="inputConfirmSenha" type="password" class="form-control" placeholder="Confirme sua senha" />
                     </div>
-                    <button class="btn btn-primary mt-4 w-100 mb-3">Cadastrar</button>
+                    <button type="button" id="btnCadastro" class="btn btn-primary mt-4 w-100 mb-3">Cadastrar</button>
                     <span>Voltar para o <a asp-action="loginView" asp-controller="Login" asp-area="">Login</a></span>
                 </form>
             </div>
@@ -38,4 +38,5 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/cadastro/cadastro.js" asp-append-version="true"></script>
 </body>
