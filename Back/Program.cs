@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -34,21 +35,27 @@ builder.Services.AddAuthentication(options =>
     
     options.Events = new JwtBearerEvents
     {
-        OnChallenge = async context =>
+        OnChallenge = context =>
         {
-            context.HandleResponse();
-
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            context.Response.ContentType = "application/json";
-
-            var resposta = new
+            if(!context.HttpContext.Request.Cookies.TryGetValue("X-Access-Token",out var token))
             {
-                erro = "TokenExpirado",
-                mensagem = "O seu token de acesso expirou. Por favor, faça login novamente ou atualize o token."
-            };
+                context.HandleResponse();
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Response.ContentType = "application/json";
+                return context.Response.WriteAsJsonAsync(new { Erros = "nao funcionou" });
+            }
 
-            var json = JsonSerializer.Serialize(resposta);
-            await context.Response.WriteAsync(json);
+            context.HandleResponse();
+            return Task.CompletedTask;
+        },
+        OnMessageReceived = context =>
+        {
+            if(context.Request.Cookies.TryGetValue("X-Access-Token", out var token))
+            {
+                context.Token = token;
+            }
+
+            return Task.CompletedTask;
         }
     };
 });

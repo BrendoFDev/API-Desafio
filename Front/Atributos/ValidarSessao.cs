@@ -7,7 +7,7 @@ namespace Front.Atributos
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var logado = context.HttpContext.Session.GetString("logado");  // ← l minúsculo   
+            var logado = context.HttpContext.Session.GetString("logado");
 
             if (logado != "true")
             {

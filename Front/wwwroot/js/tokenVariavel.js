@@ -1,0 +1,1 @@
+﻿var token = localStorage.getItem("token").toString();

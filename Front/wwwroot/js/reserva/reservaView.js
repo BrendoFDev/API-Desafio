@@ -2,6 +2,8 @@
 const tbReservas = document.getElementById("exibirReservas");
 let dados;
 
+var token = localStorage.getItem("token").toString();
+
 try {
     renderReservas();
 
@@ -15,7 +17,8 @@ async function renderReservas() {
 
     const getReservas = await fetch('https://localhost:7063/api/reservas', {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+        credentials: "include",
     });
 
     const dados = await getReservas.json();
@@ -25,7 +28,8 @@ async function renderReservas() {
 
         const getCliente = await fetch(`https://localhost:7063/api/cliente?id=${idCliente}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+            credentials: "include",
         });
 
         const cliente = await getCliente.json();

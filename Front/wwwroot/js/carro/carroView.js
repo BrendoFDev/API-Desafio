@@ -134,11 +134,11 @@ function validacaoForm() {
 async function renderCarros() {
     const requisicaoRender = await fetch(`https://localhost:7063/api/carro?pagina=${page}&tamanhoPagina=9`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token},
+        credentials: "include",
     });
 
     dados = await requisicaoRender.json();
-
 
     let cardCarros = "";
     dados.items.forEach((item) => {
@@ -196,8 +196,9 @@ async function enviarCarro() {
 
     const sendRequest = await fetch("https://localhost:7063/api/carro", {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
         body: JSON.stringify(payload),
+        credentials: "include",
     });
 
     if (sendRequest.ok) {
@@ -276,8 +277,9 @@ async function atualizarCarro() {
 
     const atualizar = await fetch(`https://localhost:7063/api/carro/${carro}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
         body: JSON.stringify(payload),
+        credentials: "include",
     });
 
     if (!atualizar.ok) {
@@ -299,8 +301,9 @@ async function salvarMarca() {
 
     const enviarMarca = await fetch(`https://localhost:7063/api/marca`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
         body: JSON.stringify(payload),
+        credentials: "include",
     });
 
     inputMarca.value = "";
@@ -313,7 +316,8 @@ async function salvarMarca() {
 async function renderSelectMarca() {
     const requisicao = await fetch(`https://localhost:7063/api/marca`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
+        credentials: "include",
     });
 
     const data = await requisicao.json();
@@ -339,8 +343,9 @@ async function salvarModelo() {
 
     const enviarModelo = await fetch(`https://localhost:7063/api/modelo`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
         body: JSON.stringify(payload),
+        credentials: "include",
     });
 
     inputModelo.value = "";
@@ -354,7 +359,8 @@ async function salvarModelo() {
 async function renderSelectModelo() {
     const requisicao = await fetch(`https://localhost:7063/api/modelo`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
+        credentials: "include",
     });
 
     const data = await requisicao.json();
@@ -390,7 +396,9 @@ async function enviarImagem() {
 
     const response = await fetch(`https://localhost:7063/api/fotocarro`, {
         method: 'POST',
+        headers: {'Authorization' : token},
         body: formData,
+        credentials: "include",
     });
 
     const modal = bootstrap.Modal.getInstance(document.getElementById('modalAddImagem'));
@@ -412,7 +420,8 @@ async function reservarCarro() {
 
     const response = await fetch(`https://localhost:7063/api/cliente?cpf=${cpf}`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
+        credentials: "include",
     });
 
     const data = await response.json();
@@ -429,8 +438,9 @@ async function reservarCarro() {
 
     const reservar = await fetch(`https://localhost:7063/api/reservas`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization' : token },
         body: JSON.stringify(payload),
+        credentials: "include",
     });
 
     console.log("Parabens pela reserva!");

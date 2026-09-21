@@ -1,3 +1,4 @@
+using Front.Atributos;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
 

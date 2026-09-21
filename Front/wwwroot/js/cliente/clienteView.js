@@ -37,8 +37,9 @@ try {
 
         const cadCliente = await fetch("https://localhost:7063/api/cliente", {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization' : token  },
             body: JSON.stringify(payload),
+            credentials: "include",
         });
 
         nome.value = "";
@@ -105,7 +106,8 @@ async function renderClientes(dadosRecebidos) {
     } else {
         const res = await fetch(`https://localhost:7063/api/cliente?paginaAtual=${page}&tamanhoPagina=10`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+            credentials: "include",
         });
         dados = await res.json();
     }
@@ -174,7 +176,8 @@ async function selecionarExcluirCliente(event) {
 
     const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaExcluir}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+        credentials: "include",
     });
 
     if (res.ok) {
@@ -196,7 +199,8 @@ async function selecionarEditarCliente(event) {
 
     const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaEditar}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+        credentials: "include",
         body: JSON.stringify(payload),
     });
 
@@ -217,7 +221,8 @@ async function pesquisar() {
 
     const res = await fetch(`https://localhost:7063/api/cliente?nome=${encodeURIComponent(nomePesquisa)}&paginaAtual=${page}&tamanhoPagina=10`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+        credentials: "include",
     });
 
     const dados = await res.json();

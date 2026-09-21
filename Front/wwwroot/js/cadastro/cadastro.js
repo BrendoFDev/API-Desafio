@@ -33,6 +33,7 @@ async function cadastrarUser() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
+        credentials: "include",
     });
 
     inputNome.value = "";
@@ -42,5 +43,9 @@ async function cadastrarUser() {
 
     if (!sendRequest.ok) {
         console.log("Erro")
+        return
     }
+
+
+
 }

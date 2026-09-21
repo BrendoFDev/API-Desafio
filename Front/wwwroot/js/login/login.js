@@ -25,9 +25,12 @@ async function fazerLogin() {
 
     const res = await fetch("https://localhost:7063/api/auth/login", {
         method: 'POST',
+        credentials: "include",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });
+
+    
 
     inputEmail.value = "";
     inputSenha.value = "";
@@ -37,15 +40,15 @@ async function fazerLogin() {
         return
     }
 
-    const resLogar = await fetch(`https://localhost:7227/login/Logar`, {
+    var response = await res.json();
+
+    console.log(response.token);
+    localStorage.setItem("token", response.token);
+
+  const resLogar = await fetch(`https://localhost:7227/login/Logar`, {
         method: 'POST',
-        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
     })
 
-    if (resLogar.ok) {
-        // window.location.href = '/Home/Index';  ← redireciona
-    } else {
-        alert("Erro ao logar");
-    }
+    window.location.href = "/Home/Index";
 }
