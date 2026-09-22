@@ -70,31 +70,33 @@
         </main>
     </div>
 
+    @* BARRA INFERIOR / *DIREITOS AUTORAIS* *@
     @* <footer class="border-top footer text-muted" style="background-color: #B0E0E6">
         <div class="container">
             &copy; 2026 - Front - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer> *@
+
+    <div id="modalSairConta" class="modal fade" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-content modal-dialog rounded-3 shadow">
+            <div class="modal-body p-4 text-center">
+                <h5 class="mb-0">Deseja realmente sair da conta?</h5> <p class="mb-0">Caso prossiga, deverá realizar login novamente.</p>
+            </div>
+            <div class="modal-footer flex-nowrap p-0">
+                <button type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
+                    <strong class="text-danger">Sim, sair.</strong>
+                </button>
+                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 fw-bold" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/tokenVariavel.js" asp-append-version="true"></script>
     @RenderSection("Modals", required: false);
     @await RenderSectionAsync("Scripts", required: false)
+
+
 </body>
 </html>
-
-@section Modals {
-    <div id="modalSairConta" class="modal fade" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-content rounded-3 shadow">
-            <div class="modal-body p-4 text-center">
-                <h5 class="mb-0">Enable this setting?</h5> <p class="mb-0">You can always change your mind in your account settings.</p>
-            </div>
-            <div class="modal-footer flex-nowrap p-0">
-                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
-                    <strong>Yes, enable</strong>
-                </button>
-                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0" data-bs-dismiss="modal">No thanks</button>
-            </div>
-        </div>
-    </div>
-}

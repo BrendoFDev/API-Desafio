@@ -46,6 +46,6 @@ async function cadastrarUser() {
         return
     }
 
-
+    window.location.href = "/Login/loginView";
 
 }

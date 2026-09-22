@@ -160,6 +160,7 @@ async function renderCarros() {
                                     <button type="button" class="btn btn-sm btn-outline-success reservar" data-id=${item.id} data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
                                     <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                                 </div>
+                                    <button id="btnExcluir" type="button" class="btn btn-sm btn-outline-danger excluir" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalExcluirCarro">Excluir</button>
                             </div>
                         </div>
 
