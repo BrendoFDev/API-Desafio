@@ -2,7 +2,7 @@
 {
     public class Paginacao<T>
     {
-        public IEnumerable<T> Items { get; set; } = [];
+        public List<T> Items { get; set; } = [];
 
         public int TotalRegistro { get; set; }
 

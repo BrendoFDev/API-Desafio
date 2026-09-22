@@ -162,14 +162,15 @@ namespace Back.Controllers
                         throw;
                     }
                 }
+            
 
-
-            }
+        }
 
             private bool CarroExists(int id)
             {
                 return _context.Carros.Any(e => e.Id == id);
             }
+
 
             [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteCarro(int id)
@@ -191,6 +192,30 @@ namespace Back.Controllers
                 return NoContent();
 
             }
+
+
+        [HttpGet("total")]
+        public async Task<IActionResult> TotalCarro()
+        {
+            var carros = await _context.Carros
+                .Include(carro => carro.Modelo)
+                .ThenInclude(modelo => modelo.Marca)
+                .Select(c => new CarroDTO
+                {
+                    id = c.Id,
+                    NomeMarca = c.Modelo.Marca.NomeMarca,
+                    NomeModelo = c.Modelo.NomeModelo,
+                    Ano = c.Ano,
+                    Cor = c.Cor,
+                    Preco = c.Preco
+                })
+                .ToListAsync();
+
+            return Ok(carros);
+        }
+
+
+
         }
     } 
 

@@ -28,6 +28,9 @@ const btnAddModelo = document.getElementById("btnAddModelo");
 //RESERVAR
 const cpfInput = document.getElementById("inputReserva");
 const btnReservar = document.getElementById("btnReserva");
+//EXCLUIR
+const btnExcluir = document.getElementById("btnExcluir");
+const excluir = document.getElementById("excluir");
 //GERAL
 const formValidation = document.querySelector(".needs-validation");
 const adcarro = document.getElementById("adcarro");
@@ -45,6 +48,7 @@ let dados;
 let page = 1;
 let totalPaginas = 1;
 let PageVarAvancar = "";
+let iDcarro;
 
 try {
     input.addEventListener('change', function () {
@@ -70,7 +74,7 @@ try {
     });
 
     divCarros.addEventListener('click', (event) => {
-        selecionarCarro();
+        selecionarCarro(event);
     });
     btnEditCarro.addEventListener('click', () => {
         atualizarCarro();
@@ -98,24 +102,28 @@ try {
     btnReservar.addEventListener('click', () => {
         reservarCarro();
     });
+
+    excluir.addEventListener('click', () => {
+        excluirCarro();
+    });
 }
 catch (err) {
     console.log(err);
 } finally {
-    //disableBtns();
-    document.addEventListener('DOMContentLoaded', function() {
-        if (page <= 1) {
-            btnVoltar.classList.add("disabled");
-            return
-        }
-        btnVoltar.classList.remove("disabled");
+    // disableBtns();
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     if (page <= 1) {
+    //         btnVoltar.classList.add("disabled");
+    //         return
+    //     }
+    //     btnVoltar.classList.remove("disabled");
 
-        if (!PageVarAvancar) {
-            btnAvancar.classList.add("disabled");
-            return
-        }
-        btnAvancar.classList.remove("disabled");
-    });
+    //     if (!PageVarAvancar) {
+    //         btnAvancar.classList.add("disabled");
+    //         return
+    //     }
+    //     btnAvancar.classList.remove("disabled");
+    // });
 }
 
 
@@ -160,7 +168,7 @@ async function renderCarros() {
                                     <button type="button" class="btn btn-sm btn-outline-success reservar" data-id=${item.id} data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
                                     <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                                 </div>
-                                    <button id="btnExcluir" type="button" class="btn btn-sm btn-outline-danger excluir" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalExcluirCarro">Excluir</button>
+                                    <button id="btnExcluir" type="button" class="btn btn-sm btn-outline-danger excluir" data-id=${item.id} data-bs-toggle="modal" data-bs-target="#modalExcluirCarro">Excluir</button>
                             </div>
                         </div>
 
@@ -244,9 +252,10 @@ function proxPagina() {
 //    btnAvancar.classList.remove("disabled");
 // }
 
-function selecionarCarro() {
+function selecionarCarro(event) {
     const btnEditar = event.target.closest('.editar');
     const btnReserv = event.target.closest('.reservar');
+    const btnExclu = event.target.closest('.excluir');
 
     if (btnEditar) {
         inputEditAnoF.value = btnEditar.getAttribute("data-ano");
@@ -260,6 +269,10 @@ function selecionarCarro() {
     if (btnReserv) {
         const idCarro = btnReserv.getAttribute("data-id");
         btnReservar.setAttribute('data-id', idCarro);
+    }
+
+    if (btnExclu) {
+        iDcarro = btnExclu.getAttribute("data-id");
     }
 }
 async function atualizarCarro() {
@@ -291,6 +304,20 @@ async function atualizarCarro() {
     modal2.hide();
 
     renderCarros();
+}
+async function excluirCarro() {
+
+    const delCarro = await fetch(`https://localhost:7063/api/carro/${iDcarro}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+        credentials: "include",
+    });
+
+    if (delCarro.ok) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalExcluirCarro'));
+        modal.hide();
+        renderCarros();
+    }
 }
 
 async function salvarMarca() {
@@ -444,9 +471,10 @@ async function reservarCarro() {
         credentials: "include",
     });
 
-    console.log("Parabens pela reserva!");
-
     if (!reservar.ok) {
         console.log("Deu ruim!");
+        return
     };
+
+    console.log("Parabens pela reserva!");
 }

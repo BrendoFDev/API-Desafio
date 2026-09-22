@@ -18,15 +18,8 @@ public class FotoCarroController : ControllerBase
     private readonly Contexto _context;
 
     [HttpPost]
-    public async Task<ActionResult<FotoCarro>> EnviarFoto([FromForm] FotoCarro foto, [FromForm] int carroId)
+    public async Task<ActionResult<FotoCarro>> EnviarFoto([FromForm] FotoCarro foto,[FromForm] int carroId)
     {
-        var limite = await _context.FotoCarros.CountAsync(f => f.CarroId==carroId) ;
-
-        if(limite >= 3 ) {
-            return BadRequest("O carro só pode ter no máximo 3 fotos.");
-        }
-
-
 
 
         if (foto.Conteudo == null || foto.Conteudo.Length == 0)
@@ -73,7 +66,7 @@ public class FotoCarroController : ControllerBase
 
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutFotoCarro(int id, FotoCarroDTO requisicao)
+    public async Task<IActionResult> PutFotoCarro(int id,  FotoCarroDTO requisicao)
     {
         try
         {
@@ -90,13 +83,13 @@ public class FotoCarroController : ControllerBase
                 using (var memoryStream = new MemoryStream())
                 {
                     await requisicao.Conteudo.CopyToAsync(memoryStream);
-
+               
                     requisicao.FotoBytes = memoryStream.ToArray();
                 }
 
                 foto.FotoBytes = requisicao.FotoBytes;
             }
-
+      
 
             await _context.SaveChangesAsync();
 
@@ -120,8 +113,7 @@ public class FotoCarroController : ControllerBase
     {
         var foto = await _context.FotoCarros.FindAsync(id);
 
-        if (foto == null)
-        {
+        if (foto == null) { 
             return NotFound("Foto não encontrado.");
         }
 
@@ -146,7 +138,7 @@ public class FotoCarroController : ControllerBase
         var query = _context.FotoCarros.AsQueryable();
 
 
-
+       
 
 
 

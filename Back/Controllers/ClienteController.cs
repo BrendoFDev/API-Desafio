@@ -21,7 +21,17 @@ namespace Back.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(ClienteDTO cliente)
         {
+           
 
+            
+            string cpfLimpo = cliente.Cpf.Replace(".", "").Replace("-", "").Trim();
+
+           
+            if (!cpfLimpo.All(char.IsDigit) || cpfLimpo.Length != 11)
+            {
+                return BadRequest("CPF inválido... ");
+            }
+            
 
             bool cpfExiste = await _context.Clientes.AnyAsync(r => r.Cpf == cliente.Cpf);
 
@@ -31,35 +41,27 @@ namespace Back.Controllers
             {
                 return BadRequest("Este CPF já está cadastrado no sistema.");
             }
-            string cpfLimpo = cliente.Cpf.Replace(".", "").Replace("-", "").Trim();
 
-
-            if (!cpfLimpo.All(char.IsDigit) || cpfLimpo.Length != 11)
-            {
-                return BadRequest("CPF inválido... ");
-            }
             var cliente2 = new Cliente
             {
                 Nome = cliente.Nome.ToUpper().Trim(),
                 Cpf = cpfLimpo,
             };
-
             _context.Clientes.Add(cliente2);
             await _context.SaveChangesAsync();
 
             return Created("Cliente criado com sucesso", cliente2);
 
         }
-
+       
 
         [HttpGet]
         public async Task<ActionResult<Paginacao<ClienteDTO>>> GetClientes(
            [FromQuery] int paginaAtual = 1,
            [FromQuery] int tamanhoPagina = 10,
-           [FromQuery] string? nome = null,
-           [FromQuery] string? cpf = null,
-           [FromQuery] int? id=null)
-
+           [FromQuery] string? nome= null,
+           [FromQuery] string? cpf = null)
+     
         {
 
             if (paginaAtual < 1) paginaAtual = 1;
@@ -67,13 +69,10 @@ namespace Back.Controllers
             var query = _context.Clientes.AsQueryable();
             var busca = nome?.ToUpper();
 
-            if(id.HasValue)
-            {
-                query = query.Where(c => c.id == id.Value);
-            }   
+
             if (!string.IsNullOrEmpty(busca))
             {
-
+               
                 query = query.Where(c => EF.Functions.Like(c.Nome, $"%{busca}%"));
             }
 
@@ -84,7 +83,7 @@ namespace Back.Controllers
             }
 
 
-
+            
 
 
 
@@ -95,10 +94,10 @@ namespace Back.Controllers
             var items = await query
                 .Select(c => new Cliente
                 {
-                    id = c.id,
+                    id= c.id,
                     Nome = c.Nome,
                     Cpf = c.Cpf
-
+                    
                 })
                 .Skip((paginaAtual - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
@@ -172,5 +171,11 @@ namespace Back.Controllers
 
         }
 
+        [HttpGet("total")]
+        public async Task<ActionResult<IEnumerable<Cliente>>> GetTotalClientes()
+        {
+            var clientes = await _context.Clientes.ToListAsync();
+            return Ok(clientes);
+        }
     }
 }

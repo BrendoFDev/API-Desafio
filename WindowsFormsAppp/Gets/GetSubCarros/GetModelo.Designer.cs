@@ -1,0 +1,121 @@
+﻿namespace WindowsFormsAppp.Gets.GetSubCarros
+{
+    partial class GetModelo
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            listaModelo = new ListView();
+            Atualizar = new Button();
+            Criar = new Button();
+            Deletar = new Button();
+            Voltar = new Button();
+            recarrega = new Button();
+            SuspendLayout();
+            // 
+            // listaModelo
+            // 
+            listaModelo.Location = new Point(12, 12);
+            listaModelo.Name = "listaModelo";
+            listaModelo.Size = new Size(778, 623);
+            listaModelo.TabIndex = 0;
+            listaModelo.UseCompatibleStateImageBehavior = false;
+            // 
+            // Atualizar
+            // 
+            Atualizar.Location = new Point(906, 297);
+            Atualizar.Name = "Atualizar";
+            Atualizar.Size = new Size(111, 36);
+            Atualizar.TabIndex = 1;
+            Atualizar.Text = "Atualizar";
+            Atualizar.UseVisualStyleBackColor = true;
+            // 
+            // Criar
+            // 
+            Criar.Location = new Point(906, 241);
+            Criar.Name = "Criar";
+            Criar.Size = new Size(111, 36);
+            Criar.TabIndex = 4;
+            Criar.Text = "Criar";
+            Criar.UseVisualStyleBackColor = true;
+            Criar.Click += Criar_Click;
+            // 
+            // Deletar
+            // 
+            Deletar.Location = new Point(906, 353);
+            Deletar.Name = "Deletar";
+            Deletar.Size = new Size(111, 36);
+            Deletar.TabIndex = 5;
+            Deletar.Text = "Deletar";
+            Deletar.UseVisualStyleBackColor = true;
+            // 
+            // Voltar
+            // 
+            Voltar.Location = new Point(1008, 12);
+            Voltar.Name = "Voltar";
+            Voltar.Size = new Size(75, 23);
+            Voltar.TabIndex = 9;
+            Voltar.Text = "Voltar";
+            Voltar.UseVisualStyleBackColor = true;
+            Voltar.Click += Voltar_Click;
+            // 
+            // recarrega
+            // 
+            recarrega.Location = new Point(927, 12);
+            recarrega.Name = "recarrega";
+            recarrega.Size = new Size(75, 23);
+            recarrega.TabIndex = 10;
+            recarrega.Text = "Recarregar";
+            recarrega.UseVisualStyleBackColor = true;
+            recarrega.Click += recarrega_Click;
+            // 
+            // GetModelo
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1095, 650);
+            Controls.Add(recarrega);
+            Controls.Add(Voltar);
+            Controls.Add(Deletar);
+            Controls.Add(Criar);
+            Controls.Add(Atualizar);
+            Controls.Add(listaModelo);
+            Name = "GetModelo";
+            Text = "GetModelo";
+            Load += GetModelo_Load;
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private ListView listaModelo;
+        private Button Atualizar;
+        private Button Criar;
+        private Button Deletar;
+        private Button Voltar;
+        private Button recarrega;
+    }
+}

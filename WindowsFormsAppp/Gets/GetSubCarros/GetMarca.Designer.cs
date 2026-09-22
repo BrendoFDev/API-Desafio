@@ -1,0 +1,124 @@
+﻿namespace WindowsFormsAppp.Gets.GetSubCarros
+{
+    partial class GetMarca
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            listaMarca = new ListView();
+            Atualizar = new Button();
+            Criar = new Button();
+            Deletar = new Button();
+            Voltar = new Button();
+            recarrega = new Button();
+            SuspendLayout();
+            // 
+            // listaMarca
+            // 
+            listaMarca.Location = new Point(12, 12);
+            listaMarca.Name = "listaMarca";
+            listaMarca.Size = new Size(778, 623);
+            listaMarca.TabIndex = 0;
+            listaMarca.UseCompatibleStateImageBehavior = false;
+            // 
+            // Atualizar
+            // 
+            Atualizar.Location = new Point(906, 297);
+            Atualizar.Name = "Atualizar";
+            Atualizar.Size = new Size(111, 36);
+            Atualizar.TabIndex = 1;
+            Atualizar.Text = "Atualizar";
+            Atualizar.UseVisualStyleBackColor = true;
+            Atualizar.Click += Atualizar_Click;
+            // 
+            // Criar
+            // 
+            Criar.Location = new Point(906, 241);
+            Criar.Name = "Criar";
+            Criar.Size = new Size(111, 36);
+            Criar.TabIndex = 2;
+            Criar.Text = "Criar";
+            Criar.UseVisualStyleBackColor = true;
+            Criar.Click += Criar_Click;
+            // 
+            // Deletar
+            // 
+            Deletar.Location = new Point(906, 353);
+            Deletar.Name = "Deletar";
+            Deletar.Size = new Size(111, 36);
+            Deletar.TabIndex = 3;
+            Deletar.Text = "Deletar";
+            Deletar.UseVisualStyleBackColor = true;
+            Deletar.Click += Deletar_Click;
+            // 
+            // Voltar
+            // 
+            Voltar.Location = new Point(1010, 12);
+            Voltar.Name = "Voltar";
+            Voltar.Size = new Size(75, 23);
+            Voltar.TabIndex = 9;
+            Voltar.Text = "Voltar";
+            Voltar.UseVisualStyleBackColor = true;
+            Voltar.Click += Voltar_Click;
+            // 
+            // recarrega
+            // 
+            recarrega.Location = new Point(906, 12);
+            recarrega.Name = "recarrega";
+            recarrega.Size = new Size(75, 23);
+            recarrega.TabIndex = 10;
+            recarrega.Text = "Recarregar";
+            recarrega.UseVisualStyleBackColor = true;
+            recarrega.Click += recarrega_Click;
+            // 
+            // GetMarca
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1097, 647);
+            Controls.Add(recarrega);
+            Controls.Add(Voltar);
+            Controls.Add(Deletar);
+            Controls.Add(Criar);
+            Controls.Add(Atualizar);
+            Controls.Add(listaMarca);
+            Location = new Point(906, 241);
+            Name = "GetMarca";
+            Text = "GetMarca";
+            Load += GetMarca_Load;
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private ListView listaMarca;
+        private Button Atualizar;
+        private Button Criar;
+        private Button Deletar;
+        private Button Voltar;
+        private Button recarrega;
+    }
+}

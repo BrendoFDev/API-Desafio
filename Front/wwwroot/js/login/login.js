@@ -11,9 +11,13 @@ try {
 
 } catch (err) {
     console.log(err);
+} finally {
+    btnLogin.textContent = "Entrar"
 }
 
 async function fazerLogin() {
+
+    btnLogin.textContent = "Caregando..."
 
     const email = inputEmail.value;
     const senha = inputSenha.value;
@@ -45,7 +49,7 @@ async function fazerLogin() {
     console.log(response.token);
     localStorage.setItem("token", response.token);
 
-  const resLogar = await fetch(`https://localhost:7227/login/Logar`, {
+    const resLogar = await fetch(`https://localhost:7227/login/Logar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
     })

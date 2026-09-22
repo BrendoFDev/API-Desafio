@@ -28,7 +28,7 @@ namespace Back.Controllers
             };
 
             bool possuiReserva = await _context.Reservas.AnyAsync(r => r.ClienteId == requisicao.ClienteId && r.CarroId == requisicao.CarroId);
-        
+
 
             bool ClienteExiste = await _context.Clientes.AnyAsync(r => r.id == requisicao.ClienteId);
             bool CarroExiste = await _context.Carros.AnyAsync(r => r.Id == requisicao.CarroId);
@@ -89,18 +89,20 @@ namespace Back.Controllers
 
 
             var items = await query
-                .Select(c => new Reserva
+                .Select(r => new ReservaDTO
                 {
-                    Id = c.Id,
-                    ClienteId = c.ClienteId,
-                    CarroId = c.CarroId
+                    Id = r.Id,
+                    ClienteId = r.ClienteId,
+                    ClienteNome = r.cliente.Nome,
 
+                    CarroId = r.CarroId,
+                    ModeloNome = r.carro.Modelo.NomeModelo
                 })
                 .Skip((paginaAtual - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
                 .ToListAsync();
 
-            var resultado = new Paginacao<Reserva>
+            var resultado = new Paginacao<ReservaDTO>
             {
                 Items = items,
                 TotalRegistro = totalRegistro,
@@ -159,6 +161,26 @@ namespace Back.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Reserva deletada com sucesso");
+        }
+
+        [HttpGet("total")]
+        public async Task<ActionResult<List<ReservaDTO>>> GetTotalReservas()
+        {
+            var totalReservas = await _context.Reservas
+              
+
+
+                .Select(r => new ReservaDTO
+                {
+                    Id = r.Id,
+                    ClienteId = r.ClienteId,
+                    ClienteNome = r.cliente.Nome,
+ 
+                    CarroId = r.CarroId,
+                    ModeloNome = r.carro.Modelo.NomeModelo
+                })
+                .ToListAsync();
+            return Ok(totalReservas);
         }
     }
 }

@@ -181,7 +181,6 @@ async function selecionarExcluirCliente(event) {
     });
 
     if (res.ok) {
-        // Fecha o modal e atualiza a tabela
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalExcluirCliente'));
         modal.hide();
         renderClientes();
