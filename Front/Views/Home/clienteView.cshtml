@@ -12,13 +12,13 @@
 
             <div class="d-flex">
 
-                <button id="buscar"class=" rounded-end-0 btn btn-primary align-items-center d-flex" onfocus="disabled">
+                <button id="buscar" class=" rounded-end-0 btn btn-primary align-items-center d-flex" onfocus="disabled">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
                     </svg>
                 </button>
 
-                <input class=" me-1 border w-100" type="search" id="pesquisarCliente" placeholder="Pesquisar" aria-label="Search" style="border-radius: 0px 15px 15px 0px;">
+                <input class="px-3 py-2 me-1 border w-100" type="search" id="pesquisarCliente" placeholder="Pesquisar" aria-label="Search" style="border-radius: 0px 15px 15px 0px;">
 
             </div>
 
@@ -32,7 +32,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col" class="ms-">Nome</th>
-                    <th scope="col">Alteraçõe   s</th>
+                    <th scope="col">Alterações</th>
                 </tr>
             </thead>
             <tbody id="exibirClientes">
@@ -110,13 +110,12 @@
                 <h5 class="mb-0">Deseja realmente excluir este cliente?</h5> <p class="mb-0">Esta alteração não poderá ser desfeita.</p>
             </div>
             <div class="modal-footer flex-nowrap p-0">
-                <button type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
-                    <strong class="text-danger">Sim, <excluir></excluir>.</strong>
+                <button id="comfirmarExcluir" type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
+                    <strong class="text-danger">Sim, excluir.</strong>
                 </button>
                 <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 fw-bold" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
-    </div>
     </div>
 }
 
