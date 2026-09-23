@@ -29,7 +29,7 @@ namespace Back.Controllers
 
         public async Task<ActionResult<Paginacao<Marca>>> GetMarca(
            [FromQuery] int paginaAtual = 1,
-           [FromQuery] int tamanhoPagina = 10,
+           [FromQuery] int tamanhoPagina = 1000,
            [FromQuery] string? NomeMarca = null
            
 

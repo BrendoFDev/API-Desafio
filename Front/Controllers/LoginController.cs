@@ -18,4 +18,11 @@ public class LoginController: Controller
     {
         HttpContext.Session.SetString("logado", "true");
     }
+
+    [HttpPost]
+    public IActionResult Deslogar()
+    {
+        HttpContext.Session.Clear();
+        return Ok();
+    }
 }

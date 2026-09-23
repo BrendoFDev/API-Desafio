@@ -64,7 +64,7 @@ namespace Back.Controllers
         {
             if (paginaAtual < 1) paginaAtual = 1;
             if (tamanhoPagina < 1) tamanhoPagina = 10;
-           
+
             var query = _context.Reservas.AsQueryable();
 
 
@@ -79,7 +79,7 @@ namespace Back.Controllers
             {
                 query = query.Where(c => EF.Functions.Like(c.ClienteId.ToString(), $"%{ClienteId}%"));
             }
-            
+
             if (!CarroId.HasValue)
             {
                 query = query.Where(c => EF.Functions.Like(c.CarroId.ToString(), $"%{CarroId}%"));
@@ -89,20 +89,18 @@ namespace Back.Controllers
 
 
             var items = await query
-                .Select(r => new ReservaDTO
+                .Select(c => new Reserva
                 {
-                    Id = r.Id,
-                    ClienteId = r.ClienteId,
-                    ClienteNome = r.cliente.Nome,
+                    Id = c.Id,
+                    ClienteId = c.ClienteId,
+                    CarroId = c.CarroId
 
-                    CarroId = r.CarroId,
-                    ModeloNome = r.carro.Modelo.NomeModelo
                 })
                 .Skip((paginaAtual - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
                 .ToListAsync();
 
-            var resultado = new Paginacao<ReservaDTO>
+            var resultado = new Paginacao<Reserva>
             {
                 Items = items,
                 TotalRegistro = totalRegistro,
@@ -112,7 +110,7 @@ namespace Back.Controllers
 
             return Ok(resultado);
         }
-        
+
 
         private bool ReservaExists(int id)
         {
@@ -161,26 +159,6 @@ namespace Back.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Reserva deletada com sucesso");
-        }
-
-        [HttpGet("total")]
-        public async Task<ActionResult<List<ReservaDTO>>> GetTotalReservas()
-        {
-            var totalReservas = await _context.Reservas
-              
-
-
-                .Select(r => new ReservaDTO
-                {
-                    Id = r.Id,
-                    ClienteId = r.ClienteId,
-                    ClienteNome = r.cliente.Nome,
- 
-                    CarroId = r.CarroId,
-                    ModeloNome = r.carro.Modelo.NomeModelo
-                })
-                .ToListAsync();
-            return Ok(totalReservas);
         }
     }
 }

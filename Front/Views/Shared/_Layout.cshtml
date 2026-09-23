@@ -83,7 +83,7 @@
                 <h5 class="mb-0">Deseja realmente sair da conta?</h5> <p class="mb-0">Caso prossiga, deverá realizar login novamente.</p>
             </div>
             <div class="modal-footer flex-nowrap p-0">
-                <button type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
+                <button id="btnSair" type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
                     <strong class="text-danger">Sim, sair.</strong>
                 </button>
                 <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 fw-bold" data-bs-dismiss="modal">Cancelar</button>
@@ -96,7 +96,27 @@
     <script src="~/js/tokenVariavel.js" asp-append-version="true"></script>
     @RenderSection("Modals", required: false);
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+            const btnSair = document.getElementById("btnSair");
 
+            btnSair.addEventListener("click", () => {
+                fazerLogout();
+            });
 
+            async function fazerLogout() {
+                try {
+                    localStorage.removeItem("token");
+
+                    await fetch("https://localhost:7227/Login/Deslogar", {
+                        method: 'POST'
+                    });
+
+                    window.location.href = "/Login/loginView";
+
+                } catch (err) {
+                    console.error("Erro ao deslogar:", err);
+                }
+            }
+    </script>
 </body>
 </html>

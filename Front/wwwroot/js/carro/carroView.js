@@ -151,12 +151,35 @@ async function renderCarros() {
     let cardCarros = "";
     dados.items.forEach((item) => {
         const imageUrl = `data:image/jpeg;base64,${item.fotos[0]}`;
+        const imageUrl2 = `data:image/jpeg;base64,${item.fotos[1]}`;
+        const imageUrl3 = `data:image/jpeg;base64,${item.fotos[2]}`;
 
         const altImagem = "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1a091a20952%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1a091a20952%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.9453125%22%20y%3D%22117.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
 
         cardCarros += `
             <div class="col-4 card shadow p-3 my-2">
-                        <img onerror="this.src='${altImagem}'" class="card-img-top rounded-3" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="${imageUrl}" data-holder-rendered="true">
+                        
+                        <div id="${item.id}" class="carousel slide carousel-fade carousel-dark">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img onerror = "this.src='${altImagem}'" src="${imageUrl}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
+                                </div>
+                                <div class="carousel-item">
+                                    <img onerror = "this.src='${altImagem}'" src="${imageUrl2}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
+                                </div>
+                                <div class="carousel-item">
+                                    <img onerror = "this.src='${altImagem}'" src="${imageUrl3}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#${item.id}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark rounded-circle shadow" style="width: 2.3rem; height: 2.3rem; background-size: 45%;" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#${item.id}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark rounded-circle shadow" style="width: 2.3rem; height: 2.3rem; background-size: 45%;" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
                         <div class="card-body">
                             <p class="card-text text-start m-1">Marca: ${item.nomeMarca}</p>
                             <p class="card-text text-start m-1">Modelo: ${item.nomeModelo}</p>
@@ -166,7 +189,7 @@ async function renderCarros() {
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-success reservar" data-id=${item.id} data-bs-toggle="modal" data-bs-target="#modalReserva">Reservar</button>
-                                    <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-id=${item.id} data-cor=${item.cor} data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
+                                    <button id="btnEditar" type="button" class="btn btn-sm btn-outline-secondary editar" data-id=${item.id} data-cor="${item.cor}" data-ano=${item.ano} data-preco=${item.preco} data-bs-toggle="modal" data-bs-target="#modalEditar">Editar</button>
                                 </div>
                                     <button id="btnExcluir" type="button" class="btn btn-sm btn-outline-danger excluir" data-id=${item.id} data-bs-toggle="modal" data-bs-target="#modalExcluirCarro">Excluir</button>
                             </div>
@@ -438,9 +461,7 @@ async function enviarImagem() {
     if (!response.ok) {
         console.log("Err0!!");
     }
-
 }
-
 
 async function reservarCarro() {
     const cpf = cpfInput.value;
