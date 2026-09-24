@@ -32,5 +32,7 @@ namespace Back.DTO_s
         public string? NomeModelo { get; set; }
     
         public string? NomeMarca { get; set; }
+
+        public int? CarroId { get; set; }
     }
 }

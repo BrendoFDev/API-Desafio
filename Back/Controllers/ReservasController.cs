@@ -68,19 +68,19 @@ namespace Back.Controllers
             var query = _context.Reservas.AsQueryable();
 
 
-            if (!Id.HasValue)
+            if (Id.HasValue)
             {
 
                 query = query.Where(c => EF.Functions.Like(c.Id.ToString(), $"%{Id}%"));
             }
 
 
-            if (!ClienteId.HasValue)
+            if (ClienteId.HasValue)
             {
                 query = query.Where(c => EF.Functions.Like(c.ClienteId.ToString(), $"%{ClienteId}%"));
             }
             
-            if (!CarroId.HasValue)
+            if (CarroId.HasValue)
             {
                 query = query.Where(c => EF.Functions.Like(c.CarroId.ToString(), $"%{CarroId}%"));
             }
@@ -90,10 +90,13 @@ namespace Back.Controllers
 
             var items = await query
                 .Select(c => new Reserva
+               
                 {
                     Id = c.Id,
                     ClienteId = c.ClienteId,
-                    CarroId = c.CarroId
+                    Nome= c.cliente.Nome,
+                    CarroId = c.CarroId,
+                    NomeMarca=c.carro.Modelo.NomeModelo
 
                 })
                 .Skip((paginaAtual - 1) * tamanhoPagina)

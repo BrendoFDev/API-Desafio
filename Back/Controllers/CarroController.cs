@@ -35,6 +35,8 @@ namespace Back.Controllers
                 Ano = carro2.Ano.Value
             };
 
+            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == carro2.CarroId);
+
             bool ModeloExiste = await _context.Modelos.AnyAsync(r => r.Id == carro2.ModeloId);
             bool MarcaExiste = await _context.Marcas.AnyAsync(r => r.Id == carro2.MarcaId);
             if (ModeloExiste == false)
@@ -47,6 +49,12 @@ namespace Back.Controllers
                 return BadRequest("Digite um marcaID válido");
 
             }
+
+            if (possuiReserva)
+            {
+                return BadRequest("Essa reserva já existe");
+            }
+
             _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
