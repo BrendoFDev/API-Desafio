@@ -28,7 +28,7 @@ namespace Back.Controllers
             };
 
             bool possuiReserva = await _context.Reservas.AnyAsync(r => r.ClienteId == requisicao.ClienteId && r.CarroId == requisicao.CarroId);
-
+        
 
             bool ClienteExiste = await _context.Clientes.AnyAsync(r => r.id == requisicao.ClienteId);
             bool CarroExiste = await _context.Carros.AnyAsync(r => r.Id == requisicao.CarroId);
@@ -64,23 +64,23 @@ namespace Back.Controllers
         {
             if (paginaAtual < 1) paginaAtual = 1;
             if (tamanhoPagina < 1) tamanhoPagina = 10;
-
+           
             var query = _context.Reservas.AsQueryable();
 
 
-            if (!Id.HasValue)
+            if (Id.HasValue)
             {
 
                 query = query.Where(c => EF.Functions.Like(c.Id.ToString(), $"%{Id}%"));
             }
 
 
-            if (!ClienteId.HasValue)
+            if (ClienteId.HasValue)
             {
                 query = query.Where(c => EF.Functions.Like(c.ClienteId.ToString(), $"%{ClienteId}%"));
             }
-
-            if (!CarroId.HasValue)
+            
+            if (CarroId.HasValue)
             {
                 query = query.Where(c => EF.Functions.Like(c.CarroId.ToString(), $"%{CarroId}%"));
             }
@@ -89,18 +89,22 @@ namespace Back.Controllers
 
 
             var items = await query
-                .Select(c => new Reserva
+                .Select(c => new ReservaDTO
+                
+               
                 {
                     Id = c.Id,
                     ClienteId = c.ClienteId,
-                    CarroId = c.CarroId
+                   Nome= c.cliente.Nome,
+                    CarroId = c.CarroId,
+                    NomeMarca=c.carro.Modelo.NomeModelo
 
                 })
                 .Skip((paginaAtual - 1) * tamanhoPagina)
                 .Take(tamanhoPagina)
                 .ToListAsync();
 
-            var resultado = new Paginacao<Reserva>
+            var resultado = new Paginacao<ReservaDTO>
             {
                 Items = items,
                 TotalRegistro = totalRegistro,
@@ -110,7 +114,7 @@ namespace Back.Controllers
 
             return Ok(resultado);
         }
-
+        
 
         private bool ReservaExists(int id)
         {

@@ -41,9 +41,9 @@ async function renderReservas() {
         tbodyReservas += `
             <tr>
                 <th scope="row">${item.id}</th>
-                <td class="text-center">${item.modeloNome}</td>
+                <td class="text-center">${item.nomeMarca}</td>
                 <td class="text-center">${item.clienteId}</td>
-                <td class="text-center">${item.clienteNome}</td>
+                <td class="text-center">${item.nome}</td>
                 <td class="text-center">16/09/2026</td>
                 <td class="text-center">
                     <button class="btn btn-danger excluir" type="button" data-bs-toggle="modal" data-bs-target="#modalExcluirReserva" data-id=${item.id}>

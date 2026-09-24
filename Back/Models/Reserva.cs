@@ -17,6 +17,10 @@ namespace Back.Models
         [ForeignKey("ClienteId")]
         public Cliente cliente { get; set; } = default!;
 
+        //public string? Nome { get; set; }
+
+       // public string? NomeMarca { get; set; }
+
         public DateOnly dataDeReserva { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
 

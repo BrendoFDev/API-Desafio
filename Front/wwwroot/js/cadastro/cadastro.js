@@ -20,6 +20,7 @@ async function cadastrarUser() {
     const senha2 = inputConfirmSenha.value;
 
     if (senha1 != senha2) {
+        mostrarToast('Sua senha precsa ter pelo menos 1 caractere especial e 1 letra Maiúscula!')
         return
     }
 
@@ -36,16 +37,23 @@ async function cadastrarUser() {
         credentials: "include",
     });
 
+    if (!sendRequest.ok) {
+        console.log("Erro")
+        mostrarToast('Nome de Usuario ou Email inválidos ou já cadastrados!');
+        return
+    }
+
     inputNome.value = "";
     inputEmail.value = "";
     inputConfirmSenha.value = "";
     inputSenha.value = "";
 
-    if (!sendRequest.ok) {
-        console.log("Erro")
-        return
-    }
-
     window.location.href = "/Login/loginView";
-
 }
+
+function mostrarToast(msg) {
+    const toastElemento = document.getElementById('toast');
+    toastElemento.querySelector('.toast-body').textContent = msg;
+    const toast = new bootstrap.Toast(toastElemento, { delay: 4000 });
+    toast.show();
+}   

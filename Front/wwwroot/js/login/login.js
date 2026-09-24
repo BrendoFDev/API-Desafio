@@ -11,8 +11,6 @@ try {
 
 } catch (err) {
     console.log(err);
-} finally {
-    btnLogin.textContent = "Entrar"
 }
 
 async function fazerLogin() {
@@ -34,19 +32,18 @@ async function fazerLogin() {
         body: JSON.stringify(payload),
     });
 
-    
-
     inputEmail.value = "";
     inputSenha.value = "";
 
     if (!res.ok) {
         console.log("Erro")
+        mostrarToast('Nome de Usuario ou Email já cadastrados!');
+        btnLogin.textContent = "Entrar"
         return
     }
 
     var response = await res.json();
 
-    console.log(response.token);
     localStorage.setItem("token", response.token);
 
     const resLogar = await fetch(`https://localhost:7227/login/Logar`, {
@@ -56,3 +53,10 @@ async function fazerLogin() {
 
     window.location.href = "/Home/Index";
 }
+
+function mostrarToast(msg) {
+    const el = document.getElementById('toast');
+    el.querySelector('.toast-body').textContent = msg;
+    const toast = new bootstrap.Toast(el, { delay: 3000 });
+    toast.show();
+}   

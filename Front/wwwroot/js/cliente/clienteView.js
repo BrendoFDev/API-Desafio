@@ -1,16 +1,13 @@
 ﻿const nome = document.getElementById("nome");
 const cpf = document.getElementById("cpf");
 const btnEnviar = document.getElementById("enviar");
-
 const nomeEditar = document.getElementById("nomeEditar");
 const cpfEditar = document.getElementById("cpfEditar");
 const btnConfirmarEdicao = document.getElementById("enviarAtualizacao");
-
 const tableExibirClientes = document.getElementById("exibirClientes");
 const btnExcluirCliente = document.getElementById("comfirmarExcluir");
 const inputPesquisa = document.getElementById("pesquisarCliente");
-const btnPesquisar = document.getElementById("buscar")
-
+const btnPesquisar = document.getElementById("buscar");
 //PAGINACAO
 const inputpage = document.getElementById("inputpage");
 const btnVoltar = document.getElementById("btnVoltar");
@@ -26,7 +23,7 @@ let nomeClienteParaEditar;
 let cpfClienteParaEditar;
 
 try {
-    renderClientes()
+    renderClientes();
 
     btnEnviar.addEventListener('click', async () => {
 
@@ -37,7 +34,7 @@ try {
 
         const cadCliente = await fetch("https://localhost:7063/api/cliente", {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization' : token  },
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
             body: JSON.stringify(payload),
             credentials: "include",
         });
@@ -98,6 +95,30 @@ try {
     console.log(err);
 }
 
+function atualizarPaginacao(dadosApi) {
+    totalPaginas = dadosApi.totalPagina;
+    page = dadosApi.paginaAtual ?? page;
+
+    if (inputpage) inputpage.value = page;
+
+    if (paginaInfo) {
+        paginaInfo.innerHTML = `<span> Página Atual: ${page} - Total de Páginas: ${totalPaginas} </span>`;
+    }
+
+    if (page <= 1) {
+        btnVoltar.classList.add("disabled");
+    } else {
+        btnVoltar.classList.remove("disabled");
+    }
+
+    const proximaExiste = dadosApi.proximaPagina ?? dadosApi.ProximaPagina;
+    if (!proximaExiste) {
+        btnAvancar.classList.add("disabled");
+    } else {
+        btnAvancar.classList.remove("disabled");
+    }
+}
+
 async function renderClientes(dadosRecebidos) {
     let dados;
 
@@ -138,34 +159,31 @@ async function renderClientes(dadosRecebidos) {
         `;
     });
 
-    const totalPages = `
-        <span> Página Atual: ${page} - Total de Páginas: ${dados.totalPagina} </span>
-    `
-    totalPaginas = dados.totalPagina;
-    paginaInfo.innerHTML = totalPages;
-
     tableExibirClientes.innerHTML = cliente;
+    atualizarPaginacao(dados);
 }
 
 function mudarPagina() {
-    const novaPagina = inputpage.value;
+    const novaPagina = Number(inputpage.value);
     if (novaPagina > 0 && novaPagina <= totalPaginas) {
         page = novaPagina;
-        renderClientes(page);
+        renderClientes();
     } else {
         inputpage.value = page;
     }
 }
+
 function pagAnterior() {
-    if (page > 1) {
+    if (page > 1 && !btnVoltar.classList.contains("disabled")) {
         page = page - 1;
-        renderClientes(page);
+        renderClientes();
     }
 }
+
 function proxPagina() {
-    if (page < totalPaginas) {
+    if (page < totalPaginas && !btnAvancar.classList.contains("disabled")) {
         page++;
-        renderClientes(page);
+        renderClientes();
     }
 }
 
@@ -186,6 +204,7 @@ async function selecionarExcluirCliente(event) {
         renderClientes();
     }
 }
+
 async function selecionarEditarCliente(event) {
     if (!idClienteParaEditar) {
         return
@@ -204,7 +223,6 @@ async function selecionarEditarCliente(event) {
     });
 
     if (res.ok) {
-        // Fecha o modal e atualiza a tabela
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente'));
         modal.hide();
         renderClientes();
@@ -226,4 +244,4 @@ async function pesquisar() {
 
     const dados = await res.json();
     renderClientes(dados);
-}   
+}
