@@ -19,6 +19,7 @@
             </div>
 
             <div id="divRenderCars" class="row justify-content-start d-flex gap-0" style="width:900px">
+                <span class="text-secondary fs-5 spanAlertCarros"></span>
             </div>
 
             <nav aria-label="Page navigation example">
@@ -82,6 +83,7 @@
 
                 </div>
                 <div class="modal-footer">
+                    <span class="text-secondary fs-5 spanAlertCad"></span>
                     <button id="adcarro" type="button" class="btn btn-primary">ADICIONAR</button>
                 </div>
             </div>
@@ -126,6 +128,7 @@
 
                 </div>
                 <div class="modal-footer">
+                    <span class="text-secondary fs-5 spanAlertEdit"></span>
                     <button id="modalAddImg" class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalAddImagem">
                         Adicionar Imagem
                     </button>
@@ -188,7 +191,8 @@
                     </form>
 
                 </div>
-                <div class="modal-footer d-flex justify-content-center mt-4">
+                <div class="modal-footer d-flex justify-content-end mt-4">
+                    <span class="spanAlertAddMarca text-secondary fs-5"></span>
                     <button id="btnAddMarca" type="button" class="btn btn-success">ADICIONAR</button>
                 </div>
             </div>
@@ -233,18 +237,19 @@
     </div>
     @* EXCLUIR CARROS *@
     <div id="modalExcluirCarro" class="modal fade" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-content modal-dialog rounded-3 shadow">
-                <div class="modal-body p-4 text-center">
-                    <h5 class="mb-0">Deseja realmente excluir este carro?</h5> <p class="mb-0">Essa ação não poderá ser desfeita.</p>
-                </div>
-                <div class="modal-footer flex-nowrap p-0">
-                    <button id="excluir" type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
-                        <strong class="text-danger">Sim, excluir.</strong>
-                    </button>
-                    <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 fw-bold" data-bs-dismiss="modal">Cancelar</button>
-                </div>
+        <div class="modal-content modal-dialog rounded-3 shadow">
+            <div class="modal-body p-4 text-center">
+                <h5 class="mb-0">Deseja realmente excluir este carro?</h5> <p class="mb-0">Essa ação não poderá ser desfeita.</p>
+                <span class="spanAlertExcluirCarro text-danger fs-5"></span>
+            </div>
+            <div class="modal-footer flex-nowrap p-0">
+                <button id="excluir" type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">
+                    <strong class="text-danger">Sim, excluir.</strong>
+                </button>
+                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 fw-bold" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
+    </div>
 
     @* ADICIONAR IMAGENS *@
     <div id="modalAddImagem" class="modal fade" style="z-index: 1060;" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

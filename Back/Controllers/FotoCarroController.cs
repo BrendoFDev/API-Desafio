@@ -148,8 +148,9 @@ public class FotoCarroController : ControllerBase
         var items = await query
             .Select(c => new FotoCarro
             {
-                FotoBytes = c.FotoBytes,
-                Id = c.Id
+                Id = c.Id,
+                FotoBytes = c.FotoBytes
+                
 
 
             })
