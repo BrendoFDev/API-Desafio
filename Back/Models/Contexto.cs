@@ -59,6 +59,11 @@ namespace Back.Models
                 .HasForeignKey(c => c.ModeloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //modelBuilder.Entity<Carro>()
+            //    .HasOne(c => c.Foto)
+            //    .WithMany()
+            //    .HasForeignKey("FotoId");
+
             // Relacionamento: FotoCarro -> Carro (Muitos para Um)
             modelBuilder.Entity<FotoCarro>()
                 .HasOne(f => f.Carro)

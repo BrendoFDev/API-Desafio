@@ -99,9 +99,9 @@ namespace WindowsFormsAppp.Gets
             [
                 reserva.Id.ToString(),
                 reserva.ClienteId.ToString(),
-                reserva.ClienteNome.ToString(),
+                //reserva.ClienteNome.ToString(),
                 reserva.CarroId.ToString(),
-                reserva.ModeloNome.ToString()
+                //reserva.ModeloNome.ToString()
 
             ]);
 

@@ -33,6 +33,10 @@ namespace Back.DTO_s
     
         public string? NomeMarca { get; set; }
 
-        public int? CarroId { get; set; }
+       // public int? CarroId { get; set; }
+
+        public int? FotoId { get; set; }
+
+        public List<FotoCarro>? FotoCarro { get; set; }
     }
 }

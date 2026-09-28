@@ -32,5 +32,6 @@ namespace Back.Models
         public ICollection<Reserva> Reservas { get; set; } = [];
         public List<FotoCarro> Fotos { get; set; } = new List<FotoCarro>();
 
+        //public object FotoCarro { get; internal set; }
     }
 }

@@ -7,6 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Immutable;
 
 namespace Back.Controllers
 {
@@ -24,9 +25,9 @@ namespace Back.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> PostCarro(CarroDTO carro2) 
+        public async Task<ActionResult> PostCarro(CarroDTO carro2)
         {
-            
+
             Carro carro = new Carro()
             {
                 Preco = carro2.Preco.Value,
@@ -36,14 +37,14 @@ namespace Back.Controllers
                 Ano = carro2.Ano.Value
             };
 
-            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == carro2.CarroId);
+            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == carro2.id);
 
             bool ModeloExiste = await _context.Modelos.AnyAsync(r => r.Id == carro2.ModeloId);
             bool MarcaExiste = await _context.Marcas.AnyAsync(r => r.Id == carro2.MarcaId);
             if (ModeloExiste == false)
             {
                 return BadRequest("Digite um modeloID válido");
-                
+
             }
             if (MarcaExiste == false)
             {
@@ -59,7 +60,7 @@ namespace Back.Controllers
             _context.Carros.Add(carro);
             await _context.SaveChangesAsync();
 
-            return Created("Carro criado com sucesso",carro);
+            return Created("Carro criado com sucesso", carro);
         }
 
         [HttpGet]
@@ -79,7 +80,8 @@ namespace Back.Controllers
 
             var query = _context.Carros
                 .Include(c => c.Modelo)
-                    .ThenInclude(m => m.Marca)
+                 .ThenInclude(m => m.Marca)
+                .Include(c => c.Fotos)
                 .AsQueryable();
 
 
@@ -105,101 +107,105 @@ namespace Back.Controllers
             if (!string.IsNullOrWhiteSpace(cor))
                 query = query.Where(c => c.Cor.Contains(cor.Trim()));
 
-            query = query.OrderBy(c => c.Id);
 
             var totalRegistros = await query.CountAsync();
 
             var itens = await query
-    .Skip(quantidadeParaPular)
-    .Take(tamanhoPagina)
-    .Select(c => new CarroDTO
-    {
-        id = c.Id, 
-        Ano = c.Ano,
-        Cor = c.Cor,
-        Preco = c.Preco,
-        ModeloId = c.ModeloId,
-        NomeModelo = c.Modelo.NomeModelo,
-        MarcaId = c.Modelo.MarcaId,
-        NomeMarca = c.Modelo.Marca.NomeMarca, 
-        Fotos = c.Fotos.Select(f => f.FotoBytes != null ? Convert.ToBase64String(f.FotoBytes) : string.Empty).ToList()
-    })
-    .ToListAsync();
+                .Skip(quantidadeParaPular)
+                .Take(tamanhoPagina)
+                .ToListAsync();
 
+            var carroResponse = itens.Select(c => new CarroDTO
+            {
+                id = c.Id,
+                Ano = c.Ano,
+                Cor = c.Cor,
+                Preco = c.Preco,
+                ModeloId = c.ModeloId,
+                NomeModelo = c.Modelo.NomeModelo,
+                MarcaId = c.Modelo.MarcaId,
+                NomeMarca = c.Modelo.Marca.NomeMarca,
+
+                // FotoId = c.FotoCarro.Select(f => f.Id).ToList(),
+                FotoCarro = c.Fotos
+                //Fotos = c.Fotos.Select(f =>
+                //    f.FotoBytes != null ? Convert.ToBase64String(f.FotoBytes) : string.Empty
+                //).ToList()
+            }).ToList();
 
             return Ok(new Paginacao<CarroDTO>
             {
                 TotalRegistro = totalRegistros,
                 PaginaAtual = pagina,
-                Items = itens
+                Items = carroResponse
             });
         }
 
-            [HttpPut("{id}")]
-            public async Task<IActionResult> PutCarro(int id, [FromBody] CarroDTO requisicao)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCarro(int id, [FromBody] CarroDTO requisicao)
+        {
+            try
             {
-                try
+
+                var carro = await _context.Carros.FindAsync(id);
+
+                if (carro == null)
+                    return BadRequest("carro não existe.");
+
+                if (!string.IsNullOrEmpty(requisicao.Cor))
+                    carro.Cor = requisicao.Cor;
+
+                if (requisicao.Ano.HasValue)
+                    carro.Ano = requisicao.Ano.Value;
+                if (requisicao.Preco.HasValue)
+                    carro.Preco = requisicao.Preco.Value;
+
+
+                await _context.SaveChangesAsync();
+
+                return Ok("Carro atualizado com sucesso");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CarroExists(id))
                 {
-
-                    var carro = await _context.Carros.FindAsync(id);
-
-                    if (carro == null)
-                        return BadRequest("carro não existe.");
-
-                    if (!string.IsNullOrEmpty(requisicao.Cor))
-                        carro.Cor = requisicao.Cor;
-
-                    if (requisicao.Ano.HasValue)
-                        carro.Ano = requisicao.Ano.Value;
-                    if (requisicao.Preco.HasValue)
-                        carro.Preco = requisicao.Preco.Value;
-
-
-                    await _context.SaveChangesAsync();
-
-                    return Ok("Carro atualizado com sucesso");
+                    return NotFound("Carro não encontrado.");
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!CarroExists(id))
-                    {
-                        return NotFound("Carro não encontrado.");
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-            
+            }
+
 
         }
 
-            private bool CarroExists(int id)
+        private bool CarroExists(int id)
+        {
+            return _context.Carros.Any(e => e.Id == id);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCarro(int id)
+        {
+            var carro = await _context.Carros.FindAsync(id);
+            if (carro == null) return NotFound("Carro não encontrado.");
+
+            // Verifica se existe alguma reserva para este carro
+            bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == id);
+
+            if (possuiReserva)
             {
-                return _context.Carros.Any(e => e.Id == id);
+                return BadRequest("Não é possível remover o carro porque ele possui reservas vinculadas.");
             }
 
+            _context.Carros.Remove(carro);
+            await _context.SaveChangesAsync();
 
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteCarro(int id)
-            {
-                var carro = await _context.Carros.FindAsync(id);
-                if (carro == null) return NotFound("Carro não encontrado.");
+            return NoContent();
 
-                // Verifica se existe alguma reserva para este carro
-                bool possuiReserva = await _context.Reservas.AnyAsync(r => r.CarroId == id);
-
-                if (possuiReserva)
-                {
-                    return BadRequest("Não é possível remover o carro porque ele possui reservas vinculadas.");
-                }
-
-                _context.Carros.Remove(carro);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-
-            }
+        }
 
 
         [HttpGet("total")]
@@ -224,6 +230,6 @@ namespace Back.Controllers
 
 
 
-        }
-    } 
+    }
+}
 

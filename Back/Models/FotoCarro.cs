@@ -13,6 +13,7 @@ namespace Back.Models
 
         public byte[]? FotoBytes { get; set; }
 
+        [ForeignKey("CarroId")]
         public int CarroId { get; set; }
 
         [BindNever]

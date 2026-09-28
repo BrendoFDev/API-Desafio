@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Back.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20260826195719_BancoNovo")]
-    partial class BancoNovo
+    [Migration("20260928192248_teste")]
+    partial class teste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace Back.Migrations
 
             modelBuilder.Entity("Back.Models.Carro", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Ano")
                         .HasColumnType("integer");
@@ -41,21 +41,21 @@ namespace Back.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("Marca")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Modelo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<int>("ModeloId")
+                        .HasColumnType("integer");
 
                     b.Property<float>("Preco")
                         .HasMaxLength(100)
                         .HasColumnType("real");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MarcaId");
+
+                    b.HasIndex("ModeloId");
 
                     b.ToTable("Carros");
                 });
@@ -86,6 +86,68 @@ namespace Back.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("Back.Models.FotoCarro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarroId")
+                        .HasColumnType("integer");
+
+                    b.Property<byte[]>("FotoBytes")
+                        .HasColumnType("bytea");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarroId");
+
+                    b.ToTable("FotoCarros");
+                });
+
+            modelBuilder.Entity("Back.Models.Marca", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NomeMarca")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marcas");
+                });
+
+            modelBuilder.Entity("Back.Models.Modelo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NomeModelo")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MarcaId");
+
+                    b.ToTable("Modelos");
+                });
+
             modelBuilder.Entity("Back.Models.Reserva", b =>
                 {
                     b.Property<int>("Id")
@@ -94,8 +156,8 @@ namespace Back.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CarroId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("CarroId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("ClienteId")
                         .HasColumnType("integer");
@@ -146,6 +208,47 @@ namespace Back.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Back.Models.Carro", b =>
+                {
+                    b.HasOne("Back.Models.Marca", "Marca")
+                        .WithMany("Carros")
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Back.Models.Modelo", "Modelo")
+                        .WithMany("Carros")
+                        .HasForeignKey("ModeloId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Marca");
+
+                    b.Navigation("Modelo");
+                });
+
+            modelBuilder.Entity("Back.Models.FotoCarro", b =>
+                {
+                    b.HasOne("Back.Models.Carro", "Carro")
+                        .WithMany("Fotos")
+                        .HasForeignKey("CarroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carro");
+                });
+
+            modelBuilder.Entity("Back.Models.Modelo", b =>
+                {
+                    b.HasOne("Back.Models.Marca", "Marca")
+                        .WithMany()
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Marca");
+                });
+
             modelBuilder.Entity("Back.Models.Reserva", b =>
                 {
                     b.HasOne("Back.Models.Carro", "carro")
@@ -167,12 +270,24 @@ namespace Back.Migrations
 
             modelBuilder.Entity("Back.Models.Carro", b =>
                 {
+                    b.Navigation("Fotos");
+
                     b.Navigation("Reservas");
                 });
 
             modelBuilder.Entity("Back.Models.Cliente", b =>
                 {
                     b.Navigation("Reservas");
+                });
+
+            modelBuilder.Entity("Back.Models.Marca", b =>
+                {
+                    b.Navigation("Carros");
+                });
+
+            modelBuilder.Entity("Back.Models.Modelo", b =>
+                {
+                    b.Navigation("Carros");
                 });
 #pragma warning restore 612, 618
         }

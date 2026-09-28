@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Back.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20260908181735_FotoCarro")]
-    partial class FotoCarro
+    [Migration("20260928192026_tabelasiniciais")]
+    partial class tabelasiniciais
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,13 +97,18 @@ namespace Back.Migrations
                     b.Property<int>("CarroId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CarroId1")
+                        .HasColumnType("integer");
+
                     b.Property<byte[]>("FotoBytes")
-                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarroId");
+
+                    b.HasIndex("CarroId1")
+                        .IsUnique();
 
                     b.ToTable("FotoCarros");
                 });
@@ -230,11 +235,17 @@ namespace Back.Migrations
 
             modelBuilder.Entity("Back.Models.FotoCarro", b =>
                 {
-                    b.HasOne("Back.Models.Carro", null)
-                        .WithMany()
+                    b.HasOne("Back.Models.Carro", "Carro")
+                        .WithMany("Fotos")
                         .HasForeignKey("CarroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Back.Models.Carro", null)
+                        .WithOne("Foto")
+                        .HasForeignKey("Back.Models.FotoCarro", "CarroId1");
+
+                    b.Navigation("Carro");
                 });
 
             modelBuilder.Entity("Back.Models.Modelo", b =>
@@ -269,6 +280,11 @@ namespace Back.Migrations
 
             modelBuilder.Entity("Back.Models.Carro", b =>
                 {
+                    b.Navigation("Foto")
+                        .IsRequired();
+
+                    b.Navigation("Fotos");
+
                     b.Navigation("Reservas");
                 });
 
