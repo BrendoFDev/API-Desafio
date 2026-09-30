@@ -48,6 +48,8 @@ const spanAlertCad = document.querySelector(".spanAlertCad");
 const spanAlertEdit = document.querySelector(".spanAlertEdit");
 const spanAlertExcluirCarro = document.querySelector(".spanAlertExcluirCarro");
 const spanAlertAddMarca = document.querySelector(".spanAlertAddMarca");
+const spanAlertEnviarModelo = document.querySelector(".spanAlertEnviarModelo");
+const spanAlertReserva = document.querySelector(".spanAlertReserva");
 
 //PAGINACAO
 const inputpage = document.getElementById("inputpage");
@@ -59,6 +61,7 @@ let dados;
 let page = 1;
 let totalPaginas = 1;
 let idCarro;
+let carouselItemsHTML = "";
 
 //--------- FUNÇÕES -----------
 
@@ -76,15 +79,9 @@ async function renderCarros(page) {
         let cardCarros = "";
 
         for (const item of dados.items) {
-            let imageUrl;
-            let imageUrl2;
-            let imageUrl3;
-
             let precoAPI;
 
             const altImagem = "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1a091a20952%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1a091a20952%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.9453125%22%20y%3D%22117.3%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E";
-
-            let cardFotos;
 
             const reservasGet = await fetch(`https://localhost:7063/api/reservas?carroId=${item.id}`, {
                 method: 'GET',
@@ -96,11 +93,25 @@ async function renderCarros(page) {
                 throw new Error(`Erro: ${reservasGet}`);
             }
 
-            item.fotoCarro.forEach((foto) => {
-                imageUrl = `data:image/jpeg;base64,${foto.fotoBytes}`;
-                imageUrl2 = `data:image/jpeg;base64,${foto.fotoBytes}`;
-                imageUrl3 = `data:image/jpeg;base64,${foto.fotoBytes}`;
-            });
+
+            if (item.fotoCarro.length > 0) {
+                item.fotoCarro.forEach((foto, index) => {
+                    const estaAtivo = index === 0 ? "active" : "";
+                    const imgUrl = `data:image/jpeg;base64,${foto.fotoBytes}`;
+
+                    carouselItemsHTML += `
+                        <div class="carousel-item ${estaAtivo}">
+                            <img onerror="this.src='${altImagem}'" src="${imgUrl}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
+                        </div>
+                    `;
+                });
+            } else {
+                carouselItemsHTML = `
+                    <div class="carousel-item active">
+                        <img src="${altImagem}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
+                    </div>
+                `;
+            }
 
             const dataR = await reservasGet.json();
 
@@ -116,15 +127,7 @@ async function renderCarros(page) {
                 <div class="col-4 card shadow p-3 my-2">
                     <div id="${item.id}" class="carousel slide carousel-fade carousel-dark">
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img onerror="this.src='${altImagem}'" src="${imageUrl}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
-                            </div>
-                            <div class="carousel-item">
-                                <img onerror="this.src='${altImagem}'" src="${imageUrl2}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
-                            </div>
-                            <div class="carousel-item">
-                                <img onerror="this.src='${altImagem}'" src="${imageUrl3}" class="d-block w-100 rounded-2" style="height: 200px; object-fit: cover;">
-                            </div>
+                            ${carouselItemsHTML}
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#${item.id}" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon bg-dark rounded-circle shadow" style="width: 2.3rem; height: 2.3rem; background-size: 45%;" aria-hidden="true"></span>
@@ -159,6 +162,60 @@ async function renderCarros(page) {
     } catch (error) {
         console.log(error)
         spanAlert.textContent = "Erro ao renderizar os cards de carro!";
+        throw error;
+    }
+}
+async function renderSelectModelo() {
+
+    try {
+        const requisicao = await fetch(`https://localhost:7063/api/modelo`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'Authorization': token },
+            credentials: "include",
+        });
+
+        const data = await requisicao.json();
+
+        let optionsModelo = "<option selected disabled>Selecione um modelo</option>";
+        data.items.forEach((item) => {
+            optionsModelo += `
+            <option data-marcaId=${item.marca.id} value=${item.id}>${item.nomeModelo}</option>
+        `;
+        });
+
+        selectModeloCarro.innerHTML = optionsModelo;
+
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}
+async function renderSelectMarca() {
+
+    let optionsMarcas = "<option selected disabled>Selecione uma marca</option>";
+
+    try {
+
+        const requisicao = await fetch(`https://localhost:7063/api/marca`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'Authorization': token },
+            credentials: "include",
+        });
+
+        const data = await requisicao.json();
+
+
+        data.items.forEach((item) => {
+            optionsMarcas += `
+            <option value=${item.id}>${item.nomeMarca}</option>
+        `;
+        });
+
+        selectMarca.innerHTML = optionsMarcas;
+    } catch (error) {
+        console.log(error)
+        optionsMarcas = '<option selected disabled >Erro ao renderizar marcas</option>';
+        selectMarca.innerHTML = optionsMarcas;
         throw error;
     }
 }
@@ -318,84 +375,183 @@ async function salvarMarca() {
 
     }
 }
-async function renderSelectMarca() {
-    const requisicao = await fetch(`https://localhost:7063/api/marca`, {
+async function salvarModelo() {
+    const modelo = inputModelo.value;
+    const idMarca = selectMarca.value;
+
+    const payload = {
+        marcaId: idMarca,
+        nomeModelo: modelo,
+    };
+
+    try {
+        btnAddModelo.textContent = "Carregando...";
+        btnAddModelo.setAttribute("disabled", "");
+
+        const enviarModelo = await fetch(`https://localhost:7063/api/modelo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': token },
+            body: JSON.stringify(payload),
+            credentials: "include",
+        });
+
+        inputModelo.value = "";
+
+        if (!enviarModelo.ok) {
+            spanAlertEnviarModelo.textContent = "Este modelo não pode ser enviado!"
+            return
+        }
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAdicionarModelo'));
+        modal.hide();
+
+    } catch (error) {
+        throw error
+    }
+    finally {
+        btnAddModelo.textContent = "ADICIONAR";
+        btnAddModelo.removeAttribute("disabled");
+    }
+}
+async function enviarImagem() {
+
+    const arquivoImagem = inputImg.files[0];
+    const carroId = btnAbrirModalImg.getAttribute("data-id");
+
+    const formData = new FormData();
+    formData.append('carroId', carroId);
+    formData.append('Conteudo', arquivoImagem);
+
+    try {
+
+        const response = await fetch(`https://localhost:7063/api/fotocarro`, {
+            method: 'POST',
+            headers: { 'Authorization': token },
+            body: formData,
+            credentials: "include",
+        });
+
+
+        if (!response.ok) {
+            console.log("Erro ao enviar imagem");
+            return
+        }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAddImagem'));
+        const modal2 = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+        modal.hide();
+        modal2.hide();
+        renderCarros(page);
+
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}
+async function reservarCarro() {
+    const cpf = cpfInput.value;
+    const carroID = btnReservar.getAttribute('data-id');
+
+    try {
+        btnReservar.textContent = "Carregando..."
+        btnReservar.setAttribute("disabled", "")
+
+    const response = await fetch(`https://localhost:7063/api/cliente?cpf=${cpf}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'Authorization': token },
         credentials: "include",
     });
 
-    const data = await requisicao.json();
+    const data = await response.json();
 
-    let optionsMarcas = "<option selected disabled>Selecione uma marca</option>";
+    let clienteID = "";
     data.items.forEach((item) => {
-        optionsMarcas += `
-            <option value=${item.id}>${item.nomeMarca}</option>
-        `;
+        clienteID = item.id;
     });
 
-    selectMarca.innerHTML = optionsMarcas;
-}
+    const payload = {
+        clienteId: clienteID,
+        carroId: carroID,
+    };
 
-
-try {
-    input.addEventListener('change', function () {
-        fileName.textContent = this.files[0]?.name ?? 'Nenhuma imagem selecionada';
+    const reservar = await fetch(`https://localhost:7063/api/reservas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': token },
+        body: JSON.stringify(payload),
+        credentials: "include",
     });
+
+        if (!reservar.ok) {
+            spanAlertReserva.textContent = "Esta reserva não pode ser feita."
+        console.log("Erro ao reservar");
+        return;
+    }
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalReserva'));
+    modal.hide();
 
     renderCarros(page);
-
-    adcarro.addEventListener('click', async () => {
-        await enviarCarro();
-    });
-
-    btnAvancar.addEventListener('click', () => {
-        proxPagina();
-    });
-    inputpage.addEventListener('change', () => {
-        mudarPagina();
-    });
-    btnVoltar.addEventListener('click', () => {
-        pagAnterior();
-    });
-
-    divCarros.addEventListener('click', (event) => {
-        selecionarCarro(event);
-    });
-    btnEditCarro.addEventListener('click', async () => {
-        await atualizarCarro();
-    });
-    btnEnviarImg.addEventListener('click', async () => {
-        await enviarImagem();
-    });
-    inputImg.addEventListener('change', (e) => {
-        spanFileName.textContent = e.target.files[0]?.name || '';
-    });
-
-    btnAddMarca.addEventListener('click', async () => {
-        await salvarMarca();
-    });
-    btnAddModelo.addEventListener('click', async () => {
-        await salvarModelo();
-    });
-    btnModelo.addEventListener('click', async () => {
-        await renderSelectMarca();
-    });
-    btnCarro.addEventListener('click', async () => {
-        await renderSelectModelo();
-    });
-
-    btnReservar.addEventListener('click', async () => {
-        await reservarCarro();
-    });
-
-    excluir.addEventListener('click', async () => {
-        await excluirCarro();
-    });
+    } catch (error) {
+        console.log(error)
+        throw error
+    } finally {
+        btnReservar.textContent = "RESERVAR";
+        btnReservar.removeAttribute("disabled");
+    }
 }
-catch (err) {
-    console.error(err);
-}  
+
+input.addEventListener('change', function () {
+    fileName.textContent = this.files[0]?.name ?? 'Nenhuma imagem selecionada';
+});
+
+renderCarros(page);
+
+adcarro.addEventListener('click', async () => {
+    await enviarCarro();
+});
+
+btnAvancar.addEventListener('click', () => {
+    proxPagina();
+});
+inputpage.addEventListener('change', () => {
+    mudarPagina();
+});
+btnVoltar.addEventListener('click', () => {
+    pagAnterior();
+});
+
+divCarros.addEventListener('click', (event) => {
+    selecionarCarro(event);
+});
+btnEditCarro.addEventListener('click', async () => {
+    await atualizarCarro();
+});
+btnEnviarImg.addEventListener('click', async () => {
+    await enviarImagem();
+});
+inputImg.addEventListener('change', (e) => {
+    spanFileName.textContent = e.target.files[0]?.name || '';
+});
+
+btnAddMarca.addEventListener('click', async () => {
+    await salvarMarca();
+});
+btnAddModelo.addEventListener('click', async () => {
+    await salvarModelo();
+});
+btnModelo.addEventListener('click', async () => {
+    await renderSelectMarca();
+});
+btnCarro.addEventListener('click', async () => {
+    await renderSelectModelo();
+});
+
+btnReservar.addEventListener('click', async () => {
+    await reservarCarro();
+});
+
+excluir.addEventListener('click', async () => {
+    await excluirCarro();
+});
 
 function validacaoForm() {
     if (!formValidation.checkValidity()) {
@@ -477,115 +633,4 @@ function selecionarCarro(event) {
     if (btnExclu) {
         idCarro = btnExclu.getAttribute("data-id");
     }
-}
-
-
-
-async function salvarModelo() {
-    const modelo = inputModelo.value;
-    const idMarca = selectMarca.value;
-
-    const payload = {
-        marcaId: idMarca,
-        nomeModelo: modelo,
-    };
-
-    const enviarModelo = await fetch(`https://localhost:7063/api/modelo`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': token },
-        body: JSON.stringify(payload),
-        credentials: "include",
-    });
-
-    inputModelo.value = "";
-
-    if (enviarModelo.ok) {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAdicionarModelo'));
-        modal.hide();
-    }
-}
-
-async function renderSelectModelo() {
-    const requisicao = await fetch(`https://localhost:7063/api/modelo`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'Authorization': token },
-        credentials: "include",
-    });
-
-    const data = await requisicao.json();
-
-    let optionsModelo = "<option selected disabled>Selecione um modelo</option>";
-    data.items.forEach((item) => {
-        optionsModelo += `
-            <option data-marcaId=${item.marca.id} value=${item.id}>${item.nomeModelo}</option>
-        `;
-    });
-
-    selectModeloCarro.innerHTML = optionsModelo;
-}
-
-async function enviarImagem() {
-    const arquivoImagem = inputImg.files[0];
-    const carroId = btnAbrirModalImg.getAttribute("data-id");
-
-    const formData = new FormData();
-    formData.append('carroId', carroId);
-    formData.append('Conteudo', arquivoImagem);
-
-    const response = await fetch(`https://localhost:7063/api/fotocarro`, {
-        method: 'POST',
-        headers: { 'Authorization': token },
-        body: formData,
-        credentials: "include",
-    });
-
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalAddImagem'));
-    const modal2 = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
-    modal.hide();
-    modal2.hide();
-    renderCarros(page);
-
-    if (!response.ok) {
-        console.log("Erro ao enviar imagem");
-    }
-}
-
-async function reservarCarro() {
-    const cpf = cpfInput.value;
-    const carroID = btnReservar.getAttribute('data-id');
-
-    const response = await fetch(`https://localhost:7063/api/cliente?cpf=${cpf}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'Authorization': token },
-        credentials: "include",
-    });
-
-    const data = await response.json();
-
-    let clienteID = "";
-    data.items.forEach((item) => {
-        clienteID = item.id;
-    });
-
-    const payload = {
-        clienteId: clienteID,
-        carroId: carroID,
-    };
-
-    const reservar = await fetch(`https://localhost:7063/api/reservas`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': token },
-        body: JSON.stringify(payload),
-        credentials: "include",
-    });
-
-    if (!reservar.ok) {
-        console.log("Erro ao reservar");
-        return;
-    }
-
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalReserva'));
-    modal.hide();
-
-    renderCarros(page);
 }
