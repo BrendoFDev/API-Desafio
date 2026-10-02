@@ -43,6 +43,9 @@ const adcarro = document.getElementById("adcarro");
 const editCarroModal = document.getElementById("btnEditar");
 const modalview = document.getElementById("staticBackdrop");
 const divCarros = document.getElementById("divRenderCars");
+const divImagens = document.getElementById("divImagensCarro");
+
+//SPAN
 const spanAlert = document.querySelector(".spanAlertCarros");
 const spanAlertCad = document.querySelector(".spanAlertCad");
 const spanAlertEdit = document.querySelector(".spanAlertEdit");
@@ -412,41 +415,7 @@ async function salvarModelo() {
         btnAddModelo.removeAttribute("disabled");
     }
 }
-async function enviarImagem() {
 
-    const arquivoImagem = inputImg.files[0];
-    const carroId = btnAbrirModalImg.getAttribute("data-id");
-
-    const formData = new FormData();
-    formData.append('carroId', carroId);
-    formData.append('Conteudo', arquivoImagem);
-
-    try {
-
-        const response = await fetch(`https://localhost:7063/api/fotocarro`, {
-            method: 'POST',
-            headers: { 'Authorization': token },
-            body: formData,
-            credentials: "include",
-        });
-
-
-        if (!response.ok) {
-            console.log("Erro ao enviar imagem");
-            return
-        }
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAddImagem'));
-        const modal2 = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
-        modal.hide();
-        modal2.hide();
-        renderCarros(page);
-
-    } catch (error) {
-        console.log(error);
-        throw error
-    }
-}
 async function reservarCarro() {
     const cpf = cpfInput.value;
     const carroID = btnReservar.getAttribute('data-id');
@@ -636,4 +605,83 @@ function selecionarCarro(event) {
         idCarro = btnExclu.getAttribute("data-id");
         spanAlertExcluirCarro.textContent = "";
     }
+}
+
+
+
+
+
+async function enviarImagem() {
+
+    const arquivoImagem = inputImg.files[0];
+    const carroId = btnAbrirModalImg.getAttribute("data-id");
+
+    const formData = new FormData();
+    formData.append('carroId', carroId);
+    formData.append('Conteudo', arquivoImagem);
+
+    try {
+
+        const response = await fetch(`https://localhost:7063/api/fotocarro`, {
+            method: 'POST',
+            headers: { 'Authorization': token },
+            body: formData,
+            credentials: "include",
+        });
+
+
+        if (!response.ok) {
+            console.log("Erro ao enviar imagem");
+            return
+        }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalAddImagem'));
+        const modal2 = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+        modal.hide();
+        modal2.hide();
+        renderCarros(page);
+
+    } catch (error) {
+        console.log(error);
+        throw error
+    }
+}
+
+async function renderImagensDiv() {
+
+    const carroId = btnAbrirModalImg.getAttribute("data-id");
+
+    const getImagensCarro = await fetch(`https://localhost:7063/api/fotocarro/${carroId}`, {
+            method: 'GET',
+            headers: { 'Authorization': token },
+            credentials: "include",
+        });
+
+    const dados = getImagensCarro.json();
+
+    let divIMG = "";
+    dados.forEach((item) => {
+        divIMG = `
+            <div class="col-4 text-center justify-content-between bg-secondary bg-opacity-50 p-1 rounded-2" style="background-image: url('data:image/jpeg;base64,${item.fotoBytes}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                <div class="d-flex justify-content-between align-self-center">
+                    <p class="text-light bg-secondary bg-opacity-50 rounded-1 p-1 pt-0 pb-0">1</p>
+                    <div class="fs-6">
+                        <button id="btnTrocarImagem" type="button" class="btn bg-secondary bg-opacity-50 p-1 pt-0 pb-0 m-0 shadow-none" onclick="this.blur();">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="yellow" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                        </button>
+                        <button id="btnExcluirImagem" type="button" class="btn bg-secondary bg-opacity-50 p-1 pt-0 pb-0 m-0 shadow-none" onclick="this.blur();">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `
+    });
+
 }

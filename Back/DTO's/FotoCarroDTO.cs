@@ -8,6 +8,7 @@ namespace Back.DTO_s
 {
     public class FotoCarroDTO
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "O conteúdo é obrigatório.")]
 
         [NotMapped]

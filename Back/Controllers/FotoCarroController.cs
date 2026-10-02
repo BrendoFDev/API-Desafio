@@ -174,6 +174,35 @@ public class FotoCarroController : ControllerBase
 
         return Ok(resultado);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> FotoPorCarro(int id)
+    {
+
+        var foto = await _context.FotoCarros
+            .Where(c => c.CarroId == id)
+            .Select( f=> new FotoCarroDTO
+        {
+            Id= f.Id,
+            FotoBytes= f.FotoBytes,
+
+
+        }
+            
+            )
+            
+            
+           
+           
+           .ToListAsync();
+        if (foto == null)
+        { return BadRequest("Carro não encontrado"); }
+        return Ok(foto);
+
+
+
+
+    }
 }
 
 
