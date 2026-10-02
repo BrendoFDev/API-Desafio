@@ -16,7 +16,9 @@ const paginaInfo = document.getElementById("paginaInfo");
 
 //GERAL
 const spanAlertCadCliente = document.querySelector(".spanCadCliente");
-const spanAlertRenderReserva = document.querySelector(".spanAlertRenderReserva");
+const spanAlertRenderClientes = document.querySelector(".spanAlertRenderClientes");
+const spanAlertExcluirCliente = document.querySelector(".spanAlertExcluirCliente");
+const spanAlertEditarCliente = document.querySelector(".spanAlertEditarCliente");
 
 let dados = "";
 let page = 1;
@@ -26,12 +28,10 @@ let idClienteParaEditar;
 let nomeClienteParaEditar;
 let cpfClienteParaEditar;
 
+
 renderClientes();
-
 btnEnviar.addEventListener('click', async () => {
-
     await cadCliente()
-
 });
 
 btnAvancar.addEventListener('click', () => {
@@ -48,32 +48,34 @@ tableExibirClientes.addEventListener('click', (event) => {
     const btnExcluir = event.target.closest('.excluir');
     if (btnExcluir) {
         idClienteParaExcluir = btnExcluir.getAttribute('data-id');
+        spanAlertExcluirCliente.textContent = "";
     }
     const btnEditar = event.target.closest('.editar');
     if (btnEditar) {
-        //resolver o problema em que nao esta salvando o novo data-alguma coisa
         idClienteParaEditar = btnEditar.getAttribute('data-id');
         nomeClienteParaEditar = btnEditar.getAttribute('data-nome');
         cpfClienteParaEditar = btnEditar.getAttribute('data-cpf');
         nomeEditar.value = nomeClienteParaEditar;
         cpfEditar.value = cpfClienteParaEditar;
+        spanAlertExcluirCliente.textContent = "";
     }
 });
-btnExcluirCliente.addEventListener('click', () => {
-    selecionarExcluirCliente()
+btnExcluirCliente.addEventListener('click', async () => {
+    await selecionarExcluirCliente()
 });
-btnConfirmarEdicao.addEventListener('click', () => {
-    selecionarEditarCliente();
+btnConfirmarEdicao.addEventListener('click', async () => {
+    await selecionarEditarCliente();
     nomeEditar.value = "";
     cpfEditar.value = "";
 });
 
-inputPesquisa.addEventListener('change', () => {
-    pesquisar();
+inputPesquisa.addEventListener('change', async () => {
+    await pesquisar();
 });
-btnPesquisar.addEventListener('click', () => {
-    pesquisar();
+btnPesquisar.addEventListener('click', async () => {
+    await pesquisar();
 });
+
 
 async function cadCliente() {
 
@@ -82,8 +84,8 @@ async function cadCliente() {
         cpf: cpf.value
     }
     try {
-        btnEditCarro.setAttribute("disabled", "");
-        btnEditCarro.textContent = "Carregando..."
+        btnEnviar.setAttribute("disabled", "");
+        btnEnviar.textContent = "Carregando...";
 
         const cadCliente = await fetch("https://localhost:7063/api/cliente", {
             method: 'POST',
@@ -106,29 +108,34 @@ async function cadCliente() {
         console.log(error);
         throw error
     } finally {
-        btnReservar.textContent = "Confirmar"
-        btnReservar.removeAttribute("disabled");
+        btnEnviar.textContent = "Confirmar"
+        btnEnviar.removeAttribute("disabled");
     }
 }
 async function renderClientes(dadosRecebidos) {
     let dados;
 
     try {
-
         if (dadosRecebidos) {
             dados = dadosRecebidos;
         } else {
+
+            spanAlertRenderClientes.textContent = "";
+
             const res = await fetch(`https://localhost:7063/api/cliente?paginaAtual=${page}&tamanhoPagina=10`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
                 credentials: "include",
             });
-            dados = await res.json();
 
             if (!res.ok) {
-                spanAlertRenderReserva.textContent = "Não foi possível exibir as reservas.";
-                return;
+                spanAlertRenderClientes.textContent = "Erro ao buscar os Clientes!";
+                inputPesquisa.setAttribute("disabled", "");
+                btnPesquisar.setAttribute("disabled", "");
+                return
             }
+            dados = await res.json();
+
         }
 
         let cliente = "";
@@ -212,6 +219,8 @@ function proxPagina() {
 
 async function selecionarExcluirCliente() {
     try {
+        btnExcluirCliente.textContent = "Carregando...";
+        btnExcluirCliente.setAttribute("disabled", "");
 
         if (!idClienteParaExcluir) return;
 
@@ -222,7 +231,8 @@ async function selecionarExcluirCliente() {
         });
 
         if (!res.ok) {
-
+            spanAlertExcluirCliente.textContent = "Erro ao editar esse cliente!"
+            return
         }
 
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalExcluirCliente'));
@@ -230,47 +240,76 @@ async function selecionarExcluirCliente() {
         renderClientes();
 
     } catch (error) {
+        console.log(error);
         throw error
+    } finally {
+        btnExcluirCliente.classList.add("text-danger");
+        btnExcluirCliente.classList.add("fw-bold");
+        btnExcluirCliente.textContent = "Sim, excluir.";
+        btnExcluirCliente.removeAttribute("disabled");
     }
 }
-
 async function selecionarEditarCliente() {
-    if (!idClienteParaEditar) {
-        return
-    }
+    try {
+        btnConfirmarEdicao.textContent = "Carregando...";
+        btnConfirmarEdicao.setAttribute("disabled", "");
 
-    const payload = {
-        nome: nomeEditar.value,
-        cpf: cpfEditar.value
-    }
+        if (!idClienteParaEditar) return;
 
-    const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaEditar}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
-        credentials: "include",
-        body: JSON.stringify(payload),
-    });
+        const payload = {
+            nome: nomeEditar.value,
+            cpf: cpfEditar.value
+        }
 
-    if (res.ok) {
+        const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaEditar}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+            credentials: "include",
+            body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+            spanAlertEditarCliente.textContent = "Erro ao editar cliente!"
+            return
+        }
+
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditarCliente'));
         modal.hide();
         renderClientes();
+
+    } catch (error) {
+        console.log(error);
+        throw error
+    } finally {
+        btnConfirmarEdicao.textContent = "Confirmar";
+        btnConfirmarEdicao.removeAttribute("disabled");
     }
 }
 
 async function pesquisar() {
-    const nomePesquisa = inputPesquisa.value.trim();
-    if (!nomePesquisa) {
-        renderClientes(); // volta para a lista normal
-        return;
+    try {
+        const nomePesquisa = inputPesquisa.value.trim();
+        if (!nomePesquisa) {
+            renderClientes();
+            return;
+        }
+
+        const res = await fetch(`https://localhost:7063/api/cliente?nome=${encodeURIComponent(nomePesquisa)}&paginaAtual=${page}&tamanhoPagina=10`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+            credentials: "include",
+        });
+
+        const dados = await res.json();
+
+        if (dados.items) {
+            spanAlertRenderClientes.textContent = "Cliente não encontrado!";
+        }
+
+        renderClientes(dados);
+
+    } catch (error) {
+        console.log(error);
+        throw error
     }
-
-    const res = await fetch(`https://localhost:7063/api/cliente?nome=${encodeURIComponent(nomePesquisa)}&paginaAtual=${page}&tamanhoPagina=10`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
-        credentials: "include",
-    });
-
-    const dados = await res.json();
-    renderClientes(dados);
 }

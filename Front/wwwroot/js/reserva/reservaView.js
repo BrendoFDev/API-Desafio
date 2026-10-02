@@ -1,6 +1,7 @@
 ﻿//GERAL
 const tbReservas = document.getElementById("exibirReservas");
 const btnExcluirReserva = document.getElementById("excluirReserva");
+const spanAlertExcluirReserva = document.querySelector(".spanAlertExcluirReserva");
 
 let reservaId;
 let dados;
@@ -9,16 +10,15 @@ var token = localStorage.getItem("token").toString();
 
 try {
     renderReservas();
-
     tbReservas.addEventListener('click', (event) => {
         const btnExcluir = event.target.closest('.excluir');
         if (btnExcluir) {
+            spanAlertExcluirReserva.textContent = ""
             reservaId = btnExcluir.getAttribute('data-id');
         }
     });
-
-    btnExcluirReserva.addEventListener('click', () => {
-        excluirReserva()
+    btnExcluirReserva.addEventListener('click', async () => {
+        await excluirReserva()
     });
 
 } catch (err) {
@@ -62,22 +62,37 @@ async function renderReservas() {
 }  
 
 async function excluirReserva() {
+    try {
+        btnExcluirReserva.setAttribute("disabled", "");
+        btnExcluirReserva.textContent = "Carregando...";
 
-    if (!reservaId) {
-        console.log("Err0!")
-        return
-    }
+        if (!reservaId) {
+            console.log("Err0!")
+            return
+        }
 
-    const delReservas = await fetch(`https://localhost:7063/api/reservas/${reservaId}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
-        credentials: "include",
-    });
+        const delReservas = await fetch(`https://localhost:7063/api/reservas/${reservaId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json; charset=utf-8', 'Authorization': token },
+            credentials: "include",
+        });
 
-    if (delReservas.ok) {
+        if (!delReservas.ok) {
+            spanAlertExcluirReserva.textContent = "Não foi possível excluir a reserva! Erro na API!";
+            return
+        }
+
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalExcluirReserva'));
         modal.hide();
         renderReservas();
-    }
 
+    } catch (error) {
+        console.log(error);
+        throw error
+    } finally {
+        btnExcluirReserva.classList.add("text-danger")
+        btnExcluirReserva.classList.add("fw-bold")
+        btnExcluirReserva.removeAttribute("disabled");
+        btnExcluirReserva.textContent = "Sim, excluir.";
+    }
 }

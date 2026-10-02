@@ -8,7 +8,7 @@
             <h1>@ViewData["Title"]</h1>
         </div>
 
-        <div class="d-flex justify-content-between gap-5 mt-3">
+        <div class="d-flex justify-content-between gap-5 mt-3 mb-2">
 
             <div class="d-flex">
 
@@ -26,7 +26,7 @@
                 Cadastrar Cliente
             </button>
         </div>
-        <span class="text-danger fs-5 spanAlertRenderReserva"></span>
+        <span class="text-danger fs-5 spanAlertRenderClientes"></span>
         <table class="table table-striped my-3">
             <thead>
                 <tr>
@@ -99,6 +99,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <span class="spanAlertEditarCliente fs-5 text-danger"></span>
                     <button id="enviarAtualizacao" type="button" class="btn btn-success">Confirmar</button>
                 </div>
             </div>
@@ -109,6 +110,7 @@
         <div class="modal-content modal-dialog rounded-3 shadow">
             <div class="modal-body p-4 text-center">
                 <h5 class="mb-0">Deseja realmente excluir este cliente?</h5> <p class="mb-0">Esta alteração não poderá ser desfeita.</p>
+                <span class="spanAlertExcluirCliente text-danger fs-5"></span>
             </div>
             <div class="modal-footer flex-nowrap p-0">
                 <button id="comfirmarExcluir" type="button" class="btn btn-lg  fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end">

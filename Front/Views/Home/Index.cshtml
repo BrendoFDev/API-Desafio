@@ -151,12 +151,11 @@
                         <div class="row justify-content-center">
                             <div class="col-auto">
                                 <label for="inputReserva" class="fw-medium col-auto fs-5 form-label">CPF:</label>
-                                <input id="inputReserva" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="Informe o CPF para reserva" required />
+                                <input id="inputReserva" type="text" class="rounded-2 col-auto fs-5 form-control" placeholder="000.000.000-00" required />
                                 <div class="invalid-feedback">
                                     <span>Preencha o campo!</span>
                                 </div>
                             </div>
-
                         </div>
                     </form>
 
@@ -261,7 +260,7 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Adicionar/Editar Imagem</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="p-4">
+                <div class="modal-body">
                     <div class="col-auto">
                         <div class="d-flex align-items-center gap-2 mb-2">
                             <input type="file" class="btn-check rounded-3" id="imagemInput" accept="image/*" required>
@@ -269,12 +268,6 @@
                             <span id="fileName" class="text-muted small text-truncate" style="max-width:200px;"></span>
                         </div>
                     </div>
-                </form>
-                <div class="modal-body">
-                    <form class="needs-validation" novalidate>
-                        <div class="row justify-content-center">
-                        </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button id="btnEnviarImg" type="button" class="btn btn-primary">Confirmar</button>

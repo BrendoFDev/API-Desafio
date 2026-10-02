@@ -626,11 +626,14 @@ function selecionarCarro(event) {
     }
 
     if (btnReserv) {
+        cpfInput.value = "";
         idCarro = btnReserv.getAttribute("data-id");
         btnReservar.setAttribute('data-id', idCarro);
+        
     }
 
     if (btnExclu) {
         idCarro = btnExclu.getAttribute("data-id");
+        spanAlertExcluirCarro.textContent = "";
     }
 }
