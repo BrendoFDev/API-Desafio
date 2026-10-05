@@ -20,7 +20,7 @@ async function cadastrarUser() {
     const senha2 = inputConfirmSenha.value;
 
     if (senha1 != senha2) {
-        mostrarToast('Sua senha precsa ter pelo menos 1 caractere especial e 1 letra Maiúscula!')
+        mostrarToast('Sua senha precisa ter pelo menos 1 caractere especial e 1 letra Maiúscula!')
         return
     }
 
@@ -57,3 +57,11 @@ function mostrarToast(msg) {
     const toast = new bootstrap.Toast(toastElemento, { delay: 4000 });
     toast.show();
 }   
+btnMostrarSenha.addEventListener('click', () => {
+    const campoSenha = inputSenha.getAttribute("type") === "password";
+
+    inputSenha.setAttribute("type", campoSenha ? "text" : "password");
+
+    iconeOlhoAberto.classList.toggle("d-none", campoSenha);
+    iconeOlhoFechado.classList.toggle("d-none", !campoSenha);
+});

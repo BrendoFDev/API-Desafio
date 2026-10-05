@@ -2,6 +2,10 @@
 let inputEmail = document.getElementById("inputEmail");
 let inputSenha = document.getElementById("inputSenha");
 const btnLogin = document.getElementById("btnLogin");
+const btnMostrarSenha = document.getElementById("btnMostrarSenha");
+const iconeOlho = document.getElementById("iconeOlho");
+const iconeOlhoFechado = document.getElementById("iconeOlhoFechado");
+
 
 try {
 
@@ -37,7 +41,7 @@ async function fazerLogin() {
 
     if (!res.ok) {
         console.log("Erro")
-        mostrarToast('Nome de Usuario ou Email já cadastrados!');
+        mostrarToast('Email ou senha incorretos!');
         btnLogin.textContent = "Entrar"
         return
     }
@@ -60,3 +64,12 @@ function mostrarToast(msg) {
     const toast = new bootstrap.Toast(el, { delay: 3000 });
     toast.show();
 }   
+
+btnMostrarSenha.addEventListener('click', () => {
+    const campoSenha = inputSenha.getAttribute("type") === "password";
+
+    inputSenha.setAttribute("type", campoSenha ? "text" : "password");
+
+    iconeOlhoAberto.classList.toggle("d-none", campoSenha);
+    iconeOlhoFechado.classList.toggle("d-none", !campoSenha);
+});

@@ -231,7 +231,7 @@ async function selecionarExcluirCliente() {
         });
 
         if (!res.ok) {
-            spanAlertExcluirCliente.textContent = "Erro ao editar esse cliente!"
+            spanAlertExcluirCliente.textContent = "Erro ao excluir esse cliente!"
             return
         }
 
@@ -258,7 +258,7 @@ async function selecionarEditarCliente() {
 
         const payload = {
             nome: nomeEditar.value,
-            cpf: cpfEditar.value
+            cpf: cpfEditar.value.replace(/\D/g, ""),
         }
 
         const res = await fetch(`https://localhost:7063/api/cliente/${idClienteParaEditar}`, {
@@ -313,3 +313,22 @@ async function pesquisar() {
         throw error
     }
 }
+cpf.addEventListener('input', () => {
+    let valor = cpf.value.replace(/\D/g, '').slice(0, 11);
+
+    valor = valor.replace(/^(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    valor = valor.replace(/\.(\d{3})(\d)/, '.$1-$2');
+
+    cpf.value = valor;
+});
+
+cpfEditar.addEventListener('input', () => {
+    let valor = cpfEditar.value.replace(/\D/g, '').slice(0, 11);
+
+    valor = valor.replace(/^(\d{3})(\d)/, '$1.$2');
+    valor = valor.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    valor = valor.replace(/\.(\d{3})(\d)/, '.$1-$2');
+
+    cpfEditar.value = valor;
+});
